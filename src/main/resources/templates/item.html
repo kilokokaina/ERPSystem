@@ -5,7 +5,7 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Dashboard | Hyper - Responsive Bootstrap 5 Admin Dashboard</title>
+        <title>ERPSystem</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
@@ -312,6 +312,24 @@
                                 <div class="card mt-2">
                                     <div class="card-body">
                                         <div class="row mb-3">
+
+<!--                                            <div id="delete-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-modal-modalLabel" aria-hidden="true">-->
+<!--                                                <div class="modal-dialog">-->
+<!--                                                    <div class="modal-content">-->
+<!--                                                        <div class="modal-header bg-warning">-->
+<!--                                                            <h4 class="modal-title" id="delete-modal-modalLabel">Delete Item</h4>-->
+<!--                                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>-->
+<!--                                                        </div>-->
+<!--                                                        <div class="modal-body">-->
+<!--                                                            Are you sure that you want to delete this item?-->
+<!--                                                        </div>-->
+<!--                                                        <div class="modal-footer">-->
+<!--                                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>-->
+<!--                                                            <button type="button" class="btn btn-warning">Delete</button>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
                                             
                                             <!-- Modal -->
                                             <div id="multiple-one" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="multiple-oneModalAddProduct" aria-hidden="true">
@@ -323,9 +341,7 @@
                                                         </div>
 
                                                         <div class="modal-body">
-                                                            <!-- Tabs -->    
-                                                                
-
+                                                            <!-- Tabs -->
                                                             <ul class="nav nav-tabs nav-justified nav-bordered mb-3">
                                                                 <li class="nav-item">
                                                                     <a href="#home-b2" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
@@ -344,22 +360,24 @@
                                                             <div class="tab-content">
                                                                 <div class="tab-pane show active" id="home-b2">
                                                                     <div class="mb-3">
-                                                                        <label for="simpleinput" class="form-label">Product</label>
-                                                                        <input type="text" id="simpleinput" class="form-control">
+                                                                        <label for="itemName" class="form-label">Product</label>
+                                                                        <input type="text" id="itemName" class="form-control">
                                                                     </div>
                                                                     <div class="mb-3">
-                                                                        <label for="example-select" class="form-label">Category</label>
-                                                                        <select class="form-select" id="example-select" data-placeholder="Material">
+                                                                        <label for="itemCategory" class="form-label">Category</label>
+                                                                        <select class="form-select" id="itemCategory" data-placeholder="Material">
                                                                             <option th:each="category : ${categories}" th:text="${category.getCategoryName()}">
                                                                         </select>
                                                                     </div>
                                                                     <div class="mb-3">
-                                                                        <label for="purchase-number" class="form-label">Purchase Price</label>
-                                                                        <input class="form-control" id="purchase-number" type="number" name="number">
+                                                                        <label for="itemPurchase" class="form-label">Purchase Price</label>
+                                                                        <input type="text" class="form-control" id="itemPurchase" data-toggle="input-mask" data-mask-format="#.##0,00" data-reverse="true">
+                                                                        <span class="font-13 text-muted">Format "#.##"</span>
                                                                     </div>
                                                                     <div class="mb-3">
-                                                                        <label for="sale-number" class="form-label">Sale Price</label>
-                                                                        <input class="form-control" id="sale-number" type="number" name="number">
+                                                                        <label for="itemSale" class="form-label">Sale Price</label>
+                                                                        <input type="text" class="form-control" id="itemSale" data-toggle="input-mask" data-mask-format="#.##0,00" data-reverse="true">
+                                                                        <span class="font-13 text-muted">Format "#.##"</span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="tab-pane" id="profile-b2">
@@ -372,7 +390,8 @@
                                                         </div>
 
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary" data-bs-target="#multiple-two" data-bs-toggle="modal" data-bs-dismiss="modal">Next</button>
+<!--                                                            <button type="button" class="btn btn-primary" data-bs-target="#multiple-two" data-bs-toggle="modal" data-bs-dismiss="modal" onclick="addItem()">Next</button>-->
+                                                            <button type="button" class="btn btn-primary" onclick="addItem()">Next</button>
                                                         </div>
                                                     </div><!-- /.modal-content -->
                                                 </div><!-- /.modal-dialog -->
@@ -401,32 +420,31 @@
 
                                         </div>    
                                         <div class="table-responsive">
-                                                <table id="basic-datatable" class="table dt-responsive nowrap w-100">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Product</th>
-                                                            <th>Added Date</th>
-                                                            <th>Purchase Price</th>
-                                                            <th>Sale Price</th>
-                                                            <th style="width: 85px;">Action</th>                                                                                    
-                                                        </tr>
-                                                    </thead>
+                                            <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Product</th>
+                                                        <th>Added Date</th>
+                                                        <th>Purchase Price</th>
+                                                        <th>Sale Price</th>
+                                                        <th style="width: 85px;">Action</th>
+                                                    </tr>
+                                                </thead>
 
-                                                    <tbody>
-                                                        <tr th:each="item : ${items}">
-                                                            <td th:text="${item.getItemName()}"/>
-                                                            <td th:text="${item.getItemCreationDate()}"/>
-                                                            <td th:text="${item.getItemPurchasePrice()}"/>
-                                                            <td th:text="${item.getItemSalePrice()}"/>
-                                                            <td class="table-action">
-                                                                <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
-                                                                <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                                                <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            <div>
+                                                <tbody>
+                                                    <tr th:each="item : ${items}">
+                                                        <td th:text="${item.getItemName()}"/>
+                                                        <td th:text="${item.getItemCreationDate().toLocaleString().split(',')[0]}"/>
+                                                        <td th:text="${item.getItemPurchasePrice()}"/>
+                                                        <td th:text="${item.getItemSalePrice()}"/>
+                                                        <td class="table-action">
+                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
+                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+                                                            <a href="javascript:void(0);" class="action-icon" th:id="'ondelete-' + ${item.getItemId()}" onclick="deleteItem(this)"> <i class="mdi mdi-delete"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -434,7 +452,6 @@
                         </div>
                     </div>
                     <!-- container -->
-
                 </div>
                 <!-- content -->
 
@@ -456,13 +473,10 @@
                     </div>
                 </footer>
                 <!-- end Footer -->
-
             </div>
-
             <!-- ============================================================== -->
             <!-- End Page content -->
             <!-- ============================================================== -->
-
         </div>
         <!-- END wrapper -->       
         
@@ -480,6 +494,8 @@
 
         <!-- Datatable Init js -->
         <script th:src="@{v3/js/pages/demo.datatable-init.js}"></script>
+
+        <script th:src="@{v3/js/item-script.js}"></script>
 
     </body>
 </html> 

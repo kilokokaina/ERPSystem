@@ -1,5 +1,6 @@
 package com.work.erpsystem.service;
 
+import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.CategoryModel;
 
 import java.util.List;
@@ -7,10 +8,10 @@ import java.util.List;
 public interface CategoryService {
 
     CategoryModel save(CategoryModel categoryModel);
-    CategoryModel findById(Long categoryModelId);
-    CategoryModel findByName(String categoryModelName);
     List<CategoryModel> findAll();
-    CategoryModel deleteById(Long categoryModelId);
-    CategoryModel delete(CategoryModel categoryModel);
+    CategoryModel findById(Long categoryModelId) throws NoDBRecord;
+    CategoryModel findByName(String categoryModelName) throws NoDBRecord;
+    void deleteById(Long categoryModelId) throws NoDBRecord;
+    void delete(CategoryModel categoryModel) throws NoDBRecord;
 
 }

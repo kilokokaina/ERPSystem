@@ -26,11 +26,11 @@ public class ItemController {
     }
 
     @GetMapping
-    public String home(@RequestParam(value = "category", required = false) CategoryModel category, Model model) {
-        log.info(category.getCategoryName());
+    public String home(@RequestParam(value = "category") CategoryModel category, Model model) {
         model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("items", itemService.findByCategoryId(category.getCategoryId()));
-        return "test";
+
+        return "item";
     }
 
 }

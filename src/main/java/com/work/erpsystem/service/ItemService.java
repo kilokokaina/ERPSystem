@@ -1,5 +1,6 @@
 package com.work.erpsystem.service;
 
+import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.ItemModel;
 
 import java.util.List;
@@ -7,11 +8,11 @@ import java.util.List;
 public interface ItemService {
 
     ItemModel save(ItemModel itemModel);
-    ItemModel findById(Long itemModelId);
-    ItemModel findByName(String itemModelName);
-    List<ItemModel> findByCategoryId(Long categoryId);
     List<ItemModel> findAll();
-    ItemModel deleteById(Long itemModelId);
-    ItemModel delete(ItemModel itemModel);
+    ItemModel findById(Long itemModelId) throws NoDBRecord;
+    ItemModel findByName(String itemModelName) throws NoDBRecord;
+    List<ItemModel> findByCategoryId(Long categoryId);
+    void deleteById(Long itemModelId) throws NoDBRecord;
+    void delete(ItemModel itemModel) throws NoDBRecord;
 
 }

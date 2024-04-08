@@ -1,17 +1,21 @@
 package com.work.erpsystem.api;
 
 import com.work.erpsystem.dto.ItemDTO;
+import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.CategoryModel;
 import com.work.erpsystem.model.ItemModel;
 import com.work.erpsystem.service.impl.CategoryServiceImpl;
 import com.work.erpsystem.service.impl.ItemServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("api/item")
 public class ItemAPI {
@@ -30,15 +34,41 @@ public class ItemAPI {
         return ResponseEntity.ok(itemService.findAll());
     }
 
+    //HttpStatus - 200 (OK), 204 (No record in DB)
     @GetMapping("{id}")
     public ResponseEntity<ItemModel> findById(@PathVariable(value = "id") Long itemModelId) {
-        return ResponseEntity.ok(itemService.findById(itemModelId));
+        try {
+            ItemModel itemModel = itemService.findById(itemModelId);
+            return new ResponseEntity<>(itemModel, HttpStatus.OK);
+        } catch (NoDBRecord exception) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+    }
+
+    //HttpStatus - 200 (OK), 204 (No record in DB)
+    @GetMapping("find_by_name")
+    public ResponseEntity<ItemModel> findByName(@RequestParam(name = "item_name") String itemName) {
+        try {
+            ItemModel itemModel = itemService.findByName(itemName);
+            return new ResponseEntity<>(itemModel, HttpStatus.OK);
+        } catch (NoDBRecord exception) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
     @PostMapping
-    public ResponseEntity<ItemModel> addItem(@RequestBody ItemDTO itemDto) {
+    public ResponseEntity<ItemModel> addItem(@RequestBody ItemDTO itemDto) throws NoDBRecord {
         ItemModel itemModel = new ItemModel();
-        CategoryModel categoryModel = categoryService.findByName(itemDto.getCategoryName());
+
+        CategoryModel categoryModel;
+
+        try {
+            categoryModel = categoryService.findByName(itemDto.getCategoryName());
+        } catch (NoDBRecord exception) {
+            log.info(exception.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         itemModel.setItemName(itemDto.getItemName());
         itemModel.setCategoryModel(categoryModel);
@@ -51,7 +81,14 @@ public class ItemAPI {
     @PutMapping("{id}")
     public ResponseEntity<ItemModel> changeItem(@PathVariable(value = "id") ItemModel itemModel,
                                                 @RequestBody ItemDTO itemDto) {
-        CategoryModel categoryModel = categoryService.findByName(itemDto.getCategoryName());
+        CategoryModel categoryModel;
+
+        try {
+            categoryModel = categoryService.findByName(itemDto.getCategoryName());
+        } catch (NoDBRecord exception) {
+            log.info(exception.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         itemModel.setItemName(itemDto.getItemName());
         itemModel.setCategoryModel(categoryModel);
@@ -60,6 +97,16 @@ public class ItemAPI {
         itemModel.setItemSalePrice(itemDto.getItemSalePrice());
 
         return ResponseEntity.ok(itemService.save(itemModel));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<HttpStatus> deleteItemById(@PathVariable(value = "id") Long itemId) {
+        try {
+            itemService.deleteById(itemId);
+            return ResponseEntity.ok(HttpStatus.OK);
+        } catch (NoDBRecord exception) {
+            return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+        }
     }
 
 }
