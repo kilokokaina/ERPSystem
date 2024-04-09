@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-layout-mode="detached" data-topbar-color="dark" data-menu-color="light" data-sidenav-user="true"
+<html lang="en" data-layout-mode="detached" data-bs-theme="dark"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="https://www.thymeleaf.org">
 
@@ -32,14 +32,12 @@
 
                             <!-- Logo -->
                             <div class="card-header py-4 text-center bg-primary">
-                                <a href="index.html">
+                                <a th:href="@{/}">
                                     <span><img th:src="@{v3/images/logo.png}" alt="logo" height="22"></span>
                                 </a>
                             </div>
 
                             <div class="card-body p-4">
-
-                                                                                   
                                 <ul class="nav nav-tabs nav-justified nav-bordered mb-3">
                                     <li class="nav-item">
                                         <a href="#home-b2" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
@@ -65,15 +63,15 @@
 
                                         <form th:action="@{/login}" method="post">
                                             <div class="mb-3">
-                                                <label for="emailaddress" class="form-label">Email address</label>
-                                                <input class="form-control" type="email" id="emailaddress" name="username" required="" placeholder="Enter your email">
+                                                <label for="singin-emailaddress" class="form-label">Email address</label>
+                                                <input class="form-control" type="email" id="singin-emailaddress" name="username" required="" placeholder="Enter your email">
                                             </div>
 
                                             <div class="mb-3">
                                                 <a href="pages-recoverpw.html" class="text-muted float-end"><small>Forgot your password?</small></a>
-                                                <label for="password" class="form-label">Password</label>
+                                                <label for="singin-password" class="form-label">Password</label>
                                                 <div class="input-group input-group-merge">
-                                                    <input type="password" id="password" class="form-control" name="password" placeholder="Enter your password">
+                                                    <input type="password" id="singin-password" class="form-control" name="password" placeholder="Enter your password">
                                                     <div class="input-group-text" data-password="false">
                                                         <span class="password-eye"></span>
                                                     </div>
@@ -100,22 +98,22 @@
                                             <p class="text-muted mb-4">Don't have an account? Create your account, it takes less than a minute </p>
                                         </div>
         
-                                        <form action="#">
+                                        <form th:action="@{/register}" method="post">
         
-                                            <div class="mb-3">
-                                                <label for="fullname" class="form-label">Full Name</label>
-                                                <input class="form-control" type="text" id="fullname" placeholder="Enter your name" required>
-                                            </div>
+<!--                                            <div class="mb-3">-->
+<!--                                                <label for="fullname" class="form-label">Full Name</label>-->
+<!--                                                <input class="form-control" type="text" id="fullname" placeholder="Enter your name" required>-->
+<!--                                            </div>-->
         
                                             <div class="mb-3">
                                                 <label for="emailaddress" class="form-label">Email address</label>
-                                                <input class="form-control" type="email" id="emailaddress" required placeholder="Enter your email">
+                                                <input class="form-control" type="email" id="emailaddress" name="username" required placeholder="Enter your email">
                                             </div>
         
                                             <div class="mb-3">
                                                 <label for="password" class="form-label">Password</label>
                                                 <div class="input-group input-group-merge">
-                                                    <input type="password" id="password" class="form-control" placeholder="Enter your password">
+                                                    <input type="password" id="password" class="form-control" name="password" placeholder="Enter your password">
                                                     <div class="input-group-text" data-password="false">
                                                         <span class="password-eye"></span>
                                                     </div>
@@ -132,18 +130,12 @@
                                             <div class="mb-3 text-center">
                                                 <button class="btn btn-primary" type="submit"> Sign Up </button>
                                             </div>
-        
                                         </form>
-                                        
                                     </div>
-                                    
                                 </div>
-                                                                
-                                
                             </div> <!-- end card-body -->
                         </div>
                         <!-- end card -->
-
                     </div> <!-- end col -->
                 </div>
                 <!-- end row -->
