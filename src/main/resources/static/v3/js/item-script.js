@@ -1,3 +1,5 @@
+let itemId = 0;
+
 function addItem() {
     // let addItemModal = new bootstrap.Modal('#multiple-one');
     let addItemModalSuccess = new bootstrap.Modal('#multiple-two');
@@ -22,7 +24,17 @@ function addItem() {
 }
 
 function deleteItem(element) {
-    // let deleteModal = new bootstrap.Modal('#delete-modal');
-    let itemId = element.id.split('-')[1];
-    fetch(`api/item/${itemId}`, { method: 'DELETE' });
+    let deleteModal = new bootstrap.Modal('#delete-modal');
+    itemId = element.id.split('-')[1];
+
+    deleteModal.show();
+}
+
+function confirmDelete() {
+    fetch(
+        `api/item/${itemId}`, { method: 'DELETE' }
+    ).then(async response => {
+        let result = await response;
+        if (result.ok) location.reload();
+    });
 }
