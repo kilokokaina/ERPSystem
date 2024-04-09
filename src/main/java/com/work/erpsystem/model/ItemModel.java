@@ -2,11 +2,13 @@ package com.work.erpsystem.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class ItemModel {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
