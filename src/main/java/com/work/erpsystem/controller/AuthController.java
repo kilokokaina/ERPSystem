@@ -1,5 +1,6 @@
 package com.work.erpsystem.controller;
 
+import com.work.erpsystem.model.Role;
 import com.work.erpsystem.model.UserModel;
 import com.work.erpsystem.service.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Set;
 
 @Slf4j
 @Controller
@@ -34,6 +37,7 @@ public class AuthController {
 
         userModel.setUsername(username);
         userModel.setPassword(password);
+        userModel.setRoleSet(Set.of(Role.USER));
 
         userService.save(userModel);
 
