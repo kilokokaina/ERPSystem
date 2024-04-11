@@ -1,7 +1,9 @@
 package com.work.erpsystem.service.impl;
 
+import com.work.erpsystem.exception.DuplicateDBRecord;
 import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.CategoryModel;
+import com.work.erpsystem.model.OrganizationModel;
 import com.work.erpsystem.repository.CategoryRepository;
 import com.work.erpsystem.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryModel save(CategoryModel categoryModel) {
+    public CategoryModel save(CategoryModel categoryModel) throws DuplicateDBRecord {
+        if (categoryRepository.findByCategoryName(categoryModel.getCategoryName()) != null) {
+            String exceptionMessage = "Record with name [%s] already exists in DB";
+            throw new DuplicateDBRecord(exceptionMessage);
+        }
+
+        return categoryRepository.save(categoryModel);
+    }
+
+    @Override
+    public CategoryModel update(CategoryModel categoryModel) {
         return categoryRepository.save(categoryModel);
     }
 
@@ -52,6 +64,11 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         return categoryModel;
+    }
+
+    @Override
+    public List<CategoryModel> findByOrg(OrganizationModel organizationModel) {
+        return categoryRepository.findByOrganization(organizationModel);
     }
 
     @Override

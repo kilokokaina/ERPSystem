@@ -1,6 +1,7 @@
 package com.work.erpsystem.api;
 
 import com.work.erpsystem.dto.ItemDTO;
+import com.work.erpsystem.exception.DuplicateDBRecord;
 import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.CategoryModel;
 import com.work.erpsystem.model.ItemModel;
@@ -57,38 +58,29 @@ public class ItemAPI {
         }
     }
 
+    //HttpStatus - 200 (OK), 409 (Duplicate record in DB)
     @PostMapping
-    public ResponseEntity<ItemModel> addItem(@RequestBody ItemDTO itemDto) throws NoDBRecord {
+    public ResponseEntity<ItemModel> addItem(@RequestBody ItemDTO itemDto) throws NoDBRecord, DuplicateDBRecord {
         ItemModel itemModel = new ItemModel();
 
-        CategoryModel categoryModel;
-
-        try {
-            categoryModel = categoryService.findByName(itemDto.getCategoryName());
-        } catch (NoDBRecord exception) {
-            log.info(exception.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        CategoryModel categoryModel = categoryService.findByName(itemDto.getCategoryName());
 
         itemModel.setItemName(itemDto.getItemName());
         itemModel.setCategoryModel(categoryModel);
         itemModel.setItemPurchasePrice(itemDto.getItemPurchasePrice());
         itemModel.setItemSalePrice(itemDto.getItemSalePrice());
 
-        return ResponseEntity.ok(itemService.save(itemModel));
+        try {
+            return ResponseEntity.ok(itemService.save(itemModel));
+        } catch (DuplicateDBRecord exception) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ItemModel> changeItem(@PathVariable(value = "id") ItemModel itemModel,
-                                                @RequestBody ItemDTO itemDto) {
-        CategoryModel categoryModel;
-
-        try {
-            categoryModel = categoryService.findByName(itemDto.getCategoryName());
-        } catch (NoDBRecord exception) {
-            log.info(exception.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<ItemModel> updateItem(@PathVariable(value = "id") ItemModel itemModel,
+                                                @RequestBody ItemDTO itemDto) throws NoDBRecord {
+        CategoryModel categoryModel = categoryService.findByName(itemDto.getCategoryName());
 
         itemModel.setItemName(itemDto.getItemName());
         itemModel.setCategoryModel(categoryModel);
@@ -96,7 +88,7 @@ public class ItemAPI {
         itemModel.setItemPurchasePrice(itemDto.getItemPurchasePrice());
         itemModel.setItemSalePrice(itemDto.getItemSalePrice());
 
-        return ResponseEntity.ok(itemService.save(itemModel));
+        return ResponseEntity.ok(itemService.update(itemModel));
     }
 
     @DeleteMapping("{id}")

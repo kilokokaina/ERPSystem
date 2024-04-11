@@ -180,14 +180,6 @@
 
                 <!-- Sidebar -left -->
                 <div class="h-100" id="leftside-menu-container" data-simplebar>
-                    <!-- Leftbar User -->
-                    <div class="leftbar-user">
-                        <a href="pages-profile.html">
-                            <img th:src="@{v3/images/users/avatar-1.jpg}" alt="user-image" height="42" class="rounded-circle shadow-sm">
-                            <span class="leftbar-user-name mt-2">Dominic Keller</span>
-                        </a>
-                    </div>
-
                     <!--- Sidemenu -->
                     <ul class="side-nav">
                         <li class="side-nav-title">Summary</li>
@@ -203,68 +195,40 @@
                         <li class="side-nav-title">Navigation</li>
 
                         <li class="side-nav-item">
-                            <a data-bs-toggle="collapse" href="#sidebarRealization" aria-expanded="false" aria-controls="sidebarRealization" class="side-nav-link">
+                            <a th:href="@{/}" class="side-nav-link">
                                 <i class="uil-copy-alt"></i>
-                                <span> Realization </span>
-                                <span class="menu-arrow"></span>
+                                <span> Sales </span>
                             </a>
-                            <div class="collapse" id="sidebarRealization">
-                                <ul class="side-nav-second-level">
-                                    <li>
-                                        <a href="realization-all.html">All</a>
-                                    </li>
-                                    <li>
-                                        <a href="realization-shop-1.html">Shop 1</a>
-                                    </li>
-                                    <li>
-                                        <a href="realization-shop-2.html">Shop 2</a>
-                                    </li>
-                                </ul>
-                            </div>
                         </li>
 
                         <li class="side-nav-item">
-                            <a data-bs-toggle="collapse" href="#sidebarStorage" aria-expanded="false" aria-controls="sidebarStorage" class="side-nav-link">
+                            <a th:href="@{/warehouse/storage}" class="side-nav-link">
                                 <i class="uil-window"></i>
                                 <span> Storage </span>
-                                <span class="menu-arrow"></span>
                             </a>
-                            <div class="collapse" id="sidebarStorage">
-                                <ul class="side-nav-second-level">
-                                    <li>
-                                        <a href="storage-all.html" target="_blank">All</a>
-                                    </li>
-                                    <li>
-                                        <a href="storage-shop-1.html" target="_blank">Shop 1</a>
-                                    </li>
-                                    <li>
-                                        <a href="storage-shop-2.html" target="_blank">Shop 2</a>
-                                    </li>
-                                </ul>
-                            </div>
                         </li>
 
-                        <li class="side-nav-title">Managment</li>
+                        <li class="side-nav-title">Management</li>
 
-                        <li class="side-nav-item">
-                            <a data-bs-toggle="collapse" href="#sidebarListOfGoods" aria-expanded="false" aria-controls="sidebarListOfGoods" class="side-nav-link">
+                        <li class="side-nav-item menuitem-active">
+                            <a data-bs-toggle="collapse" href="#sidebarProducts" aria-expanded="true" aria-controls="sidebarProducts" class="side-nav-link">
                                 <i class="uil-folder-plus"></i>
-                                <span> List of goods </span>
+                                <span> Products </span>
                                 <span class="menu-arrow"></span>
                             </a>
-                            <div class="collapse" id="sidebarListOfGoods">
+                            <div class="collapse show" id="sidebarProducts">
                                 <ul class="side-nav-second-level">
                                     <li class="side-nav-item">
-                                        <a data-bs-toggle="collapse" href="#sidebarFixationListOfGoods" aria-expanded="false" aria-controls="sidebarFixationListOfGoods">
+                                        <a data-bs-toggle="collapse" href="#sidebarAddProduct" aria-expanded="false" aria-controls="sidebarAddProduct">
                                             <span> Add category </span>
                                             <span class="badge text-bg-primary">+</span>
                                         </a>
-                                        <div class="collapse" id="sidebarFixationListOfGoods">
+                                        <div class="collapse" id="sidebarAddProduct">
                                             <ul class="side-nav-third-level">
                                                 <li>
-                                                    <div class="mb-3">
+                                                    <div class="me-3">
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" id="category-input" placeholder="Category:">
+                                                            <input type="text" class="form-control form-control-sm" id="category-input" placeholder="Category:">
                                                             <button type="button" class="btn btn-sm btn-success" onclick="addCategory()"><i class="mdi mdi-thumb-up-outline"></i></button>
                                                         </div>
                                                     </div>
@@ -272,7 +236,7 @@
                                             </ul>
                                         </div>
                                     </li>
-                                    <li th:each="category : ${categories}">
+                                    <li th:each="category : ${categories}" th:id="'category-' + ${category.getCategoryId()}">
                                         <a th:href="'/item?category=' + ${category.getCategoryId()}">
                                             <span th:text="${category.getCategoryName()}"/>
                                         </a>
@@ -285,71 +249,17 @@
                         <li class="side-nav-title">Administer</li>
 
                         <li class="side-nav-item">
-                            <a data-bs-toggle="collapse" href="#sidebarOrganization" aria-expanded="false" aria-controls="sidebarOrganization" class="side-nav-link">
+                            <a href="javascript:void(0)" class="side-nav-link">
                                 <i class="ri-team-line"></i>
                                 <span> Organization </span>
-                                <span class="menu-arrow"></span>
                             </a>
-                            <div class="collapse" id="sidebarOrganization">
-                                <ul class="side-nav-second-level">
-                                    <li>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#multiple-one">
-                                            Add organization
-                                            <span class="badge text-bg-primary">+</span>
-                                        </a>
-                                    </li>
-                                    <!-- <li th:each="user : ${users}">
-                                        <a th:href="'/item?user=' + ${user.getUserId()}">
-                                            <span th:text="${user.getUserName()}"/>
-                                        </a>
-                                    </li> -->
-                                </ul>
-                            </div>
                         </li>
 
                         <li class="side-nav-item">
-                            <a data-bs-toggle="collapse" href="#sidebarUserManagement" aria-expanded="false" aria-controls="sidebarUserManagement" class="side-nav-link">
-                                <i class="ri-team-line"></i>
-                                <span> User management </span>
-                                <span class="menu-arrow"></span>
-                            </a>
-                            <div class="collapse" id="sidebarUserManagement">
-                                <ul class="side-nav-second-level">
-                                    <li>
-                                        <a href="#">
-                                            Add user
-                                            <span class="badge text-bg-primary">+</span>
-                                        </a>
-                                    </li>
-                                    <!-- <li th:each="user : ${users}">
-                                        <a th:href="'/item?user=' + ${user.getUserId()}">
-                                            <span th:text="${user.getUserName()}"/>
-                                        </a>
-                                    </li> -->
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a data-bs-toggle="collapse" href="#sidebarRoleManagement" aria-expanded="false" aria-controls="sidebarRoleManagement" class="side-nav-link">
+                            <a href="javascript:void(0)" class="side-nav-link">
                                 <i class=" ri-group-2-line"></i>
-                                <span> Role management </span>
-                                <span class="menu-arrow"></span>
+                                <span> User management </span>
                             </a>
-                            <div class="collapse" id="sidebarRoleManagement">
-                                <ul class="side-nav-second-level">
-                                    <li>
-                                        <a href="#">
-                                            Add Role
-                                            <span class="badge text-bg-primary">+</span>
-                                        </a>
-                                    </li>
-                                    <!-- <li th:each="role : ${roles}">
-                                        <a th:href="'/item?role=' + ${role.getRoleId()}">
-                                            <span th:text="${role.getRoleName()}"/>
-                                        </a>
-                                    </li> -->
-                                </ul>
-                            </div>
                         </li>
                         <!--- End Administer2-->
                     </ul>
@@ -496,6 +406,21 @@
                                                 </div><!-- /.modal-dialog -->
                                             </div><!-- /.modal -->
 
+                                            <div id="warning-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog modal-sm">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body p-4">
+                                                            <div class="text-center">
+                                                                <i class="ri-alert-line h1 text-warning"></i>
+                                                                <h4 class="mt-2">The product could not be added</h4>
+                                                                <p class="mt-3">Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+                                                                <button type="button" class="btn btn-warning my-2" data-bs-dismiss="modal">Continue</button>
+                                                            </div>
+                                                        </div>
+                                                    </div><!-- /.modal-content -->
+                                                </div><!-- /.modal-dialog -->
+                                            </div><!-- /.modal -->
+
                                             <div class="d-flex flex-wrap gap-2">
                                                 <!-- Multiple modal -->
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#multiple-one"><i class="mdi mdi-plus-circle me-2"></i>Add Product</button>
@@ -581,8 +506,8 @@
         <!-- Input Mask Plugin js -->
         <script th:src="@{v3/vendor/jquery-mask-plugin/jquery.mask.min.js}"></script>
 
-        <script th:src="@{v3/js/item-script.js}"></script>
-        <script th:src="@{v3/js/category-script.js}"></script>
+        <script th:src="@{v3/js/api/item-script.js}"></script>
+        <script th:src="@{v3/js/api/category-script.js}"></script>
 
     </body>
 </html> 

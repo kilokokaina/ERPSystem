@@ -1,9 +1,8 @@
 let itemId = 0;
+let addItemModalSuccess = new bootstrap.Modal('#multiple-two');
+let addItemModalWarning = new bootstrap.Modal('#warning-alert-modal');
 
 function addItem() {
-    // let addItemModal = new bootstrap.Modal('#multiple-one');
-    let addItemModalSuccess = new bootstrap.Modal('#multiple-two');
-
     let itemData = {
         'itemName': document.getElementById('itemName').value,
         'categoryName': document.getElementById('itemCategory').value,
@@ -17,10 +16,15 @@ function addItem() {
             'Content-Type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify(itemData)
+    }).then(async response => {
+        let result = await response;
+        if (result.ok) {
+            addItemModalSuccess.show();
+            console.log(itemData);
+        } else {
+            addItemModalWarning.show();
+        }
     });
-
-    addItemModalSuccess.show();
-    console.log(itemData);
 }
 
 function deleteItem(element) {

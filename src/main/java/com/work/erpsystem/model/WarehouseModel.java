@@ -15,6 +15,7 @@ public class WarehouseModel {
     private Long warehouseId;
 
     private String warehouseName;
+    private String warehouseAddress;
 
     @ManyToOne
     @JoinColumn(name = "org_id")

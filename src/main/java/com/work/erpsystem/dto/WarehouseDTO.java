@@ -6,5 +6,6 @@ import lombok.Data;
 public class WarehouseDTO {
 
     private String warehouseName;
+    private String warehouseAddress;
 
 }

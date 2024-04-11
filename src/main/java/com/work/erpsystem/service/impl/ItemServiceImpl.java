@@ -1,5 +1,6 @@
 package com.work.erpsystem.service.impl;
 
+import com.work.erpsystem.exception.DuplicateDBRecord;
 import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.ItemModel;
 import com.work.erpsystem.repository.ItemRepository;
@@ -23,7 +24,17 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemModel save(ItemModel itemModel) {
+    public ItemModel save(ItemModel itemModel) throws DuplicateDBRecord {
+        if (itemRepository.findByItemName(itemModel.getItemName()) != null) {
+            String exceptionMessage = "Record with name [%s] already exists in DB";
+            throw new DuplicateDBRecord(exceptionMessage);
+        }
+
+        return itemRepository.save(itemModel);
+    }
+
+    @Override
+    public ItemModel update(ItemModel itemModel) {
         return itemRepository.save(itemModel);
     }
 

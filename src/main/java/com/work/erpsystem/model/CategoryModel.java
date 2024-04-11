@@ -1,9 +1,6 @@
 package com.work.erpsystem.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,5 +13,9 @@ public class CategoryModel {
     private Long categoryId;
 
     private String categoryName;
+
+    @ManyToOne
+    @JoinColumn(name = "org_id")
+    private OrganizationModel organization;
 
 }

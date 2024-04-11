@@ -90,7 +90,8 @@ public class DevController {
 
     @GetMapping("get_ip")
     public @ResponseBody String getIP(HttpServletRequest request) {
-        return request.getRemoteAddr();
+        log.info(request.toString());
+        return request.getRemoteUser();
     }
 
 }
