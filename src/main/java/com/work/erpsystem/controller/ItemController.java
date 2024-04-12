@@ -44,6 +44,7 @@ public class ItemController {
         model.addAttribute("categories", categoryService.findByOrg(userModel.getOrgEmployee()));
 
         if (Objects.nonNull(category)) {
+            model.addAttribute("categoryName", category.getCategoryName());
             model.addAttribute("items", itemService.findByCategoryId(category.getCategoryId()));
         } else model.addAttribute("items", null);
 

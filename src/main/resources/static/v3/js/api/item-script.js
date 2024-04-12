@@ -8,7 +8,7 @@ function addItem() {
         'categoryName': document.getElementById('itemCategory').value,
         'itemPurchasePrice': Number.parseFloat(document.getElementById('itemPurchase').value),
         'itemSalePrice': Number.parseFloat(document.getElementById('itemSale').value)
-    }
+    };
 
     fetch('api/item', {
         method: 'POST',

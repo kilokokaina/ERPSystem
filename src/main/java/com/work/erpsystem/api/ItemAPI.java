@@ -58,6 +58,17 @@ public class ItemAPI {
         }
     }
 
+    //HttpStatus - 200 (OK), 204 (No record in DB)
+    @GetMapping("find_by_category")
+    public ResponseEntity<List<ItemModel>> findByCategory(@RequestParam(name = "category_name") String categoryName) {
+        try {
+            CategoryModel categoryModel = categoryService.findByName(categoryName);
+            return ResponseEntity.ok(itemService.findByCategoryId(categoryModel.getCategoryId()));
+        } catch (NoDBRecord exception) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
     //HttpStatus - 200 (OK), 409 (Duplicate record in DB)
     @PostMapping
     public ResponseEntity<ItemModel> addItem(@RequestBody ItemDTO itemDto) throws NoDBRecord, DuplicateDBRecord {

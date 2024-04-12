@@ -211,10 +211,9 @@
                         <li class="side-nav-title">Management</li>
 
                         <li class="side-nav-item menuitem-active">
-                            <a data-bs-toggle="collapse" href="#sidebarProducts" aria-expanded="true" aria-controls="sidebarProducts" class="side-nav-link">
+                            <a data-bs-toggle="collapse" aria-expanded="true" aria-controls="sidebarProducts" class="side-nav-link">
                                 <i class="uil-folder-plus"></i>
                                 <span> Products </span>
-                                <span class="menu-arrow"></span>
                             </a>
                             <div class="collapse show" id="sidebarProducts">
                                 <ul class="side-nav-second-level">
@@ -288,9 +287,8 @@
                                         <nav aria-label="breadcrumb">
                                             <ol class="breadcrumb bg-light-lighten p-2 mb-0">
                                                 <li class="breadcrumb-item"><a href="#"><i class="uil-home-alt"></i> Hyper</a></li>
-                                                <li class="breadcrumb-item"><a href="#">List of Goods</a></li>
-                                                <li class="breadcrumb-item"><a href="#">Fixation</a></li>
-                                                <li class="breadcrumb-item active" aria-current="page">Frames</li>
+                                                <li class="breadcrumb-item"><a href="#">Products</a></li>
+                                                <li class="breadcrumb-item active" aria-current="page" th:text="${categoryName}"></li>
                                             </ol>
                                         </nav>
                                     </div>

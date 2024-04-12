@@ -1,11 +1,15 @@
 package com.work.erpsystem.api;
 
+import com.work.erpsystem.dto.ItemQuantityDTO;
 import com.work.erpsystem.dto.WarehouseDTO;
 import com.work.erpsystem.exception.DuplicateDBRecord;
 import com.work.erpsystem.exception.NoDBRecord;
+import com.work.erpsystem.model.ItemModel;
 import com.work.erpsystem.model.OrganizationModel;
 import com.work.erpsystem.model.UserModel;
 import com.work.erpsystem.model.WarehouseModel;
+import com.work.erpsystem.service.impl.CategoryServiceImpl;
+import com.work.erpsystem.service.impl.ItemServiceImpl;
 import com.work.erpsystem.service.impl.UserServiceImpl;
 import com.work.erpsystem.service.impl.WarehouseServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -23,11 +28,16 @@ import java.util.List;
 public class WarehouseAPI {
 
     private final WarehouseServiceImpl warehouseService;
+    private final CategoryServiceImpl categoryService;
+    private final ItemServiceImpl itemService;
     private final UserServiceImpl userService;
 
     @Autowired
-    public WarehouseAPI(WarehouseServiceImpl warehouseService, UserServiceImpl userService) {
+    public WarehouseAPI(WarehouseServiceImpl warehouseService, CategoryServiceImpl categoryService,
+                        ItemServiceImpl itemService, UserServiceImpl userService) {
         this.warehouseService = warehouseService;
+        this.categoryService = categoryService;
+        this.itemService = itemService;
         this.userService = userService;
     }
 
@@ -91,6 +101,30 @@ public class WarehouseAPI {
             warehouseModel.setWarehouseAddress(warehouseNew.getWarehouseAddress());
 
             return ResponseEntity.ok(warehouseService.update(warehouseModel));
+        } catch (NoDBRecord exception) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @PostMapping("add_items/{id}")
+    public ResponseEntity<WarehouseModel> addItemsToWarehouse(@PathVariable(value = "id") WarehouseModel warehouseModel,
+                                                              @RequestBody ItemQuantityDTO itemQuantityDTO,
+                                                              Authentication authentication) {
+        UserModel userModel = userService.findByUsername(authentication.getName());
+
+        if (!userModel.getOrgEmployee().equals(warehouseModel.getOrganization())) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            ItemModel itemModel = itemService.findByName(itemQuantityDTO.getItemName());
+
+            Map<ItemModel, Integer> itemQuantity = warehouseModel.getItemQuantity();
+            itemQuantity.put(itemModel, itemQuantityDTO.getQuantity());
+            warehouseModel.setItemQuantity(itemQuantity);
+
+            return ResponseEntity.ok(warehouseService.update(warehouseModel));
+
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
