@@ -195,45 +195,17 @@
                         <li class="side-nav-title">Navigation</li>
 
                         <li class="side-nav-item">
-                            <a data-bs-toggle="collapse" href="#sidebarRealization" aria-expanded="false" aria-controls="sidebarRealization" class="side-nav-link">
+                            <a th:href="@{/}" class="side-nav-link">
                                 <i class="uil-copy-alt"></i>
                                 <span> Sales </span>
-                                <span class="menu-arrow"></span>
                             </a>
-                            <div class="collapse" id="sidebarRealization">
-                                <ul class="side-nav-second-level">
-                                    <li>
-                                        <a href="realization-all.html">All</a>
-                                    </li>
-                                    <li>
-                                        <a href="realization-shop-1.html">Shop 1</a>
-                                    </li>
-                                    <li>
-                                        <a href="realization-shop-2.html">Shop 2</a>
-                                    </li>
-                                </ul>
-                            </div>
                         </li>
 
                         <li class="side-nav-item">
-                            <a data-bs-toggle="collapse" href="#sidebarStorage" aria-expanded="false" aria-controls="sidebarStorage" class="side-nav-link">
+                            <a th:href="@{/warehouse/storage}" class="side-nav-link">
                                 <i class="uil-window"></i>
                                 <span> Storage </span>
-                                <span class="menu-arrow"></span>
                             </a>
-                            <div class="collapse" id="sidebarStorage">
-                                <ul class="side-nav-second-level">
-                                    <li>
-                                        <a href="storage-all.html" target="_blank">All</a>
-                                    </li>
-                                    <li>
-                                        <a href="storage-shop-1.html" target="_blank">Shop 1</a>
-                                    </li>
-                                    <li>
-                                        <a href="storage-shop-2.html" target="_blank">Shop 2</a>
-                                    </li>
-                                </ul>
-                            </div>
                         </li>
 
                         <li class="side-nav-title">Management</li>
@@ -244,6 +216,24 @@
                                 <span> Products </span>
                             </a>
                         </li>
+
+                        <!--- Administer2-->
+                        <li class="side-nav-title">Administer</li>
+
+                        <li class="side-nav-item">
+                            <a href="javascript:void(0)" class="side-nav-link">
+                                <i class="ri-team-line"></i>
+                                <span> Organization </span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="javascript:void(0)" class="side-nav-link">
+                                <i class=" ri-group-2-line"></i>
+                                <span> User management </span>
+                            </a>
+                        </li>
+                        <!--- End Administer2-->
                     </ul>
                     <!--- End Sidemenu -->
 
