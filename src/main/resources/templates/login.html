@@ -61,7 +61,7 @@
                                             <p class="text-muted mb-4">Enter your email address and password to access admin panel.</p>
                                         </div>
 
-                                        <form th:action="@{/login}" method="post">
+                                        <form th:action="@{/api/auth/login}" method="post">
                                             <div class="mb-3">
                                                 <label for="singin-emailaddress" class="form-label">Email address</label>
                                                 <input class="form-control" type="email" id="singin-emailaddress" name="username" required="" placeholder="Enter your email">
@@ -98,7 +98,7 @@
                                             <p class="text-muted mb-4">Don't have an account? Create your account, it takes less than a minute </p>
                                         </div>
         
-                                        <form th:action="@{/register}" method="post">
+                                        <form th:action="@{/api/auth/register}" method="post">
         
 <!--                                            <div class="mb-3">-->
 <!--                                                <label for="fullname" class="form-label">Full Name</label>-->

@@ -31,13 +31,14 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/register", "/v3/**").permitAll()
+                        .requestMatchers("/register", "/v3/**", "/api/auth/**").permitAll()
                         .anyRequest().authenticated()
                 ).securityContext(context ->
                         context.securityContextRepository(new HttpSessionSecurityContextRepository())
                 ).authenticationManager(authenticationManager)
                 .formLogin(form -> form
                         .loginPage("/login")
+                        .successForwardUrl("/")
                         .permitAll()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

@@ -405,6 +405,12 @@
                                             <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                                                 <thead>
                                                 <tr>
+                                                    <th class="all sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all" style="width: 27.6px;" rowspan="1" colspan="1" data-col="0" aria-label="&amp;nbsp;">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input dt-checkboxes">
+                                                            <label class="form-check-label">&nbsp;</label>
+                                                        </div>
+                                                    </th>
                                                     <th>Product</th>
                                                     <th>Category</th>
                                                     <th>Added Date</th>
@@ -417,6 +423,12 @@
                                             
                                                 <tbody>
                                                     <tr>
+                                                        <td class="dt-checkboxes-cell dtr-control" tabindex="0">
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input dt-checkboxes">
+                                                                <label class="form-check-label">&nbsp;</label>
+                                                            </div>
+                                                        </td>
                                                         <td>Frame Standard Plastic Black </td>
                                                         <td>Something</td>
                                                         <td>01/04/2024</td>
@@ -429,6 +441,7 @@
                                                         </td>
                                                     </tr>
                                                     <tr th:each="item : ${itemQuantity.entrySet()}">
+                                                        <td class="dt-checkboxes-cell dtr-control" tabindex="0"><div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div></td>
                                                         <td th:text="${item.getKey().getItemName()}"/>
                                                         <td th:text="${item.getKey().getCategoryModel().getCategoryName()}"/>
                                                         <td th:text="${item.getKey().getItemCreationDate()}"/>

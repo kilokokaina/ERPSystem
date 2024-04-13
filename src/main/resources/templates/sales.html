@@ -1,10 +1,496 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="en" data-layout-mode="detached" data-bs-theme="dark"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org">
 
-</body>
+    <head>
+        <meta charset="utf-8" />
+        <title>ERPSystem</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+
+        <!-- App favicon -->
+        <link rel="shortcut icon" th:href="@{/v3/images/favicon.ico}">
+
+        <!-- Theme Config Js -->
+        <script th:src="@{/v3/js/hyper-config.js}"></script>
+
+        <!-- App css -->
+        <link th:href="@{/v3/css/app-creative.min.css}" rel="stylesheet" type="text/css" id="app-style" />
+
+        <!-- Icons css -->
+        <link th:href="@{/v3/css/icons.min.css}" rel="stylesheet" type="text/css" />
+
+        <!-- Datatables css -->
+        <link th:href="@{/v3/vendor/datatables.net-bs5/css/dataTables.bootstrap5.min.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/v3/vendor/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css}" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body>
+        <!-- Begin page -->
+        <div class="wrapper">
+
+            <!-- ========== Topbar Start ========== -->
+            <div class="navbar-custom">
+                <div class="topbar container-fluid">
+                    <div class="d-flex align-items-center gap-lg-2 gap-1">
+
+                        <!-- Topbar Brand Logo -->
+                        <div class="logo-topbar">
+                            <!-- Logo light -->
+                            <a th:href="@{/}" class="logo-light">
+                                <span class="logo-lg">
+                                    <img th:src="@{/v3/images/logo.png}" alt="logo">
+                                </span>
+                                <span class="logo-sm">
+                                    <img th:src="@{/v3/images/logo-sm.png}" alt="small logo">
+                                </span>
+                            </a>
+
+                            <!-- Logo Dark -->
+                            <a th:href="@{/}" class="logo-dark">
+                                <span class="logo-lg">
+                                    <img th:src="@{/v3/images/logo-dark.png}" alt="dark logo">
+                                </span>
+                                <span class="logo-sm">
+                                    <img th:src="@{/v3/images/logo-dark-sm.png}" alt="small logo">
+                                </span>
+                            </a>
+                        </div>
+
+                        <!-- Sidebar Menu Toggle Button -->
+                        <button class="button-toggle-menu">
+                            <i class="mdi mdi-menu"></i>
+                        </button>
+
+                        <!-- Horizontal Menu Toggle Button -->
+                        <button class="navbar-toggle" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                            <div class="lines">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <ul class="topbar-menu d-flex align-items-center gap-3">
+                        <li class="dropdown d-lg-none">
+                            <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                <i class="ri-search-line font-22"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-animated dropdown-lg p-0">
+                                <form class="p-3">
+                                    <input type="search" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
+                                </form>
+                            </div>
+                        </li>
+
+                        <li class="d-none d-sm-inline-block">
+                            <div class="nav-link" id="light-dark-mode" data-bs-toggle="tooltip" data-bs-placement="left" title="Theme Mode">
+                                <i class="ri-moon-line font-22"></i>
+                            </div>
+                        </li>
+
+                        <li class="dropdown">
+                            <a class="nav-link dropdown-toggle arrow-none nav-user px-2" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                <span class="account-user-avatar">
+                                    <img th:src="@{/v3/images/users/avatar-1.jpg}" alt="user-image" width="32" class="rounded-circle">
+                                </span>
+                                <span class="d-lg-flex flex-column gap-1 d-none">
+                                    <h5 class="my-0" sec:authentication="name"/>
+                                    <h6 class="my-0 fw-normal">Founder</h6>
+                                </span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
+                                <!-- item-->
+                                <div class=" dropdown-header noti-title">
+                                    <h6 class="text-overflow m-0">Welcome !</h6>
+                                </div>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <i class="mdi mdi-account-circle me-1"></i>
+                                    <span>My Account</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <i class="mdi mdi-account-edit me-1"></i>
+                                    <span>Settings</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <i class="mdi mdi-lifebuoy me-1"></i>
+                                    <span>Support</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <i class="mdi mdi-lock-outline me-1"></i>
+                                    <span>Lock Screen</span>
+                                </a>
+
+                                <!-- item-->
+                                <a th:href="@{/logout}" class="dropdown-item">
+                                    <i class="mdi mdi-logout me-1"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- ========== Topbar End ========== -->
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <div class="leftside-menu">
+
+                <!-- Brand Logo Light -->
+                <a th:href="@{/}" class="logo logo-light">
+                    <span class="logo-lg">
+                        <img th:src="@{/v3/images/logo.png}" alt="logo">
+                    </span>
+                    <span class="logo-sm">
+                        <img th:src="@{/v3/images/logo-sm.png}" alt="small logo">
+                    </span>
+                </a>
+
+                <!-- Brand Logo Dark -->
+                <a th:href="@{/}" class="logo logo-dark">
+                    <span class="logo-lg">
+                        <img th:src="@{/v3/images/logo-dark.png}" alt="dark logo">
+                    </span>
+                    <span class="logo-sm">
+                        <img th:src="@{/v3/images/logo-dark-sm.png}" alt="small logo">
+                    </span>
+                </a>
+
+                <!-- Sidebar Hover Menu Toggle Button -->
+                <div class="button-sm-hover" data-bs-toggle="tooltip" data-bs-placement="right" title="Show Full Sidebar">
+                    <i class="ri-checkbox-blank-circle-line align-middle"></i>
+                </div>
+
+                <!-- Full Sidebar Menu Close Button -->
+                <div class="button-close-fullsidebar">
+                    <i class="ri-close-fill align-middle"></i>
+                </div>
+
+                <!-- Sidebar -left -->
+                <div class="h-100" id="leftside-menu-container" data-simplebar>
+                    <!--- Sidemenu -->
+                    <ul class="side-nav">
+                        <li class="side-nav-title">Summary</li>
+
+                        <li class="side-nav-item">
+                            <a th:href="@{/}" class="side-nav-link">
+                                <i class="uil-home-alt"></i>
+                                <span class="badge bg-success float-end">5</span>
+                                <span> Statistics </span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-title">Navigation</li>
+
+                        <li class="side-nav-item">
+                            <a th:href="@{/}" class="side-nav-link">
+                                <i class="uil-copy-alt"></i>
+                                <span> Sales </span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item menuitem-active">
+                            <a data-bs-toggle="collapse" aria-expanded="true" aria-controls="sidebarStorageList" class="side-nav-link">
+                                <i class="uil-window"></i>
+                                <span> Storage </span>
+                            </a>
+                            <div class="collapse show" id="sidebarStorageList">
+                                <ul class="side-nav-second-level">
+                                    <li class="side-nav-item">
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#add-warehouse-modal">
+                                            <span> Add warehouse </span>
+                                            <span class="badge text-bg-primary">+</span>
+                                        </a>
+                                    </li>
+                                    <li th:each="warehouse : ${warehouses}" th:id="'warehouse-' + ${warehouse.getWarehouseId()}">
+                                        <a th:href="'/warehouse/storage?id=' + ${warehouse.getWarehouseId()}">
+                                            <span th:text="${warehouse.getWarehouseName()}"/>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="side-nav-title">Management</li>
+
+                        <li class="side-nav-item">
+                            <a th:href="@{/item}" class="side-nav-link">
+                                <i class="uil-folder-plus"></i>
+                                <span> Products </span>
+                            </a>
+                        </li>
+
+                        <!--- Administer2-->
+                        <li class="side-nav-title">Administer</li>
+
+                        <li class="side-nav-item">
+                            <a href="javascript:void(0)" class="side-nav-link">
+                                <i class="ri-team-line"></i>
+                                <span> Organization </span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="javascript:void(0)" class="side-nav-link">
+                                <i class=" ri-group-2-line"></i>
+                                <span> User management </span>
+                            </a>
+                        </li>
+                        <!--- End Administer2-->
+                    </ul>
+                    <!--- End Sidemenu -->
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <!-- ========== Left Sidebar End ========== -->
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- Standard modal -->
+                        <div id="add-warehouse-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="standard-modalLabel">Add warehouse</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="warehouse-name" class="form-label">Warehouse name</label>
+                                            <input type="text" id="warehouse-name" name="example-input-normal" class="form-control" placeholder="Name:">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="warehouse-address" class="form-label">Warehouse address</label>
+                                            <input type="text" id="warehouse-address" name="example-input-normal" class="form-control" placeholder="Address:">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addWarehouse()">Add warehouse</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+
+                        <!-- Modal -->
+                        <div id="add-warehouse-success" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content modal-filled bg-success">
+                                    <div class="modal-body p-4">
+                                        <div class="text-center">
+                                            <i class="ri-check-line h1"></i>
+                                            <h4 class="mt-2">Well Done!</h4>
+                                            <p class="mt-3">Warehouse was successfully added</p>
+                                            <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal" onclick="location.reload()">OK</button>
+                                        </div>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+
+
+                        <!-- Modal for edit sale -->
+                        <div id="edit-sale" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="edit-sale-label" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="edit-sale-label">Add supply</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="itemCategory" class="form-label">Category</label>
+                                            <select class="form-select" id="itemCategory" data-placeholder="Category" onchange="findItemsByCategory()">
+                                                <option></option>
+                                                <option th:each="category : ${categories}" th:text="${category.getCategoryName()}">
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="itemName" class="form-label">Product</label>
+                                            <select class="form-select"  id="itemName" data-placeholder="Product">
+
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="quantity" class="form-label">Quantity</label>
+                                            <input type="number" id="quantity" name="example-input-normal" class="form-control" placeholder="Address:">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addItemsToWarehouse()">Add supply</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+
+                        <!-- Modal -->
+                        <div id="edit-sale-success" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content modal-filled bg-success">
+                                    <div class="modal-body p-4">
+                                        <div class="text-center">
+                                            <i class="ri-check-line h1"></i>
+                                            <h4 class="mt-2">Well Done!</h4>
+                                            <p class="mt-3">Sale was successfully edited</p>
+                                            <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal" onclick="location.reload()">OK</button>
+                                        </div>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+
+                        <div id="add-supply-warning" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-body p-4">
+                                        <div class="text-center">
+                                            <i class="ri-alert-line h1 text-warning"></i>
+                                            <h4 class="mt-2">The sale could not be edited</h4>
+                                            <p class="mt-3">Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+                                            <button type="button" class="btn btn-warning my-2" data-bs-dismiss="modal">OK</button>
+                                        </div>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+
+                        <!-- Start page title -->
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                        <nav aria-label="breadcrumb">
+                                            <ol class="breadcrumb bg-light-lighten p-2 mb-0">
+                                                <li class="breadcrumb-item"><a href="#"><i class="uil-home-alt"></i> Hyper</a></li>
+                                                <li class="breadcrumb-item"><a href="#">Storage</a></li>
+                                                <li class="breadcrumb-item active" aria-current="page" th:text="${warehouseName}"/>
+                                                <div class="something" th:text="${warehouseId}" hidden/>
+                                            </ol>
+                                        </nav>
+                                    </div>
+                                    <h4 class="page-title">Storage</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- End page title -->
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="card mt-2">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                                                <thead>
+                                                <tr>
+                                                    <th>Product</th>
+                                                    <th>Category</th>
+                                                    <th>Last sale date</th>
+                                                    <th>Quantity of sale per day</th>
+                                                    <th style="width: 65px;">Action</th>                                                    
+                                                </tr>
+                                                </thead>
+                                            
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Frame Standard Plastic Black </td>
+                                                        <td>Something</td>
+                                                        <td>01/04/2024</td>
+                                                        <td>2</td>                                                 ri-edit-2-line                                                              
+                                                        <td class="table-action">
+                                                            <a  class="action-icon" data-bs-toggle="modal" data-bs-target="#add-supply"> <i class="ri-edit-2-line" ></i></a>
+                                                            <a  class="action-icon" data-bs-dismiss="modal"> <i class="ri-delete-bin-2-line"></i></a>                                                            
+                                                        </td>
+                                                    </tr>
+<!--                                                    <tr th:each="item : ${itemQuantity.entrySet()}">-->
+<!--                                                        <td th:text="${item.getKey().getItemName()}"/>-->
+<!--                                                        <td th:text="${item.getKey().getCategoryModel().getCategoryName()}"/>-->
+<!--                                                        <td th:text="${item.getKey().getItemCreationDate()}"/>-->
+<!--                                                        <td th:text="${item.getKey().getItemPurchasePrice()}"/>-->
+<!--                                                        <td th:text="${item.getKey().getItemSalePrice()}"/>-->
+<!--                                                        <td th:text="${item.getValue()}"/>-->
+<!--                                                        <td class="table-action">-->
+<!--                                                            <a  class="action-icon" data-bs-toggle="modal" data-bs-target="#add-supply"> <i class="ri-add-line" ></i></a>-->
+<!--                                                            <a  class="action-icon" data-bs-dismiss="modal"> <i class="ri-arrow-right-line"></i></a>-->
+<!--                                                        </td>-->
+<!--                                                    </tr>-->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- container -->
+                </div>
+                <!-- content -->
+
+                <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <script>document.write(new Date().getFullYear())</script> © SMART&Co
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-md-end footer-links d-none d-md-block">
+                                    <a href="javascript: void(0);">About</a>
+                                    <a href="javascript: void(0);">Support</a>
+                                    <a href="javascript: void(0);">Contact Us</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Page content -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- END wrapper -->
+
+        <!-- Vendor js -->
+        <script th:src="@{/v3/js/vendor.min.js}"></script>
+
+        <!-- App js -->
+        <script th:src="@{/v3/js/app.min.js}"></script>
+
+        <!-- Datatables js -->
+        <script th:src="@{/v3/vendor/datatables.net/js/jquery.dataTables.min.js}"></script>
+        <script th:src="@{/v3/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js}"></script>
+        <script th:src="@{/v3/vendor/datatables.net-responsive/js/dataTables.responsive.min.js}"></script>
+        <script th:src="@{/v3/vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js}"></script>
+
+        <!-- Datatable Init js -->
+        <script th:src="@{/v3/js/pages/demo.datatable-init.js}"></script>
+
+        <!-- Input Mask Plugin js -->
+        <script th:src="@{/v3/vendor/jquery-mask-plugin/jquery.mask.min.js}"></script>
+
+        <script th:src="@{/v3/js/api/warehouse-script.js}"></script>
+    </body>
 </html>

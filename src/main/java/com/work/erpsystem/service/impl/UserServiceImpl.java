@@ -1,5 +1,6 @@
 package com.work.erpsystem.service.impl;
 
+import com.work.erpsystem.exception.DuplicateDBRecord;
 import com.work.erpsystem.model.UserModel;
 import com.work.erpsystem.repository.UserRepository;
 import com.work.erpsystem.service.UserService;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -22,8 +24,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserModel save(UserModel userModel) {
+    public UserModel save(UserModel userModel) throws DuplicateDBRecord {
+        if (Objects.nonNull(userRepository.findByUsername(userModel.getUsername()))) {
+            String exceptionMessage = "Username with name%s already exist in DB";
+            throw new DuplicateDBRecord(String.format(exceptionMessage, userModel.getUsername()));
+        }
+
         return userRepository.save(userModel);
+    }
+
+    @Override
+    public UserModel update(UserModel userModel) {
+        return null;
     }
 
     @Override
