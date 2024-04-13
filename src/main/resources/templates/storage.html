@@ -321,6 +321,7 @@
                                         <div class="mb-3">
                                             <label for="itemCategory" class="form-label">Category</label>
                                             <select class="form-select" id="itemCategory" data-placeholder="Category" onchange="findItemsByCategory()">
+                                                <option></option>
                                                 <option th:each="category : ${categories}" th:text="${category.getCategoryName()}">
                                             </select>
                                         </div>
