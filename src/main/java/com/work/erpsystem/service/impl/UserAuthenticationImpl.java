@@ -39,7 +39,7 @@ public class UserAuthenticationImpl implements UserAuthenticationService {
     }
 
     @Override
-    public HttpStatus startSession(String username, String password) {
+    public boolean startSession(String username, String password) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
         authentication = authenticationManager.authenticate(authentication);
 
@@ -51,14 +51,14 @@ public class UserAuthenticationImpl implements UserAuthenticationService {
 
             log.info(servletRequest.getRemoteAddr());
 
-            return HttpStatus.OK;
+            return true;
         }
 
-        return HttpStatus.UNAUTHORIZED;
+        return false;
     }
 
     @Override
-    public HttpStatus register(String username, String password) {
+    public boolean register(String username, String password) {
         try {
             UserModel userModel = new UserModel();
 
@@ -67,9 +67,9 @@ public class UserAuthenticationImpl implements UserAuthenticationService {
 
             userService.save(userModel);
         } catch (DuplicateDBRecord exception) {
-            return HttpStatus.CONFLICT;
+            return false;
         }
 
-        return HttpStatus.OK;
+        return true;
     }
 }
