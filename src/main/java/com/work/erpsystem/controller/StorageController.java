@@ -1,11 +1,11 @@
 package com.work.erpsystem.controller;
 
-import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.UserModel;
 import com.work.erpsystem.model.WarehouseModel;
 import com.work.erpsystem.service.impl.CategoryServiceImpl;
 import com.work.erpsystem.service.impl.UserServiceImpl;
 import com.work.erpsystem.service.impl.WarehouseServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Controller
 @RequestMapping("warehouse")
 public class StorageController {

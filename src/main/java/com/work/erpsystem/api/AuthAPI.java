@@ -1,5 +1,6 @@
 package com.work.erpsystem.api;
 
+import com.work.erpsystem.exception.BadCredentials;
 import com.work.erpsystem.service.impl.UserAuthenticationImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +13,8 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -33,16 +36,23 @@ public class AuthAPI {
     @PostMapping("login")
     public ResponseEntity<HttpStatus> login(@RequestParam(value = "username") String username,
                                             @RequestParam(value = "password") String password) {
-        boolean status = userAuthentication.startSession(username, password);
         HttpHeaders headers = new HttpHeaders();
 
-        if (status) {
+        try {
+            userAuthentication.startSession(username, password);
+
             RequestCache requestCache = new HttpSessionRequestCache();
             SavedRequest savedRequest = requestCache.getRequest(servletRequest, servletResponse);
 
-            headers.add("Location", savedRequest.getRedirectUrl());
+            if (Objects.isNull(savedRequest)) headers.add("Location", "/");
+            else {
+                headers.add("Location", savedRequest.getRedirectUrl());
+                log.info(savedRequest.getRedirectUrl());
+            }
+        } catch (BadCredentials exception) {
+            headers.add("Location", "/login");
+            log.info("Error");
         }
-        else headers.add("Location", "/login");
 
         return new ResponseEntity<>(headers, HttpStatus.valueOf(301));
     }

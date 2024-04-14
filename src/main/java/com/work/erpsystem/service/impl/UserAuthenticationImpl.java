@@ -1,5 +1,6 @@
 package com.work.erpsystem.service.impl;
 
+import com.work.erpsystem.exception.BadCredentials;
 import com.work.erpsystem.exception.DuplicateDBRecord;
 import com.work.erpsystem.model.UserModel;
 import com.work.erpsystem.service.UserAuthenticationService;
@@ -8,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -39,22 +41,21 @@ public class UserAuthenticationImpl implements UserAuthenticationService {
     }
 
     @Override
-    public boolean startSession(String username, String password) {
+    public void startSession(String username, String password) throws BadCredentials {
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
         authentication = authenticationManager.authenticate(authentication);
 
-        if (Objects.nonNull(authentication)) {
-            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-            securityContext.setAuthentication(authentication);
-
-            contextRepository.saveContext(securityContext, servletRequest, servletResponse);
-
-            log.info(servletRequest.getRemoteAddr());
-
-            return true;
+        if (Objects.isNull(authentication)) {
+            String exceptionMessage = "Incorrect username [%s] or password [%s]";
+            throw new BadCredentials(String.format(exceptionMessage, username, password));
         }
 
-        return false;
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(authentication);
+
+        contextRepository.saveContext(securityContext, servletRequest, servletResponse);
+
+        log.info(servletRequest.getRemoteAddr());
     }
 
     @Override

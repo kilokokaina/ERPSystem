@@ -401,7 +401,7 @@
                             <div class="col">
                                 <div class="card mt-2">
                                     <div class="card-body">
-                                        <div class="table-responsive">
+                                        <div th:if="${itemQuantity != null}" class="table-responsive">
                                             <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                                                 <thead>
                                                 <tr>
@@ -455,6 +455,9 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
+                                        </div>
+                                        <div th:unless="${itemQuantity != null}">
+                                            Choose warehouse
                                         </div>
                                     </div>
                                 </div>
