@@ -51,7 +51,7 @@ public class AuthAPI {
             }
         } catch (BadCredentials exception) {
             headers.add("Location", "/login");
-            log.info("Error");
+            log.info(exception.getMessage());
         }
 
         return new ResponseEntity<>(headers, HttpStatus.valueOf(301));
