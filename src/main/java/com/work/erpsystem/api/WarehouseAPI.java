@@ -120,7 +120,9 @@ public class WarehouseAPI {
             ItemModel itemModel = itemService.findByName(itemQuantityDTO.getItemName());
 
             Map<ItemModel, Integer> itemQuantity = warehouseModel.getItemQuantity();
-            itemQuantity.put(itemModel, itemQuantityDTO.getQuantity());
+
+            int currentItemQuantity = itemQuantity.get(itemModel);
+            itemQuantity.put(itemModel, itemQuantityDTO.getQuantity() + currentItemQuantity);
             warehouseModel.setItemQuantity(itemQuantity);
 
             return ResponseEntity.ok(warehouseService.update(warehouseModel));

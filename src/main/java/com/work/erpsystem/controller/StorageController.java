@@ -54,7 +54,20 @@ public class StorageController {
     }
 
     @GetMapping("sales")
-    public String salesList() {
+    public String salesList(@RequestParam(value = "id", required = false) WarehouseModel warehouseModel,
+                            Authentication authentication, Model model) {
+        UserModel userModel = userService.findByUsername(authentication.getName());
+
+        if (Objects.nonNull(warehouseModel)) {
+            model.addAttribute("itemSales", warehouseModel.getItemSales());
+            model.addAttribute("itemQuantity", warehouseModel.getItemQuantity());
+            model.addAttribute("warehouseName", warehouseModel.getWarehouseName());
+            model.addAttribute("warehouseId", warehouseModel.getWarehouseId());
+        }
+
+        List<WarehouseModel> warehouseList = warehouseService.findByOrganization(userModel.getOrgEmployee());
+        model.addAttribute("warehouses", warehouseList);
+
         return "sales";
     }
 
