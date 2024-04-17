@@ -118,11 +118,14 @@ public class WarehouseAPI {
 
         try {
             ItemModel itemModel = itemService.findByName(itemQuantityDTO.getItemName());
-
             Map<ItemModel, Integer> itemQuantity = warehouseModel.getItemQuantity();
 
-            int currentItemQuantity = itemQuantity.get(itemModel);
-            itemQuantity.put(itemModel, itemQuantityDTO.getQuantity() + currentItemQuantity);
+            try {
+                int currentItemQuantity = itemQuantity.get(itemModel);
+                itemQuantity.put(itemModel, itemQuantityDTO.getQuantity() + currentItemQuantity);
+            } catch (NullPointerException exception) {
+                itemQuantity.put(itemModel, itemQuantityDTO.getQuantity());
+            }
             warehouseModel.setItemQuantity(itemQuantity);
 
             return ResponseEntity.ok(warehouseService.update(warehouseModel));
@@ -148,6 +151,31 @@ public class WarehouseAPI {
 
             return ResponseEntity.ok(HttpStatus.OK);
 
+        } catch (NoDBRecord exception) {
+            return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @DeleteMapping("delete_item/{id}")
+    public ResponseEntity<HttpStatus> deleteItemFromWarehouse(@PathVariable(value = "id") WarehouseModel warehouseModel,
+                                                              @RequestParam(value = "item_id") Long itemId,
+                                                              Authentication authentication) {
+        UserModel userModel = userService.findByUsername(authentication.getName());
+
+        try {
+            ItemModel itemModel = itemService.findById(itemId);
+
+            if (!userModel.getOrgEmployee().equals(warehouseModel.getOrganization())) {
+                return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
+            }
+
+            Map<ItemModel, Integer> itemQuantity = warehouseModel.getItemQuantity();
+            itemQuantity.remove(itemModel);
+            warehouseModel.setItemQuantity(itemQuantity);
+
+            warehouseService.update(warehouseModel);
+
+            return ResponseEntity.ok(HttpStatus.OK);
         } catch (NoDBRecord exception) {
             return ResponseEntity.ok(HttpStatus.NO_CONTENT);
         }

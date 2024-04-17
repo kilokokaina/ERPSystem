@@ -1,5 +1,6 @@
-let addWarehouseSuccess = new bootstrap.Modal('#add-warehouse-success');
-let addWarehouseWarning = new bootstrap.Modal('#add-warehouse-warning');
+let addSuccess = new bootstrap.Modal('#add-success');
+let addWarning = new bootstrap.Modal('#add-warning');
+let itemId = 0;
 
 function addWarehouse() {
     let warehouseData = {
@@ -16,9 +17,9 @@ function addWarehouse() {
     }).then(async response => {
         let result = await response;
         if (result.ok) {
-            addWarehouseSuccess.show();
+            addSuccess.show();
         } else {
-            addWarehouseWarning.show();
+            addWarning.show();
         }
     });
 }
@@ -41,12 +42,14 @@ function findItemsByCategory() {
 }
 
 function addItemsToWarehouse() {
-    let addSupplySuccess = new bootstrap.Modal('#add-supply-success');
-    let addSupplyWarning = new bootstrap.Modal('#add-supply-warning');
-
     let itemName = document.querySelector('#itemName').value;
-    let itemQuantity = document.querySelector('#quantity').value;
+    let itemQuantity = Number.parseInt(document.querySelector('#quantity').value);
     let warehouseId = document.querySelector('.something').innerHTML;
+
+    if (itemQuantity < 0 || isNaN(itemQuantity)) {
+        addWarning.show();
+        return;
+    }
 
     let requestData = {
         itemName: itemName,
@@ -62,9 +65,26 @@ function addItemsToWarehouse() {
     }).then(async response => {
         let result = await response;
         if (result.ok) {
-            addSupplySuccess.show();
+            addSuccess.show();
         } else {
-            addSupplyWarning.show();
+            addWarning.show();
         }
+    });
+}
+
+function deleteItem(element) {
+    let deleteModal = new bootstrap.Modal('#delete-modal');
+    itemId = element.id.split('-')[1];
+
+    deleteModal.show();
+}
+
+function confirmDelete() {
+    let warehouseId = document.querySelector('.something').innerHTML;
+
+    fetch(`/api/warehouse/delete_item/${warehouseId}?item_id=${itemId}`, { method: 'DELETE' }
+    ).then(async response => {
+        let result = await response;
+        if (result.ok) location.reload();
     });
 }
