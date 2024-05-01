@@ -161,6 +161,14 @@ public class WarehouseAPI {
 
             if (itemQuantityDTO.getQuantity() > warehouseModel.getItemQuantity().get(itemModel)) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } else {
+                Map<ItemModel, Integer> itemQuantity = warehouseModel.getItemQuantity();
+
+                int currentQuantity = itemQuantity.get(itemModel);
+                itemQuantity.put(itemModel, currentQuantity - itemQuantityDTO.getQuantity());
+                warehouseModel.setItemQuantity(itemQuantity);
+
+                warehouseService.update(warehouseModel);
             }
 
             saleRepository.save(saleModel);
