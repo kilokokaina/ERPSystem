@@ -10,7 +10,7 @@ public class DevController {
 
     @GetMapping("route")
     public String dev() {
-        return "index";
+        return "add-item";
     }
 
 }

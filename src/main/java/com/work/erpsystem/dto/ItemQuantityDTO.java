@@ -6,6 +6,7 @@ import lombok.Data;
 public class ItemQuantityDTO {
 
     private String itemName;
+    private Double itemPrice;
     private int quantity;
 
 }

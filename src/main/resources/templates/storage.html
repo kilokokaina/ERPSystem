@@ -315,6 +315,11 @@
                                             </select>
                                         </div>
                                         <div class="mb-3">
+                                            <label for="itemPrice" class="form-label">Sale Price</label>
+                                            <input type="number" class="form-control" id="itemPrice" data-toggle="input-mask" data-mask-format="#.##0,00" data-reverse="true">
+                                            <span class="font-13 text-muted">Format "#.##"</span>
+                                        </div>
+                                        <div class="mb-3">
                                             <label for="quantity" class="form-label">Quantity</label>
                                             <input type="number" min="0" id="quantity" name="example-input-normal" class="form-control" placeholder="Quantity">
                                         </div>
@@ -405,7 +410,7 @@
                                         <div th:if="${itemQuantity != null}" class="table-responsive">
                                             <div class="d-flex flex-wrap gap-2">
                                                 <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#add-supply">
-                                                    <i class="mdi mdi-plus-circle me-2"></i>Add Product
+                                                    <i class="mdi mdi-plus-circle me-2"></i>Add Supply
                                                 </button>
                                             </div>
                                             <table id="basic-datatable" class="table dt-responsive nowrap w-100">
@@ -427,7 +432,8 @@
                                                         <td th:text="${item.getKey().getCategoryModel().getCategoryName()}"/>
                                                         <td th:text="${item.getKey().getItemCreationDate()}"/>
                                                         <td th:text="${item.getKey().getItemPurchasePrice()}"/>
-                                                        <td th:text="${item.getKey().getItemSalePrice()}"/>
+                                                        <td th:if="${itemPrice != null }" th:text="${itemPrice.get(item.getKey())}"/>
+                                                        <td th:unless="${itemPrice != null }">Цена не указана</td>
                                                         <td th:text="${item.getValue()}"/>
                                                         <td class="table-action">
                                                             <a class="action-icon" data-bs-toggle="modal" data-bs-target="#delete-modal" th:id="'ondelete-' + ${item.getKey().getItemId()}" onclick="deleteItem(this)">

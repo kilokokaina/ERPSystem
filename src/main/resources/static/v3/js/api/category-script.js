@@ -7,5 +7,8 @@ function addCategory() {
             'Content-Type': 'application/json;charset=UTF-8'
         },
         body: JSON.stringify(categoryData)
+    }).then(async response => {
+        let result = await response;
+        if (result.ok) location.reload();
     });
 }

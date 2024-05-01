@@ -4,11 +4,8 @@ import com.work.erpsystem.dto.ItemQuantityDTO;
 import com.work.erpsystem.dto.WarehouseDTO;
 import com.work.erpsystem.exception.DuplicateDBRecord;
 import com.work.erpsystem.exception.NoDBRecord;
-import com.work.erpsystem.model.ItemModel;
-import com.work.erpsystem.model.OrganizationModel;
-import com.work.erpsystem.model.UserModel;
-import com.work.erpsystem.model.WarehouseModel;
-import com.work.erpsystem.service.impl.CategoryServiceImpl;
+import com.work.erpsystem.model.*;
+import com.work.erpsystem.repository.SaleRepository;
 import com.work.erpsystem.service.impl.ItemServiceImpl;
 import com.work.erpsystem.service.impl.UserServiceImpl;
 import com.work.erpsystem.service.impl.WarehouseServiceImpl;
@@ -28,15 +25,16 @@ import java.util.Map;
 public class WarehouseAPI {
 
     private final WarehouseServiceImpl warehouseService;
-    private final CategoryServiceImpl categoryService;
     private final ItemServiceImpl itemService;
     private final UserServiceImpl userService;
 
     @Autowired
-    public WarehouseAPI(WarehouseServiceImpl warehouseService, CategoryServiceImpl categoryService,
-                        ItemServiceImpl itemService, UserServiceImpl userService) {
+    public SaleRepository saleRepository;
+
+    @Autowired
+    public WarehouseAPI(WarehouseServiceImpl warehouseService, ItemServiceImpl itemService,
+                        UserServiceImpl userService) {
         this.warehouseService = warehouseService;
-        this.categoryService = categoryService;
         this.itemService = itemService;
         this.userService = userService;
     }
@@ -118,7 +116,12 @@ public class WarehouseAPI {
 
         try {
             ItemModel itemModel = itemService.findByName(itemQuantityDTO.getItemName());
+
             Map<ItemModel, Integer> itemQuantity = warehouseModel.getItemQuantity();
+            Map<ItemModel, Double> itemPrice = warehouseModel.getItemPrice();
+
+            double itemPriceValue = itemQuantityDTO.getItemPrice();
+            itemPrice.put(itemModel, itemPriceValue);
 
             try {
                 int currentItemQuantity = itemQuantity.get(itemModel);
@@ -126,13 +129,47 @@ public class WarehouseAPI {
             } catch (NullPointerException exception) {
                 itemQuantity.put(itemModel, itemQuantityDTO.getQuantity());
             }
+
             warehouseModel.setItemQuantity(itemQuantity);
+            warehouseModel.setItemPrice(itemPrice);
 
             return ResponseEntity.ok(warehouseService.update(warehouseModel));
 
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+    }
+
+    @PostMapping("add_sales/{id}")
+    public ResponseEntity<WarehouseModel> addSalesToWarehouse(@PathVariable(value = "id") WarehouseModel warehouseModel,
+                                                              @RequestBody ItemQuantityDTO itemQuantityDTO,
+                                                              Authentication authentication) {
+        UserModel userModel = userService.findByUsername(authentication.getName());
+
+        if (!userModel.getOrgEmployee().equals(warehouseModel.getOrganization())) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            SaleModel saleModel = new SaleModel();
+            ItemModel itemModel = itemService.findByName(itemQuantityDTO.getItemName());
+
+            saleModel.setWarehouse(warehouseModel);
+            saleModel.setItem(itemModel);
+            saleModel.setItemSalePrice(warehouseModel.getItemPrice().get(itemModel));
+            saleModel.setItemSaleQuantity(itemQuantityDTO.getQuantity());
+
+            if (itemQuantityDTO.getQuantity() > warehouseModel.getItemQuantity().get(itemModel)) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            saleRepository.save(saleModel);
+        } catch (NoDBRecord exception) {
+            log.error(exception.getMessage());
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return null;
     }
 
     @DeleteMapping("{id}")

@@ -41,7 +41,7 @@ function findItemsByCategory() {
     });
 }
 
-function addItemsToWarehouse() {
+function addSalesToWarehouse() {
     let itemName = document.querySelector('#itemName').value;
     let itemQuantity = Number.parseInt(document.querySelector('#quantity').value);
     let warehouseId = document.querySelector('.something').innerHTML;
@@ -53,6 +53,41 @@ function addItemsToWarehouse() {
 
     let requestData = {
         itemName: itemName,
+        quantity: itemQuantity
+    };
+
+    console.log(requestData);
+
+    fetch(`/api/warehouse/add_sales/${warehouseId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8'
+        },
+        body: JSON.stringify(requestData)
+    }).then(async response => {
+        let result = await response;
+        if (result.ok) {
+            addSuccess.show();
+        } else {
+            addWarning.show();
+        }
+    });
+}
+
+function addItemsToWarehouse() {
+    let itemName = document.querySelector('#itemName').value;
+    let itemQuantity = Number.parseInt(document.querySelector('#quantity').value);
+    let itemPrice = Number.parseFloat(document.querySelector('#itemPrice').value);
+    let warehouseId = document.querySelector('.something').innerHTML;
+
+    if (itemQuantity < 0 || isNaN(itemQuantity)) {
+        addWarning.show();
+        return;
+    }
+
+    let requestData = {
+        itemName: itemName,
+        itemPrice: itemPrice,
         quantity: itemQuantity
     };
 

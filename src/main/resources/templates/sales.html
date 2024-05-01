@@ -270,12 +270,12 @@
                                     <div class="modal-body">
                                         <div th:if="${itemQuantity != null}" class="mb-3">
                                             <label for="itemName" class="form-label">Product</label>
-                                            <select class="form-select"  id="itemName" data-placeholder="Product">
+                                            <select class="form-select"  id="itemName" data-placeholder="Product" onchange="findItemQuantity()">
                                                 <option></option>
                                                 <option th:each="item : ${itemQuantity.entrySet()}" th:text="${item.getKey().getItemName()}">
                                             </select>
                                         </div>
-                                        <label id="itemQuantity" class="form-label">Available quantity: </label>
+                                        <label id="itemQuantity" class="form-label"></label>
                                         <div class="mb-3">
                                             <label for="quantity" class="form-label">Quantity</label>
                                             <input type="number" min="0" max="9" id="quantity" name="example-input-normal" class="form-control" placeholder="Quantity:">
@@ -283,7 +283,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addItemsToWarehouse()">Add supply</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addSalesToWarehouse()">Add Sale</button>
                                     </div>
                                 </div><!-- /.modal-content -->
                             </div><!-- /.modal-dialog -->
@@ -349,7 +349,7 @@
                                         <div th:if="${itemSales != null}" class="table-responsive">
                                             <div class="d-flex flex-wrap gap-2">
                                                 <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#edit-sale">
-                                                    <i class="mdi mdi-plus-circle me-2"></i>Add Product
+                                                    <i class="mdi mdi-plus-circle me-2"></i>Add Sale
                                                 </button>
                                             </div>
                                             <table id="basic-datatable" class="table dt-responsive nowrap w-100">
@@ -364,13 +364,11 @@
                                                 </thead>
                                             
                                                 <tbody>
-                                                    <tr th:each="item : ${itemSales.entrySet()}">
-                                                        <td th:text="${item.getKey().getItemName()}"/>
-                                                        <td th:text="${item.getKey().getCategoryModel().getCategoryName()}"/>
-                                                        <td th:text="${item.getKey().getItemCreationDate()}"/>
-                                                        <td th:text="${item.getKey().getItemPurchasePrice()}"/>
-                                                        <td th:text="${item.getKey().getItemSalePrice()}"/>
-                                                        <td th:text="${item.getValue()}"/>
+                                                    <tr th:each="sale : ${itemSales}">
+                                                        <td th:text="${sale.getItem().getItemName()}"/>
+                                                        <td th:text="${sale.getItem().getCategoryModel().getCategoryName()}"/>
+                                                        <td th:text="${sale.getSaleDate().toLocaleString()}"/>
+                                                        <td th:text="${sale.getItemSaleQuantity()}"/>
                                                         <td class="table-action">
                                                             <a  class="action-icon">
                                                                 <i class="ri-arrow-right-line"></i>
@@ -416,6 +414,12 @@
             <!-- ============================================================== -->
         </div>
         <!-- END wrapper -->
+
+        <script th:inline="javascript">
+            function findItemQuantity() {
+                console.log([[${itemQuantity}]]);
+            }
+        </script>
 
         <!-- Vendor js -->
         <script th:src="@{/v3/js/vendor.min.js}"></script>

@@ -2,6 +2,7 @@ package com.work.erpsystem.controller;
 
 import com.work.erpsystem.model.UserModel;
 import com.work.erpsystem.model.WarehouseModel;
+import com.work.erpsystem.repository.SaleRepository;
 import com.work.erpsystem.service.impl.CategoryServiceImpl;
 import com.work.erpsystem.service.impl.UserServiceImpl;
 import com.work.erpsystem.service.impl.WarehouseServiceImpl;
@@ -27,6 +28,9 @@ public class StorageController {
     private final UserServiceImpl userService;
 
     @Autowired
+    public SaleRepository saleRepository;
+
+    @Autowired
     public StorageController(WarehouseServiceImpl warehouseService, CategoryServiceImpl categoryService,
                              UserServiceImpl userService) {
         this.warehouseService = warehouseService;
@@ -43,6 +47,7 @@ public class StorageController {
 
         if (Objects.nonNull(warehouseModel)) {
             model.addAttribute("itemQuantity", warehouseModel.getItemQuantity());
+            model.addAttribute("itemPrice", warehouseModel.getItemPrice());
             model.addAttribute("warehouseName", warehouseModel.getWarehouseName());
             model.addAttribute("warehouseId", warehouseModel.getWarehouseId());
         }
@@ -59,7 +64,7 @@ public class StorageController {
         UserModel userModel = userService.findByUsername(authentication.getName());
 
         if (Objects.nonNull(warehouseModel)) {
-            model.addAttribute("itemSales", warehouseModel.getItemSales());
+            model.addAttribute("itemSales", saleRepository.findByWarehouse(warehouseModel));
             model.addAttribute("itemQuantity", warehouseModel.getItemQuantity());
             model.addAttribute("warehouseName", warehouseModel.getWarehouseName());
             model.addAttribute("warehouseId", warehouseModel.getWarehouseId());
