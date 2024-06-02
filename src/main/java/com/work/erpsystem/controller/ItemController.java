@@ -87,7 +87,7 @@ public class ItemController {
             model.addAttribute("itemQuantity", itemQuantity);
             model.addAttribute("item", itemModel);
 
-            return "item-page";
+            return "item-page-2";
         } catch (NoDBRecord exception) {
             log.error(exception.getMessage());
             return "error";

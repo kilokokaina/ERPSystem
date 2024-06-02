@@ -208,15 +208,10 @@
                             </a>
                             <div class="collapse show" id="sidebarStorageList">
                                 <ul class="side-nav-second-level">
-                                    <li class="side-nav-item">
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#add-warehouse-modal">
-                                            <span> Add warehouse </span>
-                                            <span class="badge text-bg-primary">+</span>
-                                        </a>
-                                    </li>
                                     <li th:each="warehouse : ${warehouses}" th:id="'warehouse-' + ${warehouse.getWarehouseId()}">
                                         <a th:href="'/warehouse/storage?id=' + ${warehouse.getWarehouseId()}">
                                             <span th:text="${warehouse.getWarehouseName()}"/>
+                                            <span class="badge text-bg-primary" th:text="${warehouse.getItemQuantity().size()}">
                                         </a>
                                     </li>
                                 </ul>
@@ -236,16 +231,9 @@
                         <li class="side-nav-title">Administer</li>
 
                         <li class="side-nav-item">
-                            <a href="javascript:void(0)" class="side-nav-link">
+                            <a th:href="@{/organization}" class="side-nav-link">
                                 <i class="ri-team-line"></i>
                                 <span> Organization </span>
-                            </a>
-                        </li>
-
-                        <li class="side-nav-item">
-                            <a href="javascript:void(0)" class="side-nav-link">
-                                <i class=" ri-group-2-line"></i>
-                                <span> User management </span>
                             </a>
                         </li>
                         <!--- End Administer2-->

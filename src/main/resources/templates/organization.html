@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-mode="detached" data-bs-theme="dark"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org">
+
+    <head>
+        <meta charset="utf-8" />
+        <title>ERPSystem</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+
+        <!-- App favicon -->
+        <link rel="shortcut icon" th:href="@{v3/images/favicon.ico}">
+
+        <!-- Theme Config Js -->
+        <script th:src="@{v3/js/hyper-config.js}"></script>
+
+        <!-- App css -->
+        <link th:href="@{v3/css/app-creative.min.css}" rel="stylesheet" type="text/css" id="app-style" />
+
+        <!-- Icons css -->
+        <link th:href="@{v3/css/icons.min.css}" rel="stylesheet" type="text/css" />
+
+        <!-- Datatables css -->
+        <link th:href="@{v3/vendor/datatables.net-bs5/css/dataTables.bootstrap5.min.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{v3/vendor/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css}" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body>
+        <!-- Begin page -->
+        <div class="wrapper">
+
+            <!-- ========== Topbar Start ========== -->
+            <div class="navbar-custom">
+                <div class="topbar container-fluid">
+                    <div class="d-flex align-items-center gap-lg-2 gap-1">
+
+                        <!-- Topbar Brand Logo -->
+                        <div class="logo-topbar">
+                            <!-- Logo light -->
+                            <a th:href="@{/}" class="logo-light">
+                        <span class="logo-lg">
+                            <img th:src="@{v3/images/logo.png}" alt="logo">
+                        </span>
+                                <span class="logo-sm">
+                            <img th:src="@{v3/images/logo-sm.png}" alt="small logo">
+                        </span>
+                            </a>
+
+                            <!-- Logo Dark -->
+                            <a th:href="@{/}" class="logo-dark">
+                        <span class="logo-lg">
+                            <img th:src="@{v3/images/logo-dark.png}" alt="dark logo">
+                        </span>
+                                <span class="logo-sm">
+                            <img th:src="@{v3/images/logo-dark-sm.png}" alt="small logo">
+                        </span>
+                            </a>
+                        </div>
+
+                        <!-- Sidebar Menu Toggle Button -->
+                        <button class="button-toggle-menu">
+                            <i class="mdi mdi-menu"></i>
+                        </button>
+
+                        <!-- Horizontal Menu Toggle Button -->
+                        <button class="navbar-toggle" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                            <div class="lines">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <ul class="topbar-menu d-flex align-items-center gap-3">
+                        <li class="dropdown d-lg-none">
+                            <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                <i class="ri-search-line font-22"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-animated dropdown-lg p-0">
+                                <form class="p-3">
+                                    <input type="search" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
+                                </form>
+                            </div>
+                        </li>
+
+                        <li class="d-none d-sm-inline-block">
+                            <div class="nav-link" id="light-dark-mode" data-bs-toggle="tooltip" data-bs-placement="left" title="Theme Mode">
+                                <i class="ri-moon-line font-22"></i>
+                            </div>
+                        </li>
+
+                        <li class="dropdown">
+                            <a class="nav-link dropdown-toggle arrow-none nav-user px-2" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <span class="account-user-avatar">
+                            <img th:src="@{v3/images/users/avatar-1.jpg}" alt="user-image" width="32" class="rounded-circle">
+                        </span>
+                                <span class="d-lg-flex flex-column gap-1 d-none">
+                            <h5 class="my-0" sec:authentication="name"/>
+                            <h6 class="my-0 fw-normal">Founder</h6>
+                        </span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
+                                <!-- item-->
+                                <div class=" dropdown-header noti-title">
+                                    <h6 class="text-overflow m-0">Welcome !</h6>
+                                </div>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <i class="mdi mdi-account-circle me-1"></i>
+                                    <span>My Account</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <i class="mdi mdi-account-edit me-1"></i>
+                                    <span>Settings</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <i class="mdi mdi-lifebuoy me-1"></i>
+                                    <span>Support</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <i class="mdi mdi-lock-outline me-1"></i>
+                                    <span>Lock Screen</span>
+                                </a>
+
+                                <!-- item-->
+                                <a th:href="@{/logout}" class="dropdown-item">
+                                    <i class="mdi mdi-logout me-1"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- ========== Topbar End ========== -->
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <div class="leftside-menu">
+
+                <!-- Brand Logo Light -->
+                <a th:href="@{/}" class="logo logo-light">
+            <span class="logo-lg">
+                <img th:src="@{v3/images/logo.png}" alt="logo">
+            </span>
+                    <span class="logo-sm">
+                <img th:src="@{v3/images/logo-sm.png}" alt="small logo">
+            </span>
+                </a>
+
+                <!-- Brand Logo Dark -->
+                <a th:href="@{/}" class="logo logo-dark">
+            <span class="logo-lg">
+                <img th:src="@{v3/images/logo-dark.png}" alt="dark logo">
+            </span>
+                    <span class="logo-sm">
+                <img th:src="@{v3/images/logo-dark-sm.png}" alt="small logo">
+            </span>
+                </a>
+
+                <!-- Sidebar Hover Menu Toggle Button -->
+                <div class="button-sm-hover" data-bs-toggle="tooltip" data-bs-placement="right" title="Show Full Sidebar">
+                    <i class="ri-checkbox-blank-circle-line align-middle"></i>
+                </div>
+
+                <!-- Full Sidebar Menu Close Button -->
+                <div class="button-close-fullsidebar">
+                    <i class="ri-close-fill align-middle"></i>
+                </div>
+
+                <!-- Sidebar -left -->
+                <div class="h-100" id="leftside-menu-container" data-simplebar>
+                    <!--- Sidemenu -->
+                    <ul class="side-nav">
+                        <li class="side-nav-title">Summary</li>
+
+                        <li class="side-nav-item">
+                            <a th:href="@{/}" class="side-nav-link">
+                                <i class="uil-home-alt"></i>
+                                <span class="badge bg-success float-end">5</span>
+                                <span> Statistics </span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-title">Navigation</li>
+
+                        <li class="side-nav-item">
+                            <a th:href="@{/warehouse/sales}" class="side-nav-link">
+                                <i class="uil-copy-alt"></i>
+                                <span> Sales </span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a th:href="@{/warehouse/storage}" class="side-nav-link">
+                                <i class="uil-window"></i>
+                                <span> Storage </span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-title">Management</li>
+
+                        <li class="side-nav-item">
+                            <a th:href="@{/item}" class="side-nav-link">
+                                <i class="uil-folder-plus"></i>
+                                <span> Products </span>
+                            </a>
+                        </li>
+
+                        <!--- Administer2-->
+                        <li class="side-nav-title">Administer</li>
+
+                        <li class="side-nav-item menuitem-active">
+                            <a href="javascript:void(0)" class="side-nav-link">
+                                <i class="ri-team-line"></i>
+                                <span> Organization </span>
+                            </a>
+                        </li>
+                        <!--- End Administer2-->
+                    </ul>
+                    <!--- End Sidemenu -->
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div id="add-employee" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-employeeLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="add-employeeLabel">Modal Heading</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="Email:">
+                                </div>
+                            </div>
+                            <div class="row g-2">
+                                <div class="mb-3 col-md-6">
+                                    <label for="firstName" class="form-label">First name</label>
+                                    <input type="text" class="form-control" id="firstName" placeholder="First name:">
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="secondName" class="form-label">Second name</label>
+                                    <input type="text" class="form-control" id="secondName" placeholder="Second name:">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3 col">
+                                    <label for="post" class="form-label">Post</label>
+                                    <input type="text" class="form-control" id="post" placeholder="Post:">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3 col">
+                                    <label for="inputState" class="form-label">Authority</label>
+                                    <select id="inputState" class="form-select">
+                                        <option>Choose</option>
+                                        <option>User</option>
+                                        <option>Admin</option>
+                                        <option>Manager</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
+
+            <div id="add-warehouse" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-warehouseLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="add-warehouseLabel">Modal Heading</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="warehouse-name" class="form-label">Warehouse name</label>
+                                <input type="text" id="warehouse-name" name="example-input-normal" class="form-control" placeholder="Name:">
+                            </div>
+                            <div class="mb-3">
+                                <label for="warehouse-address" class="form-label">Warehouse address</label>
+                                <input type="text" id="warehouse-address" name="example-input-normal" class="form-control" placeholder="Address:">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addWarehouse()">Save</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
+
+            <div id="add-category" class="modal modal-sm fade" tabindex="-1" role="dialog" aria-labelledby="add-categoryLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="add-categoryLabel">Modal Heading</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="mb-3">
+                                    <label for="categoryName" class="form-label">Category name</label>
+                                    <input type="text" id="categoryName" name="example-input-normal" class="form-control" placeholder="Name:">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addCategory()">Save</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
+
+            <!-- Modal -->
+            <div id="add-success" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content modal-filled bg-success">
+                        <div class="modal-body p-4">
+                            <div class="text-center">
+                                <i class="ri-check-line h1"></i>
+                                <h4 class="mt-2">Well Done!</h4>
+                                <p class="mt-3">Warehouse was successfully added</p>
+                                <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal" onclick="location.reload()">OK</button>
+                            </div>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+            <div id="add-warning" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-body p-4">
+                            <div class="text-center">
+                                <i class="ri-alert-line h1 text-warning"></i>
+                                <h4 class="mt-2">The supply could not be created</h4>
+                                <p class="mt-3">Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+                                <button type="button" class="btn btn-warning my-2" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+            <div id="delete-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-modal-modalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-warning">
+                            <h4 class="modal-title" id="delete-modal-modalLabel">Delete Item</h4>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
+                        </div>
+                        <div class="modal-body" id="dm-text">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-warning" id="delete-button" data-bs-dismiss="modal">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                                            <li class="breadcrumb-item active">Organization card</li>
+                                        </ol>
+                                    </div>
+                                    <h4 class="page-title">Organization card</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3 class="mt-0">Organization 1<a href="javascript: void(0);" class="text-muted"><i class="mdi mdi-square-edit-outline ms-2"></i></a> </h3>
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="border p-3 mt-4 mt-lg-0 rounded">
+                                                    <h4 class="header-title mb-3">Order Summary</h4>
+
+                                                    <div class="table-responsive">
+                                                        <table class="table mb-0">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>Address :</td>
+                                                                <td>Miami</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Added date :</td>
+                                                                <td>77/77/7777</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Employees amount: </td>
+                                                                <td>4</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Payment methods: </td>
+                                                                <td>Cash, Money transfer</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Cost of all goods  :</th>
+                                                                <th>$1458.3</th>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="border p-0 mt-4 mt-lg-1 rounded">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <h4 class="header-title mb-3">Information about HQ</h4>
+
+                                                                <h5>Contact: Aleksandr Lezin</h5>
+
+                                                                <address class="mb-0 font-14 address-lg">
+                                                                    Irkutsk, Barrikad<br>
+                                                                    12b/1, Pavilion №4 <br>
+                                                                    <abbr title="Mobile">P:</abbr> +7(999) 686-5606 <br/>
+                                                                </address>
+
+                                                            </div>
+                                                        </div>
+                                                    </div> <!-- end col -->
+                                                </div>
+                                            </div><!-- end col -->
+                                            <div class="col-lg-8">
+                                                <div>
+                                                    <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
+                                                        <li class="nav-item">
+                                                            <a href="#storages" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0 active">
+                                                                <i class="ri-home-7-fill font-18"></i>
+                                                                <span class="d-none d-lg-block">Storages</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a href="#categories" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
+                                                                <i class="uil-layers-alt font-19"></i>
+                                                                <span class="d-none d-lg-block">Categories</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a href="#employees" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
+                                                                <i class="mdi mdi-account-circle font-18"></i>
+                                                                <span class="d-none d-lg-block">Employees</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="tab-content">
+                                                        <div class="tab-pane show active" id="storages">
+                                                            <div class="row">
+                                                                <h4 class="mt-2">Storages</h4>
+
+                                                                <p class="text-muted mb-4">This section describes the division of the organization by storage</p>
+
+                                                                <div class="d-flex flex-wrap gap-2">
+                                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-warehouse"><i class="mdi mdi-plus-circle me-2"></i>Add Storage</button>
+                                                                </div>
+
+                                                                <table class="table table-striped table-centered mb-0">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Name</th>
+                                                                        <th>Address</th>
+                                                                        <th>Amount of products</th>
+                                                                        <th>Action</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr th:each="warehouse : ${warehouses}">
+                                                                        <td class="table-storage" th:text="${warehouse.getWarehouseName()}"/>
+                                                                        <td th:text="${warehouse.getWarehouseAddress()}"/>
+                                                                        <td th:text="${warehouse.getItemQuantity().size()}"/>
+                                                                        <td class="table-action">
+                                                                            <a href="javascript: void(0);" class="action-icon"> <i class="mdi mdi-pencil"></i></a>
+                                                                            <a th:onclick="'showDeleteModal(\'warehouse\', ' + ${warehouse.getWarehouseId()} + ')'" class="action-icon">
+                                                                                <i class="mdi mdi-delete"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="tab-pane" id="employees">
+                                                            <div class="row">
+
+                                                                <h4 class="mt-2">Employees</h4>
+
+                                                                <p class="text-muted mb-4">There are lots of important information about employees</p>
+
+                                                                <div class="d-flex flex-wrap gap-2">
+                                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-employee"><i class="mdi mdi-plus-circle me-2"></i>Add Employee</button>
+                                                                </div>
+
+                                                                <table class="table table-striped table-centered mb-0">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Name</th>
+                                                                        <th>Email</th>
+                                                                        <th>Post</th>
+                                                                        <th>Phone number</th>
+                                                                        <th>Action</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr th:each="employee : ${employees}">
+                                                                        <td class="table-user">
+                                                                            <img th:src="@{v3/images/users/avatar-2.jpg}" alt="table-user" class="me-2 rounded-circle" />
+                                                                            Risa D. Pearson
+                                                                        </td>
+                                                                        <td th:text="${employee.getUsername()}"/>
+                                                                        <td>admin</td>
+                                                                        <td>1111</td>
+                                                                        <td class="table-action">
+                                                                            <a href="javascript: void(0);" class="action-icon"> <i class="mdi mdi-pencil"></i></a>
+                                                                            <a href="javascript: void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div> <!-- end row-->
+                                                        </div>
+                                                        <div class="tab-pane" id="categories">
+                                                            <div class="row">
+
+                                                                <h4 class="mt-2">Categories</h4>
+
+                                                                <p class="text-muted mb-4">This section describes the division of the products by category</p>
+
+                                                                <div class="d-flex flex-wrap gap-2">
+                                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-category"><i class="mdi mdi-plus-circle me-2"></i>Add Category</button>
+                                                                </div>
+
+                                                                <table class="table table-striped table-centered mb-0">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Name</th>
+                                                                        <th>Amount</th>
+                                                                        <th>Action</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr th:each="category : ${categories.entrySet()}">
+                                                                        <td class="table-user" th:text="${category.getKey().getCategoryName()}"/>
+                                                                        <td th:text="${category.getValue()}"/>
+                                                                        <td class="table-action">
+                                                                            <a href="javascript: void(0);" class="action-icon">
+                                                                                <i class="mdi mdi-pencil"></i>
+                                                                            </a>
+                                                                            <a th:onclick="'showDeleteModal(\'category\', ' + ${category.getKey().getCategoryId()} + ')'" class="action-icon">
+                                                                                <i class="mdi mdi-delete"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div> <!-- end row-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end col -->
+                                        </div> <!-- end row-->
+
+
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div> <!-- end col-->
+                        </div>
+                        <!-- end row-->
+
+                    </div>
+                    <!-- container -->
+
+                </div>
+                <!-- content -->
+
+                <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-md-end footer-links d-none d-md-block">
+                                    <a href="javascript: void(0);">About</a>
+                                    <a href="javascript: void(0);">Support</a>
+                                    <a href="javascript: void(0);">Contact Us</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer -->
+
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Page content -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- END wrapper -->
+
+        <!-- Vendor js -->
+        <script th:src="@{v3/js/vendor.min.js}"></script>
+
+        <!-- App js -->
+        <script th:src="@{v3/js/app.min.js}"></script>
+
+        <!-- Datatables js -->
+        <script th:src="@{v3/vendor/datatables.net/js/jquery.dataTables.min.js}"></script>
+        <script th:src="@{v3/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js}"></script>
+        <script th:src="@{v3/vendor/datatables.net-responsive/js/dataTables.responsive.min.js}"></script>
+        <script th:src="@{v3/vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js}"></script>
+
+        <!-- Datatable Init js -->
+        <script th:src="@{v3/js/pages/demo.datatable-init.js}"></script>
+
+        <!-- Input Mask Plugin js -->
+        <script th:src="@{v3/vendor/jquery-mask-plugin/jquery.mask.min.js}"></script>
+
+        <script th:src="@{/v3/js/api/warehouse-script.js}"></script>
+        <script th:src="@{/v3/js/api/category-script.js}"></script>
+
+    </body>
+</html>

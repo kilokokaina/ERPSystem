@@ -1,6 +1,7 @@
 package com.work.erpsystem.service.impl;
 
 import com.work.erpsystem.exception.DuplicateDBRecord;
+import com.work.erpsystem.model.OrganizationModel;
 import com.work.erpsystem.model.UserModel;
 import com.work.erpsystem.repository.UserRepository;
 import com.work.erpsystem.service.UserService;
@@ -51,6 +52,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserModel findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public List<UserModel> findByEmployeeOrg(OrganizationModel organizationModel) {
+        return userRepository.findByOrgEmployee(organizationModel);
     }
 
     @Override

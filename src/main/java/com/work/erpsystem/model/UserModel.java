@@ -21,6 +21,10 @@ public class UserModel implements UserDetails {
     private String username;
     private String password;
 
+    private String firstName;
+    private String secondName;
+    private String post;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)

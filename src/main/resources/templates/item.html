@@ -221,24 +221,6 @@
                             </a>
                             <div class="collapse show" id="sidebarProducts">
                                 <ul class="side-nav-second-level">
-                                    <li class="side-nav-item">
-                                        <a data-bs-toggle="collapse" href="#sidebarAddProduct" aria-expanded="false" aria-controls="sidebarAddProduct">
-                                            <span> Add category </span>
-                                            <span class="badge text-bg-primary">+</span>
-                                        </a>
-                                        <div class="collapse" id="sidebarAddProduct">
-                                            <ul class="side-nav-third-level">
-                                                <li>
-                                                    <div class="me-3">
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control form-control-sm" id="category-input" placeholder="Category:">
-                                                            <button type="button" class="btn btn-sm btn-success" onclick="addCategory()"><i class="mdi mdi-thumb-up-outline"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
                                     <li th:each="category : ${categories}" th:id="'category-' + ${category.getCategoryId()}">
                                         <a th:href="'/item?category=' + ${category.getCategoryId()}">
                                             <span th:text="${category.getCategoryName()}"/>
@@ -252,16 +234,9 @@
                         <li class="side-nav-title">Administer</li>
 
                         <li class="side-nav-item">
-                            <a href="javascript:void(0)" class="side-nav-link">
+                            <a th:href="@{/organization}" class="side-nav-link">
                                 <i class="ri-team-line"></i>
                                 <span> Organization </span>
-                            </a>
-                        </li>
-
-                        <li class="side-nav-item">
-                            <a href="javascript:void(0)" class="side-nav-link">
-                                <i class=" ri-group-2-line"></i>
-                                <span> User management </span>
                             </a>
                         </li>
                         <!--- End Administer2-->
