@@ -9,12 +9,12 @@ import java.util.List;
 public interface ItemService {
 
     ItemModel save(ItemModel itemModel) throws DuplicateDBRecord;
-    ItemModel update(ItemModel itemModel);
+    ItemModel update(ItemModel itemModel) throws NoDBRecord;
     List<ItemModel> findAll();
-    ItemModel findById(Long itemModelId) throws NoDBRecord;
-    ItemModel findByName(String itemModelName) throws NoDBRecord;
+    ItemModel findById(Long itemId) throws NoDBRecord;
+    ItemModel findByName(String itemName) throws NoDBRecord;
     List<ItemModel> findByCategoryId(Long categoryId);
-    void deleteById(Long itemModelId) throws NoDBRecord;
+    void deleteById(Long itemId) throws NoDBRecord;
     void delete(ItemModel itemModel) throws NoDBRecord;
 
 }

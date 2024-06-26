@@ -9,6 +9,6 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<UserModel, Long> {
 
     UserModel findByUsername(String username);
-    List<UserModel> findByOrgEmployee(OrganizationModel organizationModel);
+    UserModel findByUserUUID(String userUUID);
 
 }

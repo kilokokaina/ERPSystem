@@ -7,6 +7,7 @@ import com.work.erpsystem.model.CategoryModel;
 import com.work.erpsystem.model.ItemModel;
 import com.work.erpsystem.service.impl.CategoryServiceImpl;
 import com.work.erpsystem.service.impl.ItemServiceImpl;
+import com.work.erpsystem.service.impl.OrgServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,26 +19,29 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("api/item")
+@RequestMapping("{org_uuid}/api/item")
 public class ItemAPI {
 
     private final ItemServiceImpl itemService;
     private final CategoryServiceImpl categoryService;
+    private final OrgServiceImpl orgService;
 
     @Autowired
-    public ItemAPI(ItemServiceImpl itemService, CategoryServiceImpl categoryService) {
+    public ItemAPI(ItemServiceImpl itemService, CategoryServiceImpl categoryService, OrgServiceImpl orgService) {
         this.categoryService = categoryService;
         this.itemService = itemService;
+        this.orgService = orgService;
     }
 
     @GetMapping
-    public ResponseEntity<List<ItemModel>> findAll() {
+    public ResponseEntity<List<ItemModel>> findAll(@PathVariable(value = "org_uuid") Long orgId) {
         return ResponseEntity.ok(itemService.findAll());
     }
 
     //HttpStatus - 200 (OK), 204 (No record in DB)
     @GetMapping("{id}")
-    public ResponseEntity<ItemModel> findById(@PathVariable(value = "id") Long itemModelId) {
+    public ResponseEntity<ItemModel> findById(@PathVariable(value = "org_uuid") Long orgId,
+                                              @PathVariable(value = "id") Long itemModelId) {
         try {
             ItemModel itemModel = itemService.findById(itemModelId);
             return new ResponseEntity<>(itemModel, HttpStatus.OK);
@@ -49,7 +53,8 @@ public class ItemAPI {
 
     //HttpStatus - 200 (OK), 204 (No record in DB)
     @GetMapping("find_by_name")
-    public ResponseEntity<ItemModel> findByName(@RequestParam(name = "item_name") String itemName) {
+    public ResponseEntity<ItemModel> findByName(@PathVariable(value = "org_uuid") Long orgId,
+                                                @RequestParam(name = "item_name") String itemName) {
         try {
             ItemModel itemModel = itemService.findByName(itemName);
             return new ResponseEntity<>(itemModel, HttpStatus.OK);
@@ -60,7 +65,8 @@ public class ItemAPI {
 
     //HttpStatus - 200 (OK), 204 (No record in DB)
     @GetMapping("find_by_category")
-    public ResponseEntity<List<ItemModel>> findByCategory(@RequestParam(name = "category_name") String categoryName) {
+    public ResponseEntity<List<ItemModel>> findByCategory(@PathVariable(value = "org_uuid") Long orgId,
+                                                          @RequestParam(name = "category_name") String categoryName) {
         try {
             CategoryModel categoryModel = categoryService.findByName(categoryName);
             return ResponseEntity.ok(itemService.findByCategoryId(categoryModel.getCategoryId()));
@@ -71,7 +77,8 @@ public class ItemAPI {
 
     //HttpStatus - 200 (OK), 409 (Duplicate record in DB)
     @PostMapping
-    public ResponseEntity<ItemModel> addItem(@RequestBody ItemDTO itemDto) throws NoDBRecord, DuplicateDBRecord {
+    public ResponseEntity<ItemModel> addItem(@PathVariable(value = "org_uuid") Long orgId,
+                                             @RequestBody ItemDTO itemDto) throws NoDBRecord, DuplicateDBRecord {
         ItemModel itemModel = new ItemModel();
 
         CategoryModel categoryModel = categoryService.findByName(itemDto.getCategoryName());
@@ -90,6 +97,7 @@ public class ItemAPI {
 
     @PutMapping("{id}")
     public ResponseEntity<ItemModel> updateItem(@PathVariable(value = "id") ItemModel itemModel,
+                                                @PathVariable(value = "org_uuid") Long orgId,
                                                 @RequestBody ItemDTO itemDto) throws NoDBRecord {
         CategoryModel categoryModel = categoryService.findByName(itemDto.getCategoryName());
 
@@ -103,7 +111,8 @@ public class ItemAPI {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<HttpStatus> deleteItemById(@PathVariable(value = "id") Long itemId) {
+    public ResponseEntity<HttpStatus> deleteItemById(@PathVariable(value = "org_uuid") Long orgId,
+                                                     @PathVariable(value = "id") Long itemId) {
         try {
             itemService.deleteById(itemId);
             return ResponseEntity.ok(HttpStatus.OK);

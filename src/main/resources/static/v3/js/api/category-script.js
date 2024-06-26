@@ -3,7 +3,7 @@ let deleteModal = new bootstrap.Modal('#delete-modal');
 function addCategory() {
     let categoryName = document.querySelector('#categoryName');
     let categoryData = { 'categoryName' : categoryName.value };
-    fetch('api/category', {
+    fetch(`/${orgId}/api/category`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=UTF-8'
@@ -48,13 +48,13 @@ async function confirmDelete(type, id) {
     let response;
     switch (type) {
         case 'category':
-            response = await fetch(`/api/category/${id}`, { method: 'DELETE' });
+            response = await fetch(`/${orgId}/api/category/${id}`, { method: 'DELETE' });
             break;
         case 'warehouse':
-            response = await fetch(`/api/warehouse/${id}`, { method: 'DELETE' });
+            response = await fetch(`/${orgId}/api/warehouse/${id}`, { method: 'DELETE' });
             break;
         case 'employee':
-            response = await fetch(`/api/user/${id}`, { method: 'DELETE' });
+            response = await fetch(`/${orgId}/api/user/${id}`, { method: 'DELETE' });
             break;
         default:
             addWarning.show();

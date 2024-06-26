@@ -34,7 +34,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemModel update(ItemModel itemModel) {
+    public ItemModel update(ItemModel itemModel) throws NoDBRecord {
+        if (Objects.isNull(itemRepository.findById(itemModel.getItemId()).orElse(null))) {
+            throw new NoDBRecord(String.format("No such record in data base with id: %d", itemModel.getItemId()));
+        }
+
         return itemRepository.save(itemModel);
     }
 
@@ -44,24 +48,24 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemModel findById(Long itemModelId) throws NoDBRecord {
-        ItemModel itemModel = itemRepository.findById(itemModelId).orElse(null);
+    public ItemModel findById(Long itemId) throws NoDBRecord {
+        ItemModel itemModel = itemRepository.findById(itemId).orElse(null);
 
         if (Objects.isNull(itemModel)) {
             String exceptionMessage = "No such record in data base with id: %d";
-            throw new NoDBRecord(String.format(exceptionMessage, itemModelId));
+            throw new NoDBRecord(String.format(exceptionMessage, itemId));
         }
 
         return itemModel;
     }
 
     @Override
-    public ItemModel findByName(String itemModelName) throws NoDBRecord {
-        ItemModel itemModel = itemRepository.findByItemName(itemModelName);
+    public ItemModel findByName(String itemName) throws NoDBRecord {
+        ItemModel itemModel = itemRepository.findByItemName(itemName);
 
-        if (Objects.isNull(itemModel)) {
+        if (Objects.isNull(itemRepository.findByItemName(itemName))) {
             String exceptionMessage = "No such record in data base with name: %s";
-            throw new NoDBRecord(String.format(exceptionMessage, itemModelName));
+            throw new NoDBRecord(String.format(exceptionMessage, itemName));
         }
 
         return itemModel;
@@ -73,15 +77,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void deleteById(Long itemModelId) throws NoDBRecord {
-        ItemModel itemModel = this.findById(itemModelId);
-
-        if (Objects.isNull(itemModel)) {
+    public void deleteById(Long itemId) throws NoDBRecord {
+        if (Objects.isNull(itemRepository.findById(itemId).orElse(null))) {
             String exceptionMessage = "No such record in data base with id: %d";
-            throw new NoDBRecord(String.format(exceptionMessage, itemModelId));
+            throw new NoDBRecord(String.format(exceptionMessage, itemId));
         }
 
-        itemRepository.deleteById(itemModelId);
+        itemRepository.deleteById(itemId);
 
     }
 

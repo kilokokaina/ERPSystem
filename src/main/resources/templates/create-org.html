@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org">
+
+    <head>
+        <meta charset="utf-8" />
+        <title>Log In | Hyper - Responsive Bootstrap 5 Admin Dashboard</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+
+        <!-- App favicon -->
+        <link rel="shortcut icon" th:href="@{/v3/images/favicon.ico}">
+
+        <!-- Theme Config Js -->
+        <script th:src="@{/v3/js/hyper-config.js}"></script>
+
+        <!-- App css -->
+        <link th:href="@{/v3/css/app-creative.min.css}" rel="stylesheet" type="text/css" id="app-style" />
+        <link th:href="@{/v3/vendor/select2/css/select2.min.css}" rel="stylesheet" type="text/css" />
+        <!-- Icons css -->
+        <link th:href="@{/v3/css/icons.min.css}" rel="stylesheet" type="text/css" />
+    </head>
+    
+    <body class="authentication-bg">
+        <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xxl-7 col-lg-7">
+                        <div class="card">
+
+                            <!-- Logo -->
+                            <div class="card-header py-4 text-center bg-primary">
+                                <a href="index.html">
+                                    <span><img th:src="@{/v3/images/logo.png}" alt="logo" height="22"></span>
+                                </a>
+                            </div>
+
+                            <div class="card-body p-4">
+                                
+                                <div class="text-center w-75 m-auto">
+                                    <h4 class="text-dark-50 text-center pb-0 fw-bold">Create your organization</h4>
+                                    <p class="text-muted mb-4">Enter main info about your organization</p>
+                                </div>                                
+                                <form>
+                                    <div id="progressbarwizard">
+
+                                        <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
+                                            <li class="nav-item">
+                                                <a href="#account-2" data-bs-toggle="tab" id="main-tab" data-toggle="tab" class="nav-link rounded-0 py-2" aria-selected="true" role="tab">
+                                                    <i class="mdi mdi-home-city-outline font-18 align-middle me-1"></i>
+                                                    <span class="d-none d-sm-inline">Main info</span>
+                                                </a>
+                                            </li>            
+                                            <li class="nav-item">
+                                                <a href="#profile-tab-2" data-bs-toggle="tab" id="employee-tab" data-toggle="tab" class="nav-link rounded-0 py-2">
+                                                    <i class="mdi mdi-human-queue font-18 align-middle me-1"></i>
+                                                    <span class="d-none d-sm-inline">Structure</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#finish-2" data-bs-toggle="tab" id="finish-tab" data-toggle="tab" class="nav-link rounded-0 py-2">
+                                                    <i class="mdi mdi-checkbox-marked-circle-outline font-18 align-middle me-1"></i>
+                                                    <span class="d-none d-sm-inline">Finish</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    
+                                        <div class="tab-content b-0 mb-0">
+
+                                            <div id="bar" class="progress mb-3" style="height: 7px;">
+                                                <div class="bar progress-bar progress-bar-striped progress-bar-animated bg-success"></div>
+                                            </div>
+                                    
+                                            <div class="tab-pane" id="account-2">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="row mb-3">
+                                                            <label class="col-md-3 col-form-label" for="org-name">Organization Name</label>
+                                                            <div class="col-md-9">
+                                                                <input type="text" class="form-control" id="org-name" placeholder="Org name">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <label class="col-md-3 col-form-label" for="address">Address</label>
+                                                            <div class="col-md-9">
+                                                                <input type="text" class="form-control" id="address" placeholder="Address">
+                                                            </div>
+                                                        </div>
+                                                    </div> <!-- end col -->
+                                                </div> <!-- end row -->
+
+                                                <ul class="list-inline wizard mb-0">
+                                                    <li class="next list-inline-item float-end">
+                                                        <a href="javascript:void(0);" class="btn btn-info" onclick="createOrganization()">Add More Info <i class="mdi mdi-arrow-right ms-1"></i></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="tab-pane" id="profile-tab-2">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="row mb-3">
+<!--                                                            <label class="col-md-3 col-form-label" for="first-name">FIO</label>-->
+                                                            <div class="col-md-9">
+                                                                <input type="text" id="first-name" name="FIO" class="form-control" placeholder="First name:">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+<!--                                                            <label class="col-md-3 col-form-label" for="second-name">FIO</label>-->
+                                                            <div class="col-md-9">
+                                                                <input type="text" id="second-name" name="FIO" class="form-control" placeholder="Second name:">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+<!--                                                            <label class="col-md-3 col-form-label" for="post">Post</label>-->
+                                                            <div class="col-md-9">
+                                                                <select class="form-control select2" id="post" data-toggle="select2">
+                                                                    <option>Post</option>
+                                                                    <option>Admin</option>
+                                                                    <option>Manager</option>
+                                                                    <option>Customer</option>
+                                                                </select>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+<!--                                                            <label class="col-md-3 col-form-label" for="email1">Email</label>-->
+                                                            <div class="col-md-9">
+                                                                <input type="email" id="email1" name="email1" class="form-control" placeholder="example@inbox.ru">
+                                                            </div>
+                                                        </div>
+                                                    </div> <!-- end col -->
+                                                </div> <!-- end row -->
+                                                <div class="mb-3 mb-0 text-center">
+                                                    <button type="button" class="btn btn-success">Add Employee</button>
+                                                </div>
+
+                                                <ul class="pager wizard mb-1 list-inline">
+                                                    <li class="previous list-inline-item">
+                                                        <button type="button" class="btn btn-light"><i class="mdi mdi-arrow-left me-1"></i> Back to Main Info</button>
+                                                    </li>
+                                                    <li class="next list-inline-item float-end">
+                                                        <button type="button" class="btn btn-info">Add More Info <i class="mdi mdi-arrow-right ms-1"></i></button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="tab-pane" id="finish-2">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="text-center">
+                                                            <h2 class="mt-0"><i class="mdi mdi-check-all"></i></h2>
+                                                            <h3 class="mt-0">Thank you !</h3>
+
+                                                            <p class="w-75 mb-2 mx-auto">Quisque nec turpis at urna dictum luctus. Suspendisse convallis dignissim eros at volutpat. In egestas mattis dui. Aliquam
+                                                                mattis dictum aliquet.</p>
+
+                                                            <div class="mb-3">
+                                                                <div class="form-check d-inline-block">
+                                                                    <input type="checkbox" class="form-check-input" id="customCheck3">
+                                                                    <label class="form-check-label" for="customCheck3">I agree with the Terms and Conditions</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> <!-- end col -->
+                                                </div> <!-- end row -->
+                                                <ul class="pager wizard mb-0 list-inline mt-1">
+                                                    <li class="previous list-inline-item">
+                                                        <button type="button" class="btn btn-light"><i class="mdi mdi-arrow-left me-1"></i> Back to Structure</button>
+                                                    </li>
+                                                    <li class="next list-inline-item float-end">
+                                                        <button type="button" class="btn btn-info">Submit</button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                        </div> <!-- tab-content -->
+                                    </div> <!-- end #progressbarwizard-->
+                                </form>                                                       
+                            </div> <!-- end card-body -->
+                        </div>
+                        <!-- end card -->
+
+                        <div class="row mt-3">
+                            <div class="col-12 text-center">
+                                <p class="text-muted">Don't have an organization? <a href="pages-register.html" class=" mdi mdi-human-male-board-poll text-muted ms-1 "><b> Get out of here </b></a></p>
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+
+                    </div> <!-- end col -->
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end page -->
+
+        <!-- Vendor js -->
+        <script th:src="@{/v3/js/vendor.min.js}"></script>
+        
+        <!-- Bootstrap Wizard Form js -->
+        <script th:src="@{/v3/vendor/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js}"></script>
+
+        <!-- Wizard Form Demo js -->
+        <script th:src="@{/v3/js/pages/demo.form-wizard.js}"></script>
+        
+        <!-- App js -->
+        <script th:src="@{/v3/js/app.min.js}"></script>
+
+        <script th:src="@{/v3/vendor/jquery-mask-plugin/jquery.mask.min.js}"></script>
+
+        <script th:src="@{/v3/vendor/select2/js/select2.min.js}"></script>
+
+        <script th:src="@{/v3/js/api/org-script.js}"></script>
+        <script th:src="@{/v3/js/api/user-script.js}"></script>
+
+
+        <footer class="footer footer-alt">
+            2018 - <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
+        </footer>        
+    </body>
+</html>

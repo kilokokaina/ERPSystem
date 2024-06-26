@@ -10,12 +10,12 @@ import java.util.List;
 public interface CategoryService {
 
     CategoryModel save(CategoryModel categoryModel) throws DuplicateDBRecord;
-    CategoryModel update(CategoryModel categoryModel);
+    CategoryModel update(CategoryModel categoryModel) throws NoDBRecord;
     List<CategoryModel> findAll();
-    CategoryModel findById(Long categoryModelId) throws NoDBRecord;
-    CategoryModel findByName(String categoryModelName) throws NoDBRecord;
+    CategoryModel findById(Long categoryId) throws NoDBRecord;
+    CategoryModel findByName(String categoryName) throws NoDBRecord;
     List<CategoryModel> findByOrg(OrganizationModel organizationModel);
-    void deleteById(Long categoryModelId) throws NoDBRecord;
+    void deleteById(Long categoryId) throws NoDBRecord;
     void delete(CategoryModel categoryModel) throws NoDBRecord;
 
 }

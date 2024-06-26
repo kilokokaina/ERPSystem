@@ -5,10 +5,7 @@ import com.work.erpsystem.model.CategoryModel;
 import com.work.erpsystem.model.ItemModel;
 import com.work.erpsystem.model.UserModel;
 import com.work.erpsystem.model.WarehouseModel;
-import com.work.erpsystem.service.impl.CategoryServiceImpl;
-import com.work.erpsystem.service.impl.ItemServiceImpl;
-import com.work.erpsystem.service.impl.UserServiceImpl;
-import com.work.erpsystem.service.impl.WarehouseServiceImpl;
+import com.work.erpsystem.service.impl.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,54 +24,71 @@ import java.util.Objects;
 
 @Slf4j
 @Controller
-@RequestMapping("item")
-@PreAuthorize("hasAuthority('USER')")
+@RequestMapping("{org_uuid}/item")
+//@PreAuthorize("hasAuthority('USER')")
 public class ItemController {
 
     private final ItemServiceImpl itemService;
     private final CategoryServiceImpl categoryService;
     private final WarehouseServiceImpl warehouseService;
     private final UserServiceImpl userService;
+    private final OrgServiceImpl orgService;
 
     @Autowired
-    public ItemController(ItemServiceImpl itemService, CategoryServiceImpl categoryService,
+    public ItemController(ItemServiceImpl itemService, CategoryServiceImpl categoryService, OrgServiceImpl orgService,
                           WarehouseServiceImpl warehouseService, UserServiceImpl userService) {
         this.categoryService = categoryService;
         this.warehouseService = warehouseService;
         this.itemService = itemService;
         this.userService = userService;
+        this.orgService = orgService;
     }
 
     @GetMapping
     public String home(@RequestParam(value = "category", required = false) CategoryModel category,
-                       Authentication authentication, Model model) {
+                       Authentication authentication, Model model, @PathVariable(value = "org_uuid") Long orgId) throws NoDBRecord {
         UserModel userModel = userService.findByUsername(authentication.getName());
 
-        model.addAttribute("categories", categoryService.findByOrg(userModel.getOrgEmployee()));
+        try {
+            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
+                return "redirect:/error";
+            }
 
-        if (Objects.nonNull(category)) {
-            model.addAttribute("categoryName", category.getCategoryName());
-            model.addAttribute("items", itemService.findByCategoryId(category.getCategoryId()));
-        } else model.addAttribute("items", null);
+            model.addAttribute("categories", categoryService.findByOrg(orgService.findById(orgId)));
 
-        return "item";
+            if (Objects.nonNull(category)) {
+                model.addAttribute("categoryName", category.getCategoryName());
+                model.addAttribute("items", itemService.findByCategoryId(category.getCategoryId()));
+            } else model.addAttribute("items", null);
+
+            model.addAttribute("orgId", orgId);
+
+            return "item";
+        } catch (NoDBRecord exception) {
+            return "redirect:/error";
+        }
     }
 
     @GetMapping("add")
-    public String add() {
+    public String add(@PathVariable(value = "org_uuid") Long orgId, Model model) {
+        model.addAttribute("orgId", orgId);
         return "add-item";
     }
 
     @GetMapping("{id}")
     public String itemPage(@PathVariable(value = "id") Long itemId, Model model,
-                           Authentication authentication) {
+                           Authentication authentication, @PathVariable(value = "org_uuid") Long orgId) {
         try {
             ItemModel itemModel = itemService.findById(itemId);
             UserModel userModel = userService.findByUsername(authentication.getName());
 
+            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
+                return "redirect:/error";
+            }
+
             int itemQuantity = 0;
             Map<WarehouseModel, Double> warehouseItemPrice = new HashMap<>();
-            List<WarehouseModel> warehouseList = warehouseService.findByOrganization(userModel.getOrgEmployee());
+            List<WarehouseModel> warehouseList = warehouseService.findByOrganization(orgService.findById(orgId));
 
             for (WarehouseModel warehouse : warehouseList) {
                 if (warehouse.getItemPrice().containsKey(itemModel)) {
@@ -86,11 +100,12 @@ public class ItemController {
             model.addAttribute("itemPrice", warehouseItemPrice);
             model.addAttribute("itemQuantity", itemQuantity);
             model.addAttribute("item", itemModel);
+            model.addAttribute("orgId", orgId);
 
             return "item-page-2";
         } catch (NoDBRecord exception) {
             log.error(exception.getMessage());
-            return "error";
+            return "redirect:/error";
         }
     }
 

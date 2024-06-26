@@ -22,6 +22,10 @@ public class ItemModel {
     @JoinColumn(name = "category_id")
     private CategoryModel categoryModel;
 
+    @ManyToOne
+    @JoinColumn(name = "org_id")
+    private OrganizationModel organizationModel;
+
     private Double itemPurchasePrice;
     private Double itemSalePrice;
 

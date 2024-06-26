@@ -2,6 +2,7 @@ package com.work.erpsystem.service.impl;
 
 import com.work.erpsystem.exception.BadCredentials;
 import com.work.erpsystem.exception.DuplicateDBRecord;
+import com.work.erpsystem.model.Role;
 import com.work.erpsystem.model.UserModel;
 import com.work.erpsystem.service.UserAuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -63,6 +65,7 @@ public class UserAuthenticationImpl implements UserAuthenticationService {
 
             userModel.setUsername(username);
             userModel.setPassword(password);
+            userModel.setRoleSet(Set.of(Role.USER));
 
             userService.save(userModel);
         } catch (DuplicateDBRecord exception) {

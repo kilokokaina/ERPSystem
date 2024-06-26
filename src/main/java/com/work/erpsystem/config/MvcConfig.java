@@ -10,8 +10,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
+    private final UserServiceImpl userService;
+
     @Autowired
-    public UserServiceImpl userService;
+    public MvcConfig(UserServiceImpl userService) {
+        this.userService = userService;
+    }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -22,7 +26,8 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new OrgHttpInterceptor(userService)).excludePathPatterns(
-                "/register", "/v3/**", "/api/auth/**", "/login", "/test2"
+                "/register", "/login", "/create_org", "/error", "/v3/**", "/api/auth/**",
+                "/set_new_user/**", "/**/api/**"
         );
     }
 }

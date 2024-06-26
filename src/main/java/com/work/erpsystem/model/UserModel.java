@@ -3,12 +3,11 @@ package com.work.erpsystem.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Entity
@@ -25,18 +24,18 @@ public class UserModel implements UserDetails {
     private String secondName;
     private String post;
 
+    private String userUUID = UUID.randomUUID().toString();
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roleSet;
 
-    @OneToOne
-    @JoinColumn(name = "owner_org_id")
-    private OrganizationModel orgOwner;
-
-    @ManyToOne
-    @JoinColumn(name = "employee_org_id")
-    private OrganizationModel orgEmployee;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "org_role",
+            joinColumns = { @JoinColumn(name = "user_id") })
+    @MapKeyJoinColumn(name = "org")
+    private Map<OrganizationModel, String> orgRole;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -56,6 +56,7 @@ html[data-theme=dark], [data-theme=dark] {
 }
 
 html[data-menu-color=light] {
+html[data-menu-color=light] {
   --ct-menu-bg: #ffffff;
   --ct-menu-item-color: #6c757d;
   --ct-menu-item-hover-color: #3688fc;

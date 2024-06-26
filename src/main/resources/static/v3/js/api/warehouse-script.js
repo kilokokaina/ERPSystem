@@ -1,3 +1,4 @@
+const orgId = document.querySelector('#org-id').innerHTML;
 let addSuccess = new bootstrap.Modal('#add-success');
 let addWarning = new bootstrap.Modal('#add-warning');
 let itemId = 0;
@@ -8,7 +9,7 @@ function addWarehouse() {
         'warehouseAddress' : document.querySelector('#warehouse-address').value
     };
 
-    fetch('/api/warehouse', {
+    fetch(`/${orgId}/api/warehouse`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=UTF-8'
@@ -28,7 +29,7 @@ function findItemsByCategory() {
     let itemCategory = document.querySelector('#itemCategory').value;
     let itemList = document.querySelector('#itemName');
 
-    fetch(`/api/item/find_by_category?category_name=${itemCategory}`,
+    fetch(`/${orgId}/api/item/find_by_category?category_name=${itemCategory}`,
         { method: 'GET' }
     ).then(async response => {
         let result = await response.json();
@@ -58,7 +59,7 @@ function addSalesToWarehouse() {
 
     console.log(requestData);
 
-    fetch(`/api/warehouse/add_sales/${warehouseId}`, {
+    fetch(`/${orgId}/api/warehouse/add_sales/${warehouseId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=UTF-8'
@@ -91,7 +92,7 @@ function addItemsToWarehouse() {
         quantity: itemQuantity
     };
 
-    fetch(`/api/warehouse/add_items/${warehouseId}`, {
+    fetch(`/${orgId}/api/warehouse/add_items/${warehouseId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=UTF-8'
@@ -117,7 +118,7 @@ function deleteItem(element) {
 function confirmDelete() {
     let warehouseId = document.querySelector('.something').innerHTML;
 
-    fetch(`/api/warehouse/delete_item/${warehouseId}?item_id=${itemId}`, { method: 'DELETE' }
+    fetch(`/${orgId}/api/warehouse/delete_item/${warehouseId}?item_id=${itemId}`, { method: 'DELETE' }
     ).then(async response => {
         let result = await response;
         if (result.ok) location.reload();

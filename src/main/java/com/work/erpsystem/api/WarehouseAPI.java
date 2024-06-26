@@ -7,6 +7,7 @@ import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.*;
 import com.work.erpsystem.repository.SaleRepository;
 import com.work.erpsystem.service.impl.ItemServiceImpl;
+import com.work.erpsystem.service.impl.OrgServiceImpl;
 import com.work.erpsystem.service.impl.UserServiceImpl;
 import com.work.erpsystem.service.impl.WarehouseServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -21,40 +22,50 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("api/warehouse")
+@RequestMapping("{org_uuid}/api/warehouse")
 public class WarehouseAPI {
 
     private final WarehouseServiceImpl warehouseService;
     private final ItemServiceImpl itemService;
     private final UserServiceImpl userService;
+    private final OrgServiceImpl orgService;
 
     @Autowired
     public SaleRepository saleRepository;
 
     @Autowired
     public WarehouseAPI(WarehouseServiceImpl warehouseService, ItemServiceImpl itemService,
-                        UserServiceImpl userService) {
+                        UserServiceImpl userService, OrgServiceImpl orgService) {
         this.warehouseService = warehouseService;
         this.itemService = itemService;
         this.userService = userService;
+        this.orgService = orgService;
     }
 
     @GetMapping
-    public ResponseEntity<List<WarehouseModel>> findAll(Authentication authentication) {
+    public ResponseEntity<List<WarehouseModel>> findAll(@PathVariable(value = "org_uuid") Long orgId,
+                                                        Authentication authentication) {
         UserModel userModel = userService.findByUsername(authentication.getName());
-        OrganizationModel organization = userModel.getOrgEmployee();
+        try {
+            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
 
-        return ResponseEntity.ok(warehouseService.findByOrganization(organization));
+            return ResponseEntity.ok(warehouseService.findByOrganization(orgService.findById(orgId)));
+        } catch (NoDBRecord exception) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<WarehouseModel> findById(@PathVariable(value = "id") Long warehouseId,
+    public ResponseEntity<WarehouseModel> findById(@PathVariable(value = "org_uuid") Long orgId,
+                                                   @PathVariable(value = "id") Long warehouseId,
                                                    Authentication authentication) {
         try {
             UserModel userModel = userService.findByUsername(authentication.getName());
             WarehouseModel warehouse = warehouseService.findById(warehouseId);
 
-            if (!warehouse.getOrganization().equals(userModel.getOrgEmployee())) {
+            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
 
@@ -66,24 +77,24 @@ public class WarehouseAPI {
     }
 
     @PostMapping
-    public ResponseEntity<WarehouseModel> addWarehouse(@RequestBody WarehouseDTO warehouseDto,
-                                                       Authentication authentication) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
+    public ResponseEntity<WarehouseModel> addWarehouse(@PathVariable(value = "org_uuid") Long orgId,
+                                                       @RequestBody WarehouseDTO warehouseDto) {
         WarehouseModel warehouseModel = new WarehouseModel();
 
-        warehouseModel.setOrganization(userModel.getOrgEmployee());
-        warehouseModel.setWarehouseName(warehouseDto.getWarehouseName());
-        warehouseModel.setWarehouseAddress(warehouseDto.getWarehouseAddress());
-
         try {
+            warehouseModel.setOrganization(orgService.findById(orgId));
+            warehouseModel.setWarehouseName(warehouseDto.getWarehouseName());
+            warehouseModel.setWarehouseAddress(warehouseDto.getWarehouseAddress());
+
             return ResponseEntity.ok(warehouseService.save(warehouseModel));
-        } catch (DuplicateDBRecord exception) {
+        } catch (DuplicateDBRecord | NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<WarehouseModel> updateWarehouse(@PathVariable(value = "id") Long warehouseId,
+    public ResponseEntity<WarehouseModel> updateWarehouse(@PathVariable(value = "org_uuid") Long orgId,
+                                                          @PathVariable(value = "id") Long warehouseId,
                                                           @RequestBody WarehouseModel warehouseNew,
                                                           Authentication authentication) {
         UserModel userModel = userService.findByUsername(authentication.getName());
@@ -91,7 +102,7 @@ public class WarehouseAPI {
         try {
             WarehouseModel warehouseModel = warehouseService.findById(warehouseId);
 
-            if (!warehouseModel.getOrganization().equals(userModel.getOrgEmployee())) {
+            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
 
@@ -105,16 +116,16 @@ public class WarehouseAPI {
     }
 
     @PostMapping("add_items/{id}")
-    public ResponseEntity<WarehouseModel> addItemsToWarehouse(@PathVariable(value = "id") WarehouseModel warehouseModel,
+    public ResponseEntity<WarehouseModel> addItemsToWarehouse(@PathVariable(value = "org_uuid") Long orgId,
+                                                              @PathVariable(value = "id") WarehouseModel warehouseModel,
                                                               @RequestBody ItemQuantityDTO itemQuantityDTO,
                                                               Authentication authentication) {
         UserModel userModel = userService.findByUsername(authentication.getName());
-
-        if (!userModel.getOrgEmployee().equals(warehouseModel.getOrganization())) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
         try {
+            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
             ItemModel itemModel = itemService.findByName(itemQuantityDTO.getItemName());
 
             Map<ItemModel, Integer> itemQuantity = warehouseModel.getItemQuantity();
@@ -141,16 +152,16 @@ public class WarehouseAPI {
     }
 
     @PostMapping("add_sales/{id}")
-    public ResponseEntity<WarehouseModel> addSalesToWarehouse(@PathVariable(value = "id") WarehouseModel warehouseModel,
+    public ResponseEntity<WarehouseModel> addSalesToWarehouse(@PathVariable(value = "org_uuid") Long orgId,
+                                                              @PathVariable(value = "id") WarehouseModel warehouseModel,
                                                               @RequestBody ItemQuantityDTO itemQuantityDTO,
                                                               Authentication authentication) {
         UserModel userModel = userService.findByUsername(authentication.getName());
-
-        if (!userModel.getOrgEmployee().equals(warehouseModel.getOrganization())) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
         try {
+            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
             SaleModel saleModel = new SaleModel();
             ItemModel itemModel = itemService.findByName(itemQuantityDTO.getItemName());
 
@@ -181,36 +192,33 @@ public class WarehouseAPI {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<HttpStatus> deleteWarehouse(@PathVariable(value = "id") Long warehouseId,
-                                                          Authentication authentication) {
+    public ResponseEntity<HttpStatus> deleteWarehouse(@PathVariable(value = "org_uuid") Long orgId,
+                                                      @PathVariable(value = "id") Long warehouseId,
+                                                      Authentication authentication) {
         UserModel userModel = userService.findByUsername(authentication.getName());
-
         try {
-            WarehouseModel warehouseModel = warehouseService.findById(warehouseId);
-
-            if (!warehouseModel.getOrganization().equals(userModel.getOrgEmployee())) {
+            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
                 return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
             }
 
             warehouseService.deleteById(warehouseId);
 
             return ResponseEntity.ok(HttpStatus.OK);
-
         } catch (NoDBRecord exception) {
             return ResponseEntity.ok(HttpStatus.NO_CONTENT);
         }
     }
 
     @DeleteMapping("delete_item/{id}")
-    public ResponseEntity<HttpStatus> deleteItemFromWarehouse(@PathVariable(value = "id") WarehouseModel warehouseModel,
+    public ResponseEntity<HttpStatus> deleteItemFromWarehouse(@PathVariable(value = "org_uuid") Long orgId,
+                                                              @PathVariable(value = "id") WarehouseModel warehouseModel,
                                                               @RequestParam(value = "item_id") Long itemId,
                                                               Authentication authentication) {
         UserModel userModel = userService.findByUsername(authentication.getName());
-
         try {
             ItemModel itemModel = itemService.findById(itemId);
 
-            if (!userModel.getOrgEmployee().equals(warehouseModel.getOrganization())) {
+            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
                 return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
             }
 

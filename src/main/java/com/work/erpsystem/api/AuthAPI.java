@@ -26,8 +26,8 @@ public class AuthAPI {
     private final HttpServletRequest servletRequest;
 
     @Autowired
-    public AuthAPI(HttpServletResponse servletResponse, HttpServletRequest servletRequest
-            , UserAuthenticationImpl userAuthentication) {
+    public AuthAPI(HttpServletResponse servletResponse, HttpServletRequest servletRequest,
+                   UserAuthenticationImpl userAuthentication) {
         this.userAuthentication = userAuthentication;
         this.servletResponse = servletResponse;
         this.servletRequest = servletRequest;
@@ -37,7 +37,6 @@ public class AuthAPI {
     public ResponseEntity<HttpStatus> login(@RequestParam(value = "username") String username,
                                             @RequestParam(value = "password") String password) {
         HttpHeaders headers = new HttpHeaders();
-
         try {
             userAuthentication.startSession(username, password);
 

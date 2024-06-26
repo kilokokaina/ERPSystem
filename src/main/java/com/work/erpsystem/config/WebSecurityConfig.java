@@ -31,7 +31,7 @@ public class WebSecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/register", "/v3/**", "/api/auth/**").permitAll()
+                        .requestMatchers("/register", "/v3/**", "/api/auth/**", "/set_new_user/**").permitAll()
                         .anyRequest().authenticated()
                 ).securityContext(context ->
                         context.securityContextRepository(new HttpSessionSecurityContextRepository())
