@@ -40,7 +40,7 @@
                         <!-- Topbar Brand Logo -->
                         <div class="logo-topbar">
                             <!-- Logo light -->
-                            <a th:href="@{'/' + {orgId}}" class="logo-light">
+                            <a th:href="@{'/' + ${orgId}}" class="logo-light">
                                 <span class="logo-lg">
                                     <img th:src="@{/v3/images/logo.png}" alt="logo">
                                 </span>
@@ -50,7 +50,7 @@
                             </a>
 
                             <!-- Logo Dark -->
-                            <a th:href="@{'/' + {orgId}}" class="logo-dark">
+                            <a th:href="@{'/' + ${orgId}}" class="logo-dark">
                                 <span class="logo-lg">
                                     <img th:src="@{/v3/images/logo-dark.png}" alt="dark logo">
                                 </span>
@@ -115,7 +115,7 @@
             <div class="leftside-menu">
 
                 <!-- Brand Logo Light -->
-                <a th:href="@{'/' + {orgId}}" class="logo logo-light">
+                <a th:href="@{'/' + ${orgId}}" class="logo logo-light">
                     <span class="logo-lg">
                         <img th:src="@{/v3/images/logo.png}" alt="logo">
                     </span>
@@ -125,7 +125,7 @@
                 </a>
 
                 <!-- Brand Logo Dark -->
-                <a th:href="@{'/' + {orgId}}" class="logo logo-dark">
+                <a th:href="@{'/' + ${orgId}}" class="logo logo-dark">
                     <span class="logo-lg">
                         <img th:src="@{/v3/images/logo-dark.png}" alt="dark logo">
                     </span>
@@ -151,7 +151,7 @@
                         <li class="side-nav-title">Summary</li>
 
                         <li class="side-nav-item">
-                            <a th:href="@{'/' + {orgId}}" class="side-nav-link">
+                            <a th:href="@{'/' + ${orgId}}" class="side-nav-link">
                                 <i class="uil-home-alt"></i>
                                 <span class="badge bg-success float-end">5</span>
                                 <span> Statistics </span>
@@ -161,14 +161,14 @@
                         <li class="side-nav-title">Navigation</li>
 
                         <li class="side-nav-item">
-                            <a th:href="@{'/' + {orgId} + '/warehouse/sales'}" class="side-nav-link">
+                            <a th:href="@{'/' + ${orgId} + '/warehouse/sales'}" class="side-nav-link">
                                 <i class="uil-copy-alt"></i>
                                 <span> Sales </span>
                             </a>
                         </li>
 
                         <li class="side-nav-item">
-                            <a th:href="@{'/' + {orgId} '/warehouse/storage'}" class="side-nav-link">
+                            <a th:href="@{'/' + ${orgId} '/warehouse/storage'}" class="side-nav-link">
                                 <i class="uil-window"></i>
                                 <span> Storage </span>
                             </a>
@@ -177,7 +177,7 @@
                         <li class="side-nav-title">Management</li>
 
                         <li class="side-nav-item">
-                            <a th:href="@{'/' + {orgId} + '/item'}" class="side-nav-link">
+                            <a th:href="@{'/' + ${orgId} + '/item'}" class="side-nav-link">
                                 <i class="uil-folder-plus"></i>
                                 <span> Products </span>
                             </a>
@@ -187,7 +187,7 @@
                         <li class="side-nav-title">Administer</li>
 
                         <li class="side-nav-item">
-                            <a th:href="@{'/' + {orgId} + '/organization'}" class="side-nav-link">
+                            <a th:href="@{'/' + ${orgId} + '/organization'}" class="side-nav-link">
                                 <i class="ri-team-line"></i>
                                 <span> Organization </span>
                             </a>

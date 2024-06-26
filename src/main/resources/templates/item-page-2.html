@@ -371,16 +371,12 @@
                                                     <!-- Product description -->
                                                     <div class="mt-2">
                                                         <div class="row">
-                                                            <div class="col-md-2">
-                                                                <h6 class="font-14">Purchase Price:</h6>
-                                                                <h3 th:text="${item.getItemPurchasePrice()}" />
+                                                            <div class="col-md-4">
+                                                                <h4 class="font-14" th:text="'Purchase Price: ' + ${item.getItemPurchasePrice()} + ' ₽'" />
                                                             </div>  
                                                             <div class="col-md-8">
-                                                                <h6 class="font-14">Quantity</h6>
                                                                 <div class="d-flex">
-                                                                    <input type="number" min="1" value="1" class="form-control" placeholder="Qty" style="width: 90px;">
-                                                                    <button type="button" class="btn btn-danger ms-2" ><i class="mdi mdi-cart me-1"></i> Add to cart</button>                                                                                                                                  
-                                                                    <button type="button" class="btn btn-dark ms-2" data-bs-toggle="modal" data-bs-target="#multiple-one">Add bardcode</button>
+                                                                    <button type="button" class="btn btn-dark ms-2" data-bs-toggle="modal" data-bs-target="#multiple-one">Add barcode</button>
                                                                 </div>
                                                             </div>                                                         
                                                         </div>                                                    
@@ -445,7 +441,7 @@
                                                 <tbody>
                                                     <tr th:each="price : ${itemPrice}">
                                                         <td th:text="${price.getKey().getWarehouseName()}"/>
-                                                        <td th:text="'₽' + ${price.getValue()}"/>
+                                                        <td th:text="${price.getValue()} + ' ₽'"/>
                                                         <td>
                                                             <div class="progress-w-percent mb-0">
                                                                 <span class="progress-value">478 </span>
