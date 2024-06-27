@@ -1,15 +1,13 @@
 package com.work.erpsystem.controller;
 
 import com.work.erpsystem.exception.NoDBRecord;
-import com.work.erpsystem.model.CategoryModel;
-import com.work.erpsystem.model.ItemModel;
-import com.work.erpsystem.model.UserModel;
-import com.work.erpsystem.model.WarehouseModel;
+import com.work.erpsystem.model.*;
 import com.work.erpsystem.service.impl.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +23,7 @@ import java.util.Objects;
 @Slf4j
 @Controller
 @RequestMapping("{org_uuid}/item")
-//@PreAuthorize("hasAuthority('USER')")
+@PreAuthorize("@preAuth.getAuthorities(#auth, #org, 'USER, OWNER, ADMIN')")
 public class ItemController {
 
     private final ItemServiceImpl itemService;
@@ -46,7 +44,8 @@ public class ItemController {
 
     @GetMapping
     public String home(@RequestParam(value = "category", required = false) CategoryModel category,
-                       Authentication authentication, Model model, @PathVariable(value = "org_uuid") Long orgId) throws NoDBRecord {
+                       @P("auth") Authentication authentication, @P("org") @PathVariable(value = "org_uuid") Long orgId,
+                       Model model) throws NoDBRecord {
         UserModel userModel = userService.findByUsername(authentication.getName());
 
         try {
@@ -69,15 +68,9 @@ public class ItemController {
         }
     }
 
-    @GetMapping("add")
-    public String add(@PathVariable(value = "org_uuid") Long orgId, Model model) {
-        model.addAttribute("orgId", orgId);
-        return "add-item";
-    }
-
     @GetMapping("{id}")
-    public String itemPage(@PathVariable(value = "id") Long itemId, Model model,
-                           Authentication authentication, @PathVariable(value = "org_uuid") Long orgId) {
+    public String itemPage(@PathVariable(value = "id") Long itemId, @P("auth") Authentication authentication,
+                           @P("org") @PathVariable(value = "org_uuid") Long orgId, Model model) {
         try {
             ItemModel itemModel = itemService.findById(itemId);
             UserModel userModel = userService.findByUsername(authentication.getName());
@@ -102,7 +95,7 @@ public class ItemController {
             model.addAttribute("item", itemModel);
             model.addAttribute("orgId", orgId);
 
-            return "item-page-2";
+            return "item-page";
         } catch (NoDBRecord exception) {
             log.error(exception.getMessage());
             return "redirect:/error";

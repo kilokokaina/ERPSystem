@@ -91,7 +91,7 @@
                         <li class="dropdown">
                             <a class="nav-link dropdown-toggle arrow-none nav-user px-2" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                 <span class="account-user-avatar">
-                                    <img th:src="@{v3/images/users/avatar-1.jpg}" alt="user-image" width="32" class="rounded-circle">
+                                    <img th:src="@{/v3/images/users/avatar-1.jpg}" alt="user-image" width="32" class="rounded-circle">
                                 </span>
                                 <span class="d-lg-flex flex-column gap-1 d-none">
                                     <h5 class="my-0" sec:authentication="name"/>
@@ -267,83 +267,59 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-5">
+                                                <!-- Product title -->
+                                                <div class="mb-3">
+                                                    <label for="item-name" class="form-label">Name of position</label>
+                                                    <input type="text" id="item-name" class="form-control">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="item-category" class="form-label">Category</label>
+                                                    <select class="form-select" id="item-category" data-placeholder="Material">
+                                                        <option th:each="category : ${categories}" th:text="${category.getCategoryName()}">
+                                                    </select>
+                                                </div>
+
+                                                <!-- Product description -->
+                                                <div class="mb-3">
+                                                    <label for="item-coast" class="form-label">The cost of the position</label>
+                                                    <input class="form-control" id="item-coast" type="number" name="number">
+                                                </div>
+
                                                 <!-- File Upload -->
-                                                <form action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate" style="height:100%;">
-                                                    <div class="fallback">
-                                                        <input name="file" type="file" multiple />
-                                                    </div>
-                                                    <div style="height: 100%;display: flex;justify-content: center;align-items: center;">
-                                                        <div class="dz-message needsclick" >
-                                                            <i class="h1 text-muted ri-upload-cloud-2-line"></i>
-                                                            <h3>Drop files here or click to upload.</h3>
-                                                            <span class="text-muted font-13">(This is just a demo dropzone. Selected files are
-                                                                <strong>not</strong> actually uploaded.)</span>
-                                                        </div>
-                                                    </div>
-                                                </form>
+                                                <label for="papers-list" class="form-label">Выбирете файлы</label>
+                                                <input class="form-control" type="file" accept=".csv, .ris" id="papers-list" oninput="updateList()" multiple>
+                                                <div id="files-list">
 
-                                                <!-- Preview -->
-                                                <div class="dropzone-previews mt-3" id="file-previews"></div>
-
-                                                <!-- file preview template -->
-                                                <div class="d-none" id="uploadPreviewTemplate">
-                                                    <div class="card mt-1 mb-0 shadow-none border">
-                                                        <div class="p-2">
-                                                            <div class="row align-items-center">
-                                                                <div class="col-auto">
-                                                                    <img data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">
-                                                                </div>
-                                                                <div class="col ps-0">
-                                                                    <a href="javascript:void(0);" class="text-muted fw-bold" data-dz-name></a>
-                                                                    <p class="mb-0" data-dz-size></p>
-                                                                </div>
-                                                                <div class="col-auto">
-                                                                    <!-- Button -->
-                                                                    <a href="" class="btn btn-link btn-lg text-muted" data-dz-remove>
-                                                                        <i class="ri-close-line"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>                          
+                                                </div>
                                             </div> <!-- end col -->
                                             <div class="col-lg-7">
-                                                <form class="ps-lg-4">
-                                                    <!-- Product title -->
-                                                    <div class="mb-3">
-                                                        <label for="simpleinput" class="form-label">Name of position</label>
-                                                        <input type="text" id="simpleinput" class="form-control">
-                                                    </div>                                          
-
-                                                    <!-- Product description -->
-                                                    <div class="mb-3">
-                                                        <label for="example-number" class="form-label">The cost of the position</label>
-                                                        <input class="form-control" id="example-number" type="number" name="number">
-                                                    </div>                                                                                         
-                                                    
-                                                    <!-- Product information -->                                                    
-                                                    <div id="snow-editor" style="height: 300px;">
-                                                        <h3><span class="ql-size-large">Hello World!</span></h3>
-                                                        <p><br></p>
-                                                        <h3>This is an simple editable area.</h3>
-                                                        <p><br></p>
-                                                        <ul>
-                                                            <li>
-                                                                Select a text to reveal the toolbar.
-                                                            </li>
-                                                            <li>
-                                                                Edit rich document on-the-fly, so elastic!
-                                                            </li>
-                                                        </ul>
-                                                        <p><br></p>
-                                                        <p>
-                                                            End of simple area
-                                                        </p>
-                                                    </div>                                                                           
-                                                </form>                                              
+                                                <!-- Product information -->
+                                                <div id="snow-editor" style="height: 300px;">
+                                                    <h3><span class="ql-size-large">Описание товарной позиции</span></h3>
+                                                    <p><br></p>
+                                                    <h3>Здесь вы можете добавить текстовое описание для вашего товара</h3>
+                                                    <p><br></p>
+                                                    <ul>
+                                                        <li>
+                                                            Эта информация будет отображаться
+                                                        </li>
+                                                        <li>
+                                                            на странице данной товарной позиции
+                                                        </li>
+                                                    </ul>
+                                                    <p><br></p>
+                                                    <p>
+                                                        Приятной работы!
+                                                    </p>
+                                                </div>
                                             </div> <!-- end col -->                                          
                                         </div> <!-- end row-->
+                                        <div class="row mt-3">
+                                            <div class="col">
+                                                <button class="btn btn-primary">Добавить</button>
+                                            </div>
+                                        </div>
                                     </div> <!-- end card-body-->
                                 </div> <!-- end card-->
                             </div> <!-- end col-->
@@ -398,13 +374,9 @@
         <!-- Input Mask Plugin js -->
         <script th:src="@{/v3/vendor/jquery-mask-plugin/jquery.mask.min.js}"></script>
 
-        <!-- plugin js -->
-        <script th:src="@{/v3/vendor/dropzone/min/dropzone.min.js}"></script>
-
         <!-- init js -->
         <script th:src="@{/v3/js/api/item-script.js}"></script>
         <script th:src="@{/v3/js/api/category-script.js}"></script>
-        <script th:src="@{/v3/js/ui/component.fileupload.js}"></script>
 
         <!-- quill js -->
         <script th:src="@{/v3/vendor/quill/quill.min.js}"></script>

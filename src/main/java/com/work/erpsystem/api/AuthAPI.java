@@ -43,8 +43,9 @@ public class AuthAPI {
             RequestCache requestCache = new HttpSessionRequestCache();
             SavedRequest savedRequest = requestCache.getRequest(servletRequest, servletResponse);
 
-            if (Objects.isNull(savedRequest)) headers.add("Location", "/");
-            else {
+            if (Objects.isNull(savedRequest) || savedRequest.getRedirectUrl().contains("error")) {
+                headers.add("Location", "/");
+            } else {
                 headers.add("Location", savedRequest.getRedirectUrl());
                 log.info(savedRequest.getRedirectUrl());
             }

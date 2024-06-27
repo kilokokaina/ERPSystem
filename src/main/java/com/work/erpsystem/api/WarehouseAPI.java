@@ -2,6 +2,7 @@ package com.work.erpsystem.api;
 
 import com.work.erpsystem.dto.ItemQuantityDTO;
 import com.work.erpsystem.dto.WarehouseDTO;
+import com.work.erpsystem.exception.DBException;
 import com.work.erpsystem.exception.DuplicateDBRecord;
 import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.*;
@@ -87,7 +88,7 @@ public class WarehouseAPI {
             warehouseModel.setWarehouseAddress(warehouseDto.getWarehouseAddress());
 
             return ResponseEntity.ok(warehouseService.save(warehouseModel));
-        } catch (DuplicateDBRecord | NoDBRecord exception) {
+        } catch (DBException exception) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }

@@ -2,19 +2,28 @@ package com.work.erpsystem.config;
 
 import com.work.erpsystem.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
+    private @Value("${upload.path}") String uploadPath;
     private final UserServiceImpl userService;
 
     @Autowired
     public MvcConfig(UserServiceImpl userService) {
         this.userService = userService;
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/img/**")
+                .addResourceLocations("file:///Users/nikol/Desktop/ERPImages/");
     }
 
     @Override
@@ -27,7 +36,8 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new OrgHttpInterceptor(userService)).excludePathPatterns(
                 "/register", "/login", "/create_org", "/error", "/v3/**", "/api/auth/**",
-                "/set_new_user/**", "/**/api/**"
+                "/set_new_password/**", "/**/api/**"
         );
     }
+
 }

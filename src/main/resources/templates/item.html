@@ -28,13 +28,14 @@
         <link th:href="@{/v3/vendor/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css}" rel="stylesheet" type="text/css" />
 
         <!-- Quill css -->
-        <link th:href="@{/v3/quill/quill.core.css}" rel="stylesheet" type="text/css" />
-        <link th:href="@{v3/vendor/quill/quill.snow.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/v3/vendor/quill/quill.core.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/v3/vendor/quill/quill.snow.css}" rel="stylesheet" type="text/css" />
     </head>
 
     <body>
         <!-- Begin page -->
         <div class="wrapper">
+            <p hidden="hidden" id="org-id" th:text="${orgId}">
 
             <!-- ========== Topbar Start ========== -->
             <div class="navbar-custom">
@@ -262,76 +263,11 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                                            <button type="button" class="btn btn-warning" onclick="confirmDelete()">Delete</button>
+                                                            <button type="button" id="delete-button" class="btn btn-warning">Delete</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
-                                            <!-- Modal -->
-                                            <div id="multiple-one" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="multiple-oneModalAddProduct" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title" id="multiple-oneModalAddProduct">Add Product</h4>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-
-                                                        <div class="modal-body">
-                                                            <!-- Tabs -->
-                                                            <ul class="nav nav-tabs nav-justified nav-bordered mb-3">
-                                                                <li class="nav-item">
-                                                                    <a href="#home-b2" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
-                                                                        <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                                                                        <span class="d-none d-md-block">Manually</span> <!-- Home -->
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a href="#profile-b2" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-                                                                        <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                                                                        <span class="d-none d-md-block">Scanner</span>  <!-- Profile -->
-                                                                    </a>
-                                                                </li>                                                                
-                                                            </ul>    
-                                                            
-                                                            <div class="tab-content">
-                                                                <div class="tab-pane show active" id="home-b2">
-                                                                    <div class="mb-3">
-                                                                        <label for="itemName" class="form-label">Product</label>
-                                                                        <input type="text" id="itemName" class="form-control">
-                                                                    </div>
-                                                                    <div class="mb-3">
-                                                                        <label for="itemCategory" class="form-label">Category</label>
-                                                                        <select class="form-select" id="itemCategory" data-placeholder="Material">
-                                                                            <option th:each="category : ${categories}" th:text="${category.getCategoryName()}">
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="mb-3">
-                                                                        <label for="itemPurchase" class="form-label">Purchase Price</label>
-                                                                        <input type="text" class="form-control" id="itemPurchase" data-toggle="input-mask" data-mask-format="#.##0,00" data-reverse="true">
-                                                                        <span class="font-13 text-muted">Format "#.##"</span>
-                                                                    </div>
-                                                                    <div class="mb-3">
-                                                                        <label for="itemSale" class="form-label">Sale Price</label>
-                                                                        <input type="text" class="form-control" id="itemSale" data-toggle="input-mask" data-mask-format="#.##0,00" data-reverse="true">
-                                                                        <span class="font-13 text-muted">Format "#.##"</span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="tab-pane" id="profile-b2">
-                                                                    <p>...</p>
-                                                                </div>                                                                
-                                                            </div>
-
-                                                            <!--End Tabs -->  
-                                                        </div>
-
-                                                        <div class="modal-footer">
-                                                            <!-- <button type="button" class="btn btn-primary" data-bs-target="#multiple-two" data-bs-toggle="modal" data-bs-dismiss="modal" onclick="addItem()">Next</button> -->
-                                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addItem()">Next</button>
-                                                        </div>
-                                                    </div><!-- /.modal-content -->
-                                                </div><!-- /.modal-dialog -->
-                                            </div><!-- /.modal -->
 
                                             <!-- Modal -->
                                             <div id="multiple-two" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="multiple-twoModalLabel" aria-hidden="true">
@@ -366,7 +302,7 @@
 
                                             <!-- Large modal -->
                                             <div class="modal fade" id="bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg">
+                                                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h4 class="modal-title" id="myLargeModalLabel">Large modal</h4>
@@ -374,88 +310,66 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="row">
-                                                                <div class="col-lg-5">
-                                                                    <!-- File Upload -->
-                                                                    <form action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate" style="height:100%;">
-                                                                        <div class="fallback">
-                                                                            <input name="file" type="file" multiple />
-                                                                        </div>
-                                                                        <div style="height: 100%;display: flex;justify-content: center;align-items: center;">
-                                                                            <div class="dz-message needsclick" >
-                                                                                <i class="h1 text-muted ri-upload-cloud-2-line"></i>
-                                                                                <h3>Drop files here or click to upload.</h3>
-                                                                                <span class="text-muted font-13">
-                                                                                    (This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </form>
-
-                                                                    <!-- Preview -->
-                                                                    <div class="dropzone-previews mt-3" id="file-previews"></div>
-
-                                                                    <!-- file preview template -->
-                                                                    <div class="d-none" id="uploadPreviewTemplate">
-                                                                        <div class="card mt-1 mb-0 shadow-none border">
-                                                                            <div class="p-2">
-                                                                                <div class="row align-items-center">
-                                                                                    <div class="col-auto">
-                                                                                        <img data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">
+                                                                <div class="col-12">
+                                                                    <div class="card">
+                                                                        <div class="card-body">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-5">
+                                                                                    <!-- Product title -->
+                                                                                    <div class="mb-3">
+                                                                                        <label for="item-name" class="form-label">Name of position</label>
+                                                                                        <input type="text" id="item-name" class="form-control">
                                                                                     </div>
-                                                                                    <div class="col ps-0">
-                                                                                        <a href="javascript:void(0);" class="text-muted fw-bold" data-dz-name></a>
-                                                                                        <p class="mb-0" data-dz-size></p>
-                                                                                    </div>
-                                                                                    <div class="col-auto">
-                                                                                        <!-- Button -->
-                                                                                        <a href="" class="btn btn-link btn-lg text-muted" data-dz-remove>
-                                                                                            <i class="ri-close-line"></i>
-                                                                                        </a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div> <!-- end col -->
-                                                                <div class="col-lg-7">
-                                                                    <form class="ps-lg-4">
-                                                                        <!-- Product title -->
-                                                                        <div class="mb-3">
-                                                                            <label for="simpleinput" class="form-label">Name of position</label>
-                                                                            <input type="text" id="simpleinput" class="form-control">
-                                                                        </div>
 
-                                                                        <!-- Product description -->
-                                                                        <div class="mb-3">
-                                                                            <label for="example-number" class="form-label">The cost of the position</label>
-                                                                            <input class="form-control" id="example-number" type="number" name="number">
-                                                                        </div>
+                                                                                    <div class="mb-3">
+                                                                                        <label for="item-category" class="form-label">Category</label>
+                                                                                        <select class="form-select" id="item-category" data-placeholder="Material">
+                                                                                            <option th:each="category : ${categories}" th:text="${category.getCategoryName()}">
+                                                                                        </select>
+                                                                                    </div>
 
-                                                                        <!-- Product information -->
-                                                                        <div id="snow-editor" style="height: 300px;">
-                                                                            <h3><span class="ql-size-large">Hello World!</span></h3>
-                                                                            <p><br></p>
-                                                                            <h3>This is an simple editable area.</h3>
-                                                                            <p><br></p>
-                                                                            <ul>
-                                                                                <li>
-                                                                                    Select a text to reveal the toolbar.
-                                                                                </li>
-                                                                                <li>
-                                                                                    Edit rich document on-the-fly, so elastic!
-                                                                                </li>
-                                                                            </ul>
-                                                                            <p><br></p>
-                                                                            <p>
-                                                                                End of simple area
-                                                                            </p>
-                                                                        </div>
-                                                                    </form>
-                                                                </div> <!-- end col -->
-                                                            </div> <!-- end row-->
+                                                                                    <!-- Product description -->
+                                                                                    <div class="mb-3">
+                                                                                        <label for="item-coast" class="form-label">The cost of the position</label>
+                                                                                        <input class="form-control" id="item-coast" type="number" name="number">
+                                                                                    </div>
+
+                                                                                    <!-- File Upload -->
+                                                                                    <label for="papers-list" class="form-label">Выбирете файлы</label>
+                                                                                    <input class="form-control" type="file" accept="image/*" id="papers-list" oninput="updateList()" multiple>
+                                                                                    <div class="mb-3" id="files-list">
+
+                                                                                    </div>
+                                                                                </div> <!-- end col -->
+                                                                                <div class="col-lg-7">
+                                                                                    <!-- Product information -->
+                                                                                    <div id="snow-editor" style="height: 300px;">
+                                                                                        <h3><span class="ql-size-large">Описание товарной позиции</span></h3>
+                                                                                        <p><br></p>
+                                                                                        <h3>Здесь вы можете добавить текстовое описание для вашего товара</h3>
+                                                                                        <p><br></p>
+                                                                                        <ul>
+                                                                                            <li>
+                                                                                                Эта информация будет отображаться
+                                                                                            </li>
+                                                                                            <li>
+                                                                                                на странице данной товарной позиции
+                                                                                            </li>
+                                                                                        </ul>
+                                                                                        <p><br></p>
+                                                                                        <p>
+                                                                                            Приятной работы!
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div> <!-- end col -->
+                                                                            </div> <!-- end row-->
+                                                                        </div> <!-- end card-body-->
+                                                                    </div> <!-- end card-->
+                                                                </div> <!-- end col-->
+                                                            </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addItem()">Next</button>
+                                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addItem()">Добавить</button>
                                                         </div>
                                                     </div><!-- /.modal-content -->
                                                 </div><!-- /.modal-dialog -->
@@ -463,7 +377,7 @@
 
                                             <div class="d-flex flex-wrap gap-2">
                                                 <!-- Multiple modal -->
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#multiple-one"><i class="mdi mdi-plus-circle me-2"></i>Add Product</button>
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bs-example-modal-lg"><i class="mdi mdi-plus-circle me-2"></i>Add Product</button>
                                             </div>
 
                                         </div>    
@@ -474,7 +388,6 @@
                                                         <th>Product</th>
                                                         <th>Added Date</th>
                                                         <th>Purchase Price</th>
-                                                        <th>Sale Price</th>
                                                         <th style="width: 85px;">Action</th>
                                                     </tr>
                                                 </thead>
@@ -484,11 +397,10 @@
                                                         <td th:text="${item.getItemName()}"/>
                                                         <td th:text="${item.getItemCreationDate().toLocaleString().split(',')[0]}"/>
                                                         <td th:text="${item.getItemPurchasePrice()}"/>
-                                                        <td th:text="${item.getItemSalePrice()}"/>
                                                         <td class="table-action">
                                                             <a th:href="'/' + ${orgId} + '/item/' + ${item.getItemId()}" class="action-icon"> <i class="mdi mdi-eye"></i></a>
                                                             <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                                            <a href="javascript:void(0);" class="action-icon" th:id="'ondelete-' + ${item.getItemId()}" onclick="deleteItem(this)"> <i class="mdi mdi-delete"></i></a>
+                                                            <a href="javascript:void(0);" class="action-icon" th:id="${item.getItemId()}" onclick="deleteItem(this)"> <i class="mdi mdi-delete"></i></a>
                                                         </td>
                                                     </tr>
                                                 </tbody>

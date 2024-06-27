@@ -21,7 +21,6 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-@RequestMapping("{org_uuid}/organization")
 public class OrgController {
 
     private final UserServiceImpl userService;
@@ -40,8 +39,21 @@ public class OrgController {
         this.orgService = orgService;
     }
 
+    @GetMapping("choose_org")
+    public String chooseOrg(Model model, Authentication authentication) {
+        UserModel userModel = userService.findByUsername(authentication.getName());
+        model.addAttribute("orgList", userModel.getOrgRole().keySet());
 
-    @GetMapping
+        return "choose-org";
+    }
+
+    @GetMapping("create_org")
+    public String createOrg() {
+        return "create-org";
+    }
+
+
+    @GetMapping("{org_uuid}/organization")
     public String orgHome(@PathVariable(value = "org_uuid") Long orgId, Model model, Authentication authentication) {
         UserModel userModel = userService.findByUsername(authentication.getName());
         try {

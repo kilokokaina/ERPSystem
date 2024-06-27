@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -15,8 +16,16 @@ public class ItemModel {
     private Long itemId;
 
     private String itemName;
+    private String itemDescribe;
 
     private Date itemCreationDate = new Date();
+
+    @OneToMany
+    @JoinTable(
+            name = "item_images", joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "file_id")
+    )
+    private List<FileModel> itemImages;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -27,6 +36,5 @@ public class ItemModel {
     private OrganizationModel organizationModel;
 
     private Double itemPurchasePrice;
-    private Double itemSalePrice;
 
 }

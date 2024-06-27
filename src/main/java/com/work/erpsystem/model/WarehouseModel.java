@@ -27,12 +27,6 @@ public class WarehouseModel {
     @MapKeyJoinColumn(name = "item_id")
     private Map<ItemModel, Integer> itemQuantity;
 
-//    @ElementCollection
-//    @CollectionTable(name = "warehouse_item_sales",
-//            joinColumns = { @JoinColumn(name = "warehouse_id") })
-//    @MapKeyJoinColumn(name = "item_id")
-//    private Map<ItemModel, Integer> itemSales;
-
     @ElementCollection
     @CollectionTable(name = "warehouse_item_price",
             joinColumns = { @JoinColumn(name = "warehouse_id") })

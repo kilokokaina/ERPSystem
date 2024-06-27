@@ -1,6 +1,7 @@
 package com.work.erpsystem.api;
 
 import com.work.erpsystem.dto.OrgDTO;
+import com.work.erpsystem.exception.DBException;
 import com.work.erpsystem.exception.DuplicateDBRecord;
 import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.OrganizationModel;
@@ -73,11 +74,10 @@ public class OrganizationAPI {
                                                     @RequestBody OrgDTO orgDTO, Authentication authentication) {
         UserModel userModel = userService.findByUsername(authentication.getName());
         OrganizationModel organizationModel = new OrganizationModel();
-
-        organizationModel.setOrgName(orgDTO.getOrgName());
-        organizationModel.setOrgAddress(orgDTO.getOrgAddress());
-
         try {
+            organizationModel.setOrgName(orgDTO.getOrgName());
+            organizationModel.setOrgAddress(orgDTO.getOrgAddress());
+
             orgService.save(organizationModel);
 
             Map<OrganizationModel, String> orgRole = userModel.getOrgRole();
@@ -87,10 +87,8 @@ public class OrganizationAPI {
             userService.update(userModel);
 
             return ResponseEntity.ok(organizationModel);
-        } catch (DuplicateDBRecord exception) {
+        } catch (DBException exception) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        } catch (NoDBRecord e) {
-            throw new RuntimeException(e);
         }
     }
 

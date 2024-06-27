@@ -1,6 +1,6 @@
 package com.work.erpsystem.exception;
 
-public class NoDBRecord extends Exception {
+public class NoDBRecord extends DBException {
 
     public NoDBRecord(String message) {
         super(message);

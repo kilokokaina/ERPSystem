@@ -1,6 +1,7 @@
 package com.work.erpsystem.api;
 
 import com.work.erpsystem.dto.UserDTO;
+import com.work.erpsystem.exception.DBException;
 import com.work.erpsystem.exception.DuplicateDBRecord;
 import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.OrganizationModel;
@@ -78,7 +79,7 @@ public class UserAPI {
             mailSender.send(message);
 
             return ResponseEntity.ok(newUser);
-        } catch (DuplicateDBRecord | NoDBRecord exception) {
+        } catch (DBException exception) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
