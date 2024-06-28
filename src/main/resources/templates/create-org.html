@@ -27,6 +27,37 @@
     <body class="authentication-bg">
         <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
             <div class="container">
+                <!-- Modal -->
+                <div id="add-success" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content modal-filled bg-success">
+                            <div class="modal-body p-4">
+                                <div class="text-center">
+                                    <i class="ri-check-line h1"></i>
+                                    <h4 class="mt-2">Well Done!</h4>
+                                    <p class="mt-3">User was successfully added</p>
+                                    <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">OK</button>
+                                </div>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+
+                <div id="add-warning" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-body p-4">
+                                <div class="text-center">
+                                    <i class="ri-alert-line h1 text-warning"></i>
+                                    <h4 class="mt-2">The user could not be created</h4>
+                                    <p class="mt-3">Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+                                    <button type="button" class="btn btn-warning my-2" data-bs-dismiss="modal">OK</button>
+                                </div>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+
                 <div class="row justify-content-center">
                     <div class="col-xxl-7 col-lg-7">
                         <div class="card">
@@ -102,40 +133,38 @@
                                             <div class="tab-pane" id="profile-tab-2">
                                                 <div class="row">
                                                     <div class="col-12">
-                                                        <div class="row mb-3">
-<!--                                                            <label class="col-md-3 col-form-label" for="first-name">FIO</label>-->
-                                                            <div class="col-md-9">
-                                                                <input type="text" id="first-name" name="FIO" class="form-control" placeholder="First name:">
+                                                        <div class="row">
+                                                            <div class="mb-2">
+                                                                <input type="email" class="form-control" id="email" oninput="findUser(this)" placeholder="Email:">
+                                                                <h5 id="user-info"></h5>
                                                             </div>
                                                         </div>
-                                                        <div class="row mb-3">
-<!--                                                            <label class="col-md-3 col-form-label" for="second-name">FIO</label>-->
-                                                            <div class="col-md-9">
-                                                                <input type="text" id="second-name" name="FIO" class="form-control" placeholder="Second name:">
+                                                        <div class="row g-2">
+                                                            <div class="mb-3 col-md-6">
+                                                                <input type="text" class="form-control" id="first-name" placeholder="First name:">
+                                                            </div>
+                                                            <div class="mb-3 col-md-6">
+                                                                <input type="text" class="form-control" id="second-name" placeholder="Second name:">
                                                             </div>
                                                         </div>
-                                                        <div class="row mb-3">
-<!--                                                            <label class="col-md-3 col-form-label" for="post">Post</label>-->
-                                                            <div class="col-md-9">
-                                                                <select class="form-control select2" id="post" data-toggle="select2">
-                                                                    <option>Post</option>
-                                                                    <option>Admin</option>
-                                                                    <option>Manager</option>
-                                                                    <option>Customer</option>
+                                                        <div class="row">
+                                                            <div class="mb-3 col">
+                                                                <input type="text" class="form-control" id="post" placeholder="Post:">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="mb-3 col">
+                                                                <select id="user-authority" class="form-select">
+                                                                    <option>Authority</option>
+                                                                    <option value="USER">User</option>
+                                                                    <option value="ADMIN">Admin</option>
                                                                 </select>
-
-                                                            </div>
-                                                        </div>
-                                                        <div class="row mb-3">
-<!--                                                            <label class="col-md-3 col-form-label" for="email1">Email</label>-->
-                                                            <div class="col-md-9">
-                                                                <input type="email" id="email1" name="email1" class="form-control" placeholder="example@inbox.ru">
                                                             </div>
                                                         </div>
                                                     </div> <!-- end col -->
                                                 </div> <!-- end row -->
                                                 <div class="mb-3 mb-0 text-center">
-                                                    <button type="button" class="btn btn-success">Add Employee</button>
+                                                    <button type="button" class="btn btn-success" onclick="addUser()">Add Employee</button>
                                                 </div>
 
                                                 <ul class="pager wizard mb-1 list-inline">
@@ -143,7 +172,7 @@
                                                         <button type="button" class="btn btn-light"><i class="mdi mdi-arrow-left me-1"></i> Back to Main Info</button>
                                                     </li>
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="button" class="btn btn-info">Add More Info <i class="mdi mdi-arrow-right ms-1"></i></button>
+                                                        <button type="button" class="btn btn-info">Finish <i class="mdi mdi-arrow-right ms-1"></i></button>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -172,7 +201,7 @@
                                                         <button type="button" class="btn btn-light"><i class="mdi mdi-arrow-left me-1"></i> Back to Structure</button>
                                                     </li>
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="button" class="btn btn-info">Submit</button>
+                                                        <a type="button" th:href="@{/choose_org}" class="btn btn-info">Submit</a>
                                                     </li>
                                                 </ul>
                                             </div>

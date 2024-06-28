@@ -2,7 +2,6 @@ package com.work.erpsystem.api;
 
 import com.work.erpsystem.dto.UserDTO;
 import com.work.erpsystem.exception.DBException;
-import com.work.erpsystem.exception.DuplicateDBRecord;
 import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.OrganizationModel;
 import com.work.erpsystem.model.Role;
@@ -16,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -51,23 +51,27 @@ public class UserAPI {
 
         return message;
     }
+
+    @GetMapping("/api/user")
+    public @ResponseBody ResponseEntity<UserModel> findUser(@RequestParam(value = "email") String email) {
+        try {
+            return ResponseEntity.ok(userService.findByUsername(email));
+        } catch (UsernameNotFoundException exception) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
     
     @PostMapping("{org_uuid}/api/user")
-    public ResponseEntity<UserModel> createUser(@PathVariable(value = "org_uuid") Long orgId,
-                                                @RequestBody UserDTO userDTO, Authentication authentication) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
+    public @ResponseBody ResponseEntity<UserModel> createUser(@PathVariable(value = "org_uuid") Long orgId,
+                                                              @RequestBody UserDTO userDTO, Authentication authentication) {
         try {
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-
             OrganizationModel organizationModel = orgService.findById(orgId);
             Map<OrganizationModel, String> orgRole = new HashMap<>();
-            orgRole.put(organizationModel, Role.USER.name());
+            orgRole.put(organizationModel, Role.valueOf(userDTO.getUserAuthority()).name());
 
             UserModel newUser = new UserModel();
 
-            newUser.setUsername(userDTO.getUsername());
+            newUser.setUsername(userDTO.getEmail());
             newUser.setFirstName(userDTO.getFirstName());
             newUser.setSecondName(userDTO.getSecondName());
             newUser.setPost(userDTO.getPost());
@@ -81,6 +85,25 @@ public class UserAPI {
             return ResponseEntity.ok(newUser);
         } catch (DBException exception) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping("{org_uuid}/api/user/invite")
+    public @ResponseBody ResponseEntity<HttpStatus> inviteUser(@PathVariable(value = "org_uuid") Long orgId,
+                                                               @RequestParam(name = "user_id") Long userId,
+                                                               @RequestParam(name = "role") String role,
+                                                               Authentication authentication) {
+        try {
+            UserModel user = userService.findById(userId);
+            Map<OrganizationModel, String> orgRole = user.getOrgRole();
+
+            orgRole.put(orgService.findById(orgId), Role.valueOf(role).name());
+            user.setOrgRole(orgRole);
+            userService.update(user);
+
+            return ResponseEntity.ok(HttpStatus.OK);
+        } catch (NoDBRecord exception) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 

@@ -34,16 +34,11 @@ public class OrganizationAPI {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<OrganizationModel> findById(@PathVariable(value = "org_uuid") Long orgId,
-                                                      @PathVariable(value = "id") Long organizationId,
-                                                      Authentication authentication) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
+    public @ResponseBody ResponseEntity<OrganizationModel> findById(@PathVariable(value = "org_uuid") Long orgId,
+                                                                    @PathVariable(value = "id") Long organizationId,
+                                                                    Authentication authentication) {
         try {
             OrganizationModel organizationModel = orgService.findById(organizationId);
-
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
 
             return new ResponseEntity<>(organizationModel, HttpStatus.OK);
         } catch (NoDBRecord exception) {
@@ -52,16 +47,11 @@ public class OrganizationAPI {
     }
 
     @GetMapping("find_by_name")
-    public ResponseEntity<OrganizationModel> findByName(@PathVariable(value = "org_uuid") Long orgId,
-                                                        @RequestParam(value = "orgName") String orgName,
-                                                        Authentication authentication) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
+    public @ResponseBody ResponseEntity<OrganizationModel> findByName(@PathVariable(value = "org_uuid") Long orgId,
+                                                                      @RequestParam(value = "orgName") String orgName,
+                                                                      Authentication authentication) {
         try {
             OrganizationModel organizationModel = orgService.findByName(orgName);
-
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
 
             return new ResponseEntity<>(organizationModel, HttpStatus.OK);
         } catch (NoDBRecord exception) {
@@ -70,8 +60,8 @@ public class OrganizationAPI {
     }
 
     @PostMapping
-    public ResponseEntity<OrganizationModel> addOrg(@PathVariable(value = "org_uuid", required = false) Long orgId,
-                                                    @RequestBody OrgDTO orgDTO, Authentication authentication) {
+    public @ResponseBody ResponseEntity<OrganizationModel> addOrg(@PathVariable(value = "org_uuid", required = false) Long orgId,
+                                                                  @RequestBody OrgDTO orgDTO, Authentication authentication) {
         UserModel userModel = userService.findByUsername(authentication.getName());
         OrganizationModel organizationModel = new OrganizationModel();
         try {
@@ -93,16 +83,11 @@ public class OrganizationAPI {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<OrganizationModel> updateOrg(@PathVariable(value = "org_uuid") Long orgId,
-                                                       @PathVariable(value = "id") Long organizationId,
-                                                       @RequestBody OrgDTO orgDTO, Authentication authentication) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
+    public @ResponseBody ResponseEntity<OrganizationModel> updateOrg(@PathVariable(value = "org_uuid") Long orgId,
+                                                                     @PathVariable(value = "id") Long organizationId,
+                                                                     @RequestBody OrgDTO orgDTO, Authentication authentication) {
         try {
             OrganizationModel organizationModel = orgService.findById(organizationId);
-
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
 
             organizationModel.setOrgName(orgDTO.getOrgName());
             organizationModel.setOrgAddress(orgDTO.getOrgAddress());
@@ -114,15 +99,10 @@ public class OrganizationAPI {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<HttpStatus> deleteById(@PathVariable(value = "org_uuid") Long orgId,
-                                                 @PathVariable(value = "id") Long organizationId,
-                                                 Authentication authentication) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
+    public @ResponseBody ResponseEntity<HttpStatus> deleteById(@PathVariable(value = "org_uuid") Long orgId,
+                                                               @PathVariable(value = "id") Long organizationId,
+                                                               Authentication authentication) {
         try {
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-
             orgService.deleteById(organizationId);
 
             return ResponseEntity.ok(HttpStatus.OK);

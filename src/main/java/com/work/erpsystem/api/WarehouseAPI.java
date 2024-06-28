@@ -3,13 +3,13 @@ package com.work.erpsystem.api;
 import com.work.erpsystem.dto.ItemQuantityDTO;
 import com.work.erpsystem.dto.WarehouseDTO;
 import com.work.erpsystem.exception.DBException;
-import com.work.erpsystem.exception.DuplicateDBRecord;
 import com.work.erpsystem.exception.NoDBRecord;
-import com.work.erpsystem.model.*;
+import com.work.erpsystem.model.ItemModel;
+import com.work.erpsystem.model.SaleModel;
+import com.work.erpsystem.model.WarehouseModel;
 import com.work.erpsystem.repository.SaleRepository;
 import com.work.erpsystem.service.impl.ItemServiceImpl;
 import com.work.erpsystem.service.impl.OrgServiceImpl;
-import com.work.erpsystem.service.impl.UserServiceImpl;
 import com.work.erpsystem.service.impl.WarehouseServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,31 +27,23 @@ import java.util.Map;
 public class WarehouseAPI {
 
     private final WarehouseServiceImpl warehouseService;
+    private final SaleRepository saleRepository;
     private final ItemServiceImpl itemService;
-    private final UserServiceImpl userService;
     private final OrgServiceImpl orgService;
 
     @Autowired
-    public SaleRepository saleRepository;
-
-    @Autowired
     public WarehouseAPI(WarehouseServiceImpl warehouseService, ItemServiceImpl itemService,
-                        UserServiceImpl userService, OrgServiceImpl orgService) {
+                        OrgServiceImpl orgService, SaleRepository saleRepository) {
         this.warehouseService = warehouseService;
+        this.saleRepository = saleRepository;
         this.itemService = itemService;
-        this.userService = userService;
         this.orgService = orgService;
     }
 
     @GetMapping
-    public ResponseEntity<List<WarehouseModel>> findAll(@PathVariable(value = "org_uuid") Long orgId,
-                                                        Authentication authentication) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
+    public @ResponseBody ResponseEntity<List<WarehouseModel>> findAll(@PathVariable(value = "org_uuid") Long orgId,
+                                                                      Authentication authentication) {
         try {
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-
             return ResponseEntity.ok(warehouseService.findByOrganization(orgService.findById(orgId)));
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -59,27 +51,21 @@ public class WarehouseAPI {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<WarehouseModel> findById(@PathVariable(value = "org_uuid") Long orgId,
-                                                   @PathVariable(value = "id") Long warehouseId,
-                                                   Authentication authentication) {
+    public @ResponseBody ResponseEntity<WarehouseModel> findById(@PathVariable(value = "org_uuid") Long orgId,
+                                                                 @PathVariable(value = "id") Long warehouseId,
+                                                                 Authentication authentication) {
         try {
-            UserModel userModel = userService.findByUsername(authentication.getName());
             WarehouseModel warehouse = warehouseService.findById(warehouseId);
 
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-
             return ResponseEntity.ok(warehouse);
-
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
     @PostMapping
-    public ResponseEntity<WarehouseModel> addWarehouse(@PathVariable(value = "org_uuid") Long orgId,
-                                                       @RequestBody WarehouseDTO warehouseDto) {
+    public @ResponseBody ResponseEntity<WarehouseModel> addWarehouse(@PathVariable(value = "org_uuid") Long orgId,
+                                                                     @RequestBody WarehouseDTO warehouseDto) {
         WarehouseModel warehouseModel = new WarehouseModel();
 
         try {
@@ -94,18 +80,12 @@ public class WarehouseAPI {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<WarehouseModel> updateWarehouse(@PathVariable(value = "org_uuid") Long orgId,
-                                                          @PathVariable(value = "id") Long warehouseId,
-                                                          @RequestBody WarehouseModel warehouseNew,
-                                                          Authentication authentication) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
-
+    public @ResponseBody ResponseEntity<WarehouseModel> updateWarehouse(@PathVariable(value = "org_uuid") Long orgId,
+                                                                        @PathVariable(value = "id") Long warehouseId,
+                                                                        @RequestBody WarehouseModel warehouseNew,
+                                                                        Authentication authentication) {
         try {
             WarehouseModel warehouseModel = warehouseService.findById(warehouseId);
-
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
 
             warehouseModel.setWarehouseName(warehouseNew.getWarehouseName());
             warehouseModel.setWarehouseAddress(warehouseNew.getWarehouseAddress());
@@ -117,16 +97,11 @@ public class WarehouseAPI {
     }
 
     @PostMapping("add_items/{id}")
-    public ResponseEntity<WarehouseModel> addItemsToWarehouse(@PathVariable(value = "org_uuid") Long orgId,
-                                                              @PathVariable(value = "id") WarehouseModel warehouseModel,
-                                                              @RequestBody ItemQuantityDTO itemQuantityDTO,
-                                                              Authentication authentication) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
+    public @ResponseBody ResponseEntity<WarehouseModel> addItemsToWarehouse(@PathVariable(value = "org_uuid") Long orgId,
+                                                                            @PathVariable(value = "id") WarehouseModel warehouseModel,
+                                                                            @RequestBody ItemQuantityDTO itemQuantityDTO,
+                                                                            Authentication authentication) {
         try {
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-
             ItemModel itemModel = itemService.findByName(itemQuantityDTO.getItemName());
 
             Map<ItemModel, Integer> itemQuantity = warehouseModel.getItemQuantity();
@@ -153,16 +128,11 @@ public class WarehouseAPI {
     }
 
     @PostMapping("add_sales/{id}")
-    public ResponseEntity<WarehouseModel> addSalesToWarehouse(@PathVariable(value = "org_uuid") Long orgId,
-                                                              @PathVariable(value = "id") WarehouseModel warehouseModel,
-                                                              @RequestBody ItemQuantityDTO itemQuantityDTO,
-                                                              Authentication authentication) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
+    public @ResponseBody ResponseEntity<WarehouseModel> addSalesToWarehouse(@PathVariable(value = "org_uuid") Long orgId,
+                                                                            @PathVariable(value = "id") WarehouseModel warehouseModel,
+                                                                            @RequestBody ItemQuantityDTO itemQuantityDTO,
+                                                                            Authentication authentication) {
         try {
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-
             SaleModel saleModel = new SaleModel();
             ItemModel itemModel = itemService.findByName(itemQuantityDTO.getItemName());
 
@@ -193,15 +163,10 @@ public class WarehouseAPI {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<HttpStatus> deleteWarehouse(@PathVariable(value = "org_uuid") Long orgId,
-                                                      @PathVariable(value = "id") Long warehouseId,
-                                                      Authentication authentication) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
+    public @ResponseBody ResponseEntity<HttpStatus> deleteWarehouse(@PathVariable(value = "org_uuid") Long orgId,
+                                                                    @PathVariable(value = "id") Long warehouseId,
+                                                                    Authentication authentication) {
         try {
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
-            }
-
             warehouseService.deleteById(warehouseId);
 
             return ResponseEntity.ok(HttpStatus.OK);
@@ -211,17 +176,12 @@ public class WarehouseAPI {
     }
 
     @DeleteMapping("delete_item/{id}")
-    public ResponseEntity<HttpStatus> deleteItemFromWarehouse(@PathVariable(value = "org_uuid") Long orgId,
-                                                              @PathVariable(value = "id") WarehouseModel warehouseModel,
-                                                              @RequestParam(value = "item_id") Long itemId,
-                                                              Authentication authentication) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
+    public @ResponseBody ResponseEntity<HttpStatus> deleteItemFromWarehouse(@PathVariable(value = "org_uuid") Long orgId,
+                                                                            @PathVariable(value = "id") WarehouseModel warehouseModel,
+                                                                            @RequestParam(value = "item_id") Long itemId,
+                                                                            Authentication authentication) {
         try {
             ItemModel itemModel = itemService.findById(itemId);
-
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
-            }
 
             Map<ItemModel, Integer> itemQuantity = warehouseModel.getItemQuantity();
             itemQuantity.remove(itemModel);

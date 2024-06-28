@@ -2,12 +2,10 @@ package com.work.erpsystem.controller;
 
 import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.OrganizationModel;
-import com.work.erpsystem.model.UserModel;
 import com.work.erpsystem.model.WarehouseModel;
 import com.work.erpsystem.repository.SaleRepository;
 import com.work.erpsystem.service.impl.CategoryServiceImpl;
 import com.work.erpsystem.service.impl.OrgServiceImpl;
-import com.work.erpsystem.service.impl.UserServiceImpl;
 import com.work.erpsystem.service.impl.WarehouseServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,32 +27,23 @@ public class StorageController {
 
     private final WarehouseServiceImpl warehouseService;
     private final CategoryServiceImpl categoryService;
-    private final UserServiceImpl userService;
+    private final SaleRepository saleRepository;
     private final OrgServiceImpl orgService;
 
     @Autowired
-    public SaleRepository saleRepository;
-
-    @Autowired
     public StorageController(WarehouseServiceImpl warehouseService, CategoryServiceImpl categoryService,
-                             UserServiceImpl userService, OrgServiceImpl orgService) {
+                             SaleRepository saleRepository, OrgServiceImpl orgService) {
         this.warehouseService = warehouseService;
         this.categoryService = categoryService;
-        this.userService = userService;
+        this.saleRepository = saleRepository;
         this.orgService = orgService;
     }
 
     @GetMapping("storage")
     public String storageList(@RequestParam(value = "id", required = false) WarehouseModel warehouseModel,
                               Authentication authentication, Model model, @PathVariable(value = "org_uuid") Long orgId) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
         try {
             OrganizationModel organizationModel = orgService.findById(orgId);
-
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return "redirect:/error";
-            }
-
             model.addAttribute("categories", categoryService.findByOrg(organizationModel));
 
             if (Objects.nonNull(warehouseModel)) {
@@ -77,13 +66,8 @@ public class StorageController {
     @GetMapping("sales")
     public String salesList(@RequestParam(value = "id", required = false) WarehouseModel warehouseModel,
                             Authentication authentication, Model model, @PathVariable(value = "org_uuid") Long orgId) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
         try {
             OrganizationModel organizationModel = orgService.findById(orgId);
-
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return "redirect:/error";
-            }
 
             if (Objects.nonNull(warehouseModel)) {
                 model.addAttribute("itemSales", saleRepository.findByWarehouse(warehouseModel));

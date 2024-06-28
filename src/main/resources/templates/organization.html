@@ -100,6 +100,11 @@
                                     <span>Settings</span>
                                 </a>
 
+                                <a th:href="@{/choose_org}" class="dropdown-item">
+                                    <i class="mdi mdi-account-convert me-1"></i>
+                                    <span>Change org</span>
+                                </a>
+
                                 <!-- item-->
                                 <a th:href="@{/logout}" class="dropdown-item">
                                     <i class="mdi mdi-logout me-1"></i>
@@ -214,9 +219,10 @@
                         </div>
                         <div class="modal-body">
                             <div class="row">
-                                <div class="mb-3">
+                                <div class="mb-2">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" placeholder="Email:">
+                                    <input type="email" class="form-control" id="email" oninput="findUser(this)" placeholder="Email:">
+                                    <h5 id="user-info"></h5>
                                 </div>
                             </div>
                             <div class="row g-2">
@@ -237,12 +243,11 @@
                             </div>
                             <div class="row">
                                 <div class="mb-3 col">
-                                    <label for="inputState" class="form-label">Authority</label>
-                                    <select id="inputState" class="form-select">
+                                    <label for="user-authority" class="form-label">Authority</label>
+                                    <select id="user-authority" class="form-select">
                                         <option>Choose</option>
-                                        <option>User</option>
-                                        <option>Admin</option>
-                                        <option>Manager</option>
+                                        <option value="USER">User</option>
+                                        <option value="ADMIN">Admin</option>
                                     </select>
                                 </div>
                             </div>
@@ -511,6 +516,7 @@
                                                                     <table id="employee" class="table table-striped dt-responsive nowrap w-100">
                                                                         <thead>
                                                                             <tr>
+                                                                                <th></th>
                                                                                 <th>Name</th>
                                                                                 <th>Email</th>
                                                                                 <th>Post</th>
@@ -520,12 +526,12 @@
                                                                         </thead>
                                                                         <tbody>
                                                                             <tr th:each="employee : ${employees}">
-                                                                                <td class="table-user">
+                                                                                <td class="table-user" >
                                                                                     <img th:src="@{/v3/images/users/avatar-2.jpg}" alt="table-user" class="me-2 rounded-circle" />
-                                                                                    Risa D. Pearson
                                                                                 </td>
+                                                                                <td th:text="${employee.getFirstName()} + ' ' + ${employee.getSecondName()}"/>
                                                                                 <td th:text="${employee.getUsername()}"/>
-                                                                                <td>admin</td>
+                                                                                <td th:text="${employee.getOrgRole().get(organization)}">
                                                                                 <td>1111</td>
                                                                                 <td class="table-action">
                                                                                     <a href="javascript: void(0);" class="action-icon"> <i class="mdi mdi-pencil"></i></a>
@@ -639,16 +645,13 @@
         <script th:inline="javascript" th:src="@{/v3/js/api/user-script.js}"></script>
         <script>
             new DataTable('#storage', {
-                responsive: true,
-                scrollX: true
+                responsive: true
             });
             new DataTable('#employee', {
-                responsive: true,
-                scrollX: true
+                responsive: true
             });
             new DataTable('#category', {
-                responsive: true,
-                scrollX: true
+                responsive: true
             });
         </script>
     </body>

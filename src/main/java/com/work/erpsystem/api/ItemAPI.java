@@ -51,8 +51,8 @@ public class ItemAPI {
 
     //HttpStatus - 200 (OK), 204 (No record in DB)
     @GetMapping("{id}")
-    public ResponseEntity<ItemModel> findById(@PathVariable(value = "org_uuid") Long orgId,
-                                              @PathVariable(value = "id") Long itemModelId) {
+    public @ResponseBody ResponseEntity<ItemModel> findById(@PathVariable(value = "org_uuid") Long orgId,
+                                                            @PathVariable(value = "id") Long itemModelId) {
         try {
             ItemModel itemModel = itemService.findById(itemModelId);
             return new ResponseEntity<>(itemModel, HttpStatus.OK);
@@ -64,8 +64,8 @@ public class ItemAPI {
 
     //HttpStatus - 200 (OK), 204 (No record in DB)
     @GetMapping("find_by_name")
-    public ResponseEntity<ItemModel> findByName(@PathVariable(value = "org_uuid") Long orgId,
-                                                @RequestParam(name = "item_name") String itemName) {
+    public @ResponseBody ResponseEntity<ItemModel> findByName(@PathVariable(value = "org_uuid") Long orgId,
+                                                              @RequestParam(name = "item_name") String itemName) {
         try {
             ItemModel itemModel = itemService.findByName(itemName);
             return new ResponseEntity<>(itemModel, HttpStatus.OK);
@@ -76,8 +76,8 @@ public class ItemAPI {
 
     //HttpStatus - 200 (OK), 204 (No record in DB)
     @GetMapping("find_by_category")
-    public ResponseEntity<List<ItemModel>> findByCategory(@PathVariable(value = "org_uuid") Long orgId,
-                                                          @RequestParam(name = "category_name") String categoryName) {
+    public @ResponseBody ResponseEntity<List<ItemModel>> findByCategory(@PathVariable(value = "org_uuid") Long orgId,
+                                                                        @RequestParam(name = "category_name") String categoryName) {
         try {
             CategoryModel categoryModel = categoryService.findByName(categoryName);
             return ResponseEntity.ok(itemService.findByCategoryId(categoryModel.getCategoryId()));
@@ -88,7 +88,8 @@ public class ItemAPI {
 
     //HttpStatus - 200 (OK), 409 (Duplicate record in DB)
     @PostMapping
-    public ResponseEntity<ItemModel> addItem(@PathVariable(value = "org_uuid") Long orgId, @RequestBody ItemDTO itemDto) {
+    public @ResponseBody ResponseEntity<ItemModel> addItem(@RequestBody ItemDTO itemDto,
+                                                           @PathVariable(value = "org_uuid") Long orgId) {
         try {
             ItemModel itemModel = new ItemModel();
 
@@ -106,9 +107,9 @@ public class ItemAPI {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ItemModel> updateItem(@PathVariable(value = "id") ItemModel itemModel,
-                                                @PathVariable(value = "org_uuid") Long orgId,
-                                                @RequestBody ItemDTO itemDto) {
+    public @ResponseBody ResponseEntity<ItemModel> updateItem(@RequestBody ItemDTO itemDto,
+                                                              @PathVariable(value = "id") ItemModel itemModel,
+                                                              @PathVariable(value = "org_uuid") Long orgId) {
         try {
             CategoryModel categoryModel = categoryService.findByName(itemDto.getCategoryName());
 
@@ -124,8 +125,8 @@ public class ItemAPI {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<HttpStatus> deleteItemById(@PathVariable(value = "org_uuid") Long orgId,
-                                                     @PathVariable(value = "id") Long itemId) {
+    public @ResponseBody ResponseEntity<HttpStatus> deleteItemById(@PathVariable(value = "org_uuid") Long orgId,
+                                                                   @PathVariable(value = "id") Long itemId) {
         try {
             ItemModel itemModel = itemService.findById(itemId);
             List<FileModel> imageList = itemModel.getItemImages();

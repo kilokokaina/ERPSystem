@@ -29,16 +29,14 @@ public class ItemController {
     private final ItemServiceImpl itemService;
     private final CategoryServiceImpl categoryService;
     private final WarehouseServiceImpl warehouseService;
-    private final UserServiceImpl userService;
     private final OrgServiceImpl orgService;
 
     @Autowired
-    public ItemController(ItemServiceImpl itemService, CategoryServiceImpl categoryService, OrgServiceImpl orgService,
-                          WarehouseServiceImpl warehouseService, UserServiceImpl userService) {
+    public ItemController(ItemServiceImpl itemService, CategoryServiceImpl categoryService,
+                          OrgServiceImpl orgService, WarehouseServiceImpl warehouseService) {
         this.categoryService = categoryService;
         this.warehouseService = warehouseService;
         this.itemService = itemService;
-        this.userService = userService;
         this.orgService = orgService;
     }
 
@@ -46,13 +44,7 @@ public class ItemController {
     public String home(@RequestParam(value = "category", required = false) CategoryModel category,
                        @P("auth") Authentication authentication, @P("org") @PathVariable(value = "org_uuid") Long orgId,
                        Model model) throws NoDBRecord {
-        UserModel userModel = userService.findByUsername(authentication.getName());
-
         try {
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return "redirect:/error";
-            }
-
             model.addAttribute("categories", categoryService.findByOrg(orgService.findById(orgId)));
 
             if (Objects.nonNull(category)) {
@@ -73,11 +65,6 @@ public class ItemController {
                            @P("org") @PathVariable(value = "org_uuid") Long orgId, Model model) {
         try {
             ItemModel itemModel = itemService.findById(itemId);
-            UserModel userModel = userService.findByUsername(authentication.getName());
-
-            if (!userModel.getOrgRole().containsKey(orgService.findById(orgId))) {
-                return "redirect:/error";
-            }
 
             int itemQuantity = 0;
             Map<WarehouseModel, Double> warehouseItemPrice = new HashMap<>();

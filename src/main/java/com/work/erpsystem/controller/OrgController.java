@@ -55,13 +55,8 @@ public class OrgController {
 
     @GetMapping("{org_uuid}/organization")
     public String orgHome(@PathVariable(value = "org_uuid") Long orgId, Model model, Authentication authentication) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
         try {
             OrganizationModel organizationModel = orgService.findById(orgId);
-
-            if (!userModel.getOrgRole().containsKey(organizationModel)) {
-                return "redirect:/error";
-            }
 
             List<UserModel> employees = userService.findByEmployeeOrg(organizationModel);
             List<WarehouseModel> warehouses = warehouseService.findByOrganization(organizationModel);

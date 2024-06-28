@@ -59,12 +59,14 @@ public class UserAuthenticationImpl implements UserAuthenticationService {
     }
 
     @Override
-    public boolean register(String username, String password) {
+    public boolean register(String username, String password, String firstName, String secondName) {
         try {
             UserModel userModel = new UserModel();
 
             userModel.setUsername(username);
             userModel.setPassword(password);
+            userModel.setFirstName(firstName);
+            userModel.setSecondName(secondName);
             userModel.setRoleSet(Set.of(Role.USER));
 
             userService.save(userModel);

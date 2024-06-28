@@ -36,8 +36,8 @@ public class FileAPI {
     }
 
     @PostMapping("{id}")
-    public ResponseEntity<HttpStatus> uploadImage(@PathVariable(value = "id") Long itemId,
-                                                  @RequestBody MultipartFile[] images) {
+    public @ResponseBody ResponseEntity<HttpStatus> uploadImage(@PathVariable(value = "id") Long itemId,
+                                                                @RequestBody MultipartFile[] images) {
         for (MultipartFile image : images) {
             String fileType = Objects.requireNonNull(image.getContentType()).split("/")[0];
             String fileName = UUID.randomUUID() + "." + image.getOriginalFilename();

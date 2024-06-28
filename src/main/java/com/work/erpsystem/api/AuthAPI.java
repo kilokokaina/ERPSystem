@@ -34,8 +34,8 @@ public class AuthAPI {
     }
 
     @PostMapping("login")
-    public ResponseEntity<HttpStatus> login(@RequestParam(value = "username") String username,
-                                            @RequestParam(value = "password") String password) {
+    public @ResponseBody ResponseEntity<HttpStatus> login(@RequestParam(value = "username") String username,
+                                                          @RequestParam(value = "password") String password) {
         HttpHeaders headers = new HttpHeaders();
         try {
             userAuthentication.startSession(username, password);
@@ -58,9 +58,11 @@ public class AuthAPI {
     }
 
     @PostMapping("register")
-    public ResponseEntity<HttpStatus> register(@RequestParam(value = "username") String username,
-                                               @RequestParam(value = "password") String password) {
-        userAuthentication.register(username, password);
+    public @ResponseBody ResponseEntity<HttpStatus> register(@RequestParam(value = "username") String username,
+                                                             @RequestParam(value = "password") String password,
+                                                             @RequestParam(value = "firstname") String firstName,
+                                                             @RequestParam(value = "secondname") String secondName) {
+        userAuthentication.register(username, password, firstName, secondName);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/login");
