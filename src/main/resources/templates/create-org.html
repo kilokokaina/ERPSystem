@@ -82,7 +82,7 @@
                                             <li class="nav-item">
                                                 <a href="#account-2" data-bs-toggle="tab" id="main-tab" data-toggle="tab" class="nav-link rounded-0 py-2" aria-selected="true" role="tab">
                                                     <i class="mdi mdi-home-city-outline font-18 align-middle me-1"></i>
-                                                    <span class="d-none d-sm-inline">Основная информация</span>
+                                                    <span class="d-none d-sm-inline">Организация</span>
                                                 </a>
                                             </li>            
                                             <li class="nav-item">
@@ -246,6 +246,10 @@
         <script th:src="@{/v3/js/api/org-script.js}"></script>
         <script th:src="@{/v3/js/api/user-script.js}"></script>
 
+        <script>
+            let addSuccess = new bootstrap.Modal('#add-success');
+            let addWarning = new bootstrap.Modal('#add-warning');
+        </script>
 
         <footer class="footer footer-alt">
             2018 - <script>document.write(new Date().getFullYear())</script> © SMART&Co.

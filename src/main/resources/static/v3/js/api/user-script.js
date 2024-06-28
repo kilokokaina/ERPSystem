@@ -1,6 +1,3 @@
-let addSuccess = new bootstrap.Modal('#add-success');
-let addWarning = new bootstrap.Modal('#add-warning');
-
 function addUser() {
     let email = document.querySelector('#email').value;
     let firstName = document.querySelector('#first-name').value;
