@@ -6,7 +6,7 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>ERPSystem</title>
+        <title>ERPSystem - Главная</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
@@ -96,18 +96,18 @@
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item">
                                     <i class="mdi mdi-account-edit me-1"></i>
-                                    <span>Settings</span>
+                                    <span>Настройки</span>
                                 </a>
 
                                 <a th:href="@{/choose_org}" class="dropdown-item">
                                     <i class="mdi mdi-account-convert me-1"></i>
-                                    <span>Change org</span>
+                                    <span>Сменить организацию</span>
                                 </a>
 
                                 <!-- item-->
                                 <a th:href="@{/logout}" class="dropdown-item">
                                     <i class="mdi mdi-logout me-1"></i>
-                                    <span>Logout</span>
+                                    <span>Выход</span>
                                 </a>
                             </div>
                         </li>
@@ -159,7 +159,7 @@
                             <a th:href="@{'/' + ${orgId}}" class="side-nav-link">
                                 <i class="uil-home-alt"></i>
                                 <span class="badge bg-success float-end">5</span>
-                                <span> Statistics </span>
+                                <span> Главная </span>
                             </a>
                         </li>
 
@@ -168,33 +168,33 @@
                         <li class="side-nav-item">
                             <a th:href="@{'/' + ${orgId} + '/warehouse/sales'}" class="side-nav-link">
                                 <i class="uil-copy-alt"></i>
-                                <span> Sales </span>
+                                <span> Продажи </span>
                             </a>
                         </li>
 
                         <li class="side-nav-item">
                             <a th:href="@{'/' + ${orgId} +'/warehouse/storage'}" class="side-nav-link">
                                 <i class="uil-window"></i>
-                                <span> Storage </span>
+                                <span> Склады </span>
                             </a>
                         </li>
 
-                        <li class="side-nav-title">Management</li>
+                        <li class="side-nav-title">Менеджмент</li>
 
                         <li class="side-nav-item">
                             <a th:href="@{'/' + ${orgId} + '/item'}" class="side-nav-link">
                                 <i class="uil-folder-plus"></i>
-                                <span> Products </span>
+                                <span> Товары </span>
                             </a>
                         </li>
 
                         <!--- Administer2-->
-                        <li class="side-nav-title">Administer</li>
+                        <li class="side-nav-title">Администрирование</li>
 
                         <li class="side-nav-item">
                             <a th:href="@{'/' + ${orgId} + '/organization'}" class="side-nav-link">
                                 <i class="ri-team-line"></i>
-                                <span> Organization </span>
+                                <span> Организация </span>
                             </a>
                         </li>
                         <!--- End Administer2-->
@@ -222,12 +222,10 @@
                                 <div class="page-title-box">
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li>
-                                            <li class="breadcrumb-item active">Start page</li>
+                                            <li class="breadcrumb-item active">Главная</li>
                                         </ol>
                                     </div>
-                                    <h4 class="page-title">Start page</h4>
+                                    <h4 class="page-title">Главная</h4>
                                 </div>
                             </div>
                         </div>
@@ -239,9 +237,9 @@
                                     <img th:src="@{v3/images/svg/file-searching.svg}" height="90" alt="File not found Image">
 
                                     <h1 class="text-error mt-4">101</h1>
-                                    <h4 class="text-uppercase text-danger mt-3">Main Page</h4>
+                                    <h4 class="text-uppercase text-danger mt-3">Главная</h4>
                                     <p class="text-muted mt-3">
-                                        This is where your workflow begins.
+                                        Здесь начинается Ваш рабочий процесс
                                     </p>
 
                                 </div> <!-- end /.text-center-->
@@ -258,7 +256,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-6">
-                                <script>document.write(new Date().getFullYear())</script> © SMART&Co
+                                <script>document.write(new Date().getFullYear())</script> © SMART&Co.
                             </div>
                             <div class="col-md-6">
                                 <div class="text-md-end footer-links d-none d-md-block">

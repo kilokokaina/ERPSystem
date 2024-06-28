@@ -25,15 +25,15 @@ function showDeleteModal(type, id) {
 
     switch (type) {
         case 'category':
-            deleteText.innerHTML = 'Are you sure that you want to delete this category?';
+            deleteText.innerHTML = 'Вы уверены, что хотите удалить эту категория?';
             deleteButton.setAttribute('onclick', `confirmDelete('${type}', ${id})`);
             break;
         case 'warehouse':
-            deleteText.innerHTML = 'Are you sure that you want to delete this warehouse?';
+            deleteText.innerHTML = 'Вы уверены, что хотите удалить этот склад?';
             deleteButton.setAttribute('onclick', `confirmDelete('${type}', ${id})`);
             break;
         case 'employee':
-            deleteText.innerHTML = 'Are you sure that you want to delete this employee?';
+            deleteText.innerHTML = 'Вы уверены, что хотите удалить этого сотрудника?';
             deleteButton.setAttribute('onclick', `confirmDelete('${type}', ${id})`);
             break;
         default:

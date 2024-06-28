@@ -6,7 +6,7 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>ERPSystem</title>
+        <title>ERPSystem - Продажи</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
@@ -97,18 +97,18 @@
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item">
                                     <i class="mdi mdi-account-edit me-1"></i>
-                                    <span>Settings</span>
+                                    <span>Настройки</span>
                                 </a>
 
                                 <a th:href="@{/choose_org}" class="dropdown-item">
                                     <i class="mdi mdi-account-convert me-1"></i>
-                                    <span>Change org</span>
+                                    <span>Сменить организацию</span>
                                 </a>
 
                                 <!-- item-->
                                 <a th:href="@{/logout}" class="dropdown-item">
                                     <i class="mdi mdi-logout me-1"></i>
-                                    <span>Logout</span>
+                                    <span>Выйти</span>
                                 </a>
                             </div>
                         </li>
@@ -154,22 +154,22 @@
                 <div class="h-100" id="leftside-menu-container" data-simplebar>
                     <!--- Sidemenu -->
                     <ul class="side-nav">
-                        <li class="side-nav-title">Summary</li>
+                        <li class="side-nav-title">Основное</li>
 
                         <li class="side-nav-item">
                             <a th:href="@{'/' + ${orgId}}" class="side-nav-link">
                                 <i class="uil-home-alt"></i>
                                 <span class="badge bg-success float-end">5</span>
-                                <span> Statistics </span>
+                                <span> Главная </span>
                             </a>
                         </li>
 
-                        <li class="side-nav-title">Navigation</li>
+                        <li class="side-nav-title">Навигация</li>
 
                         <li class="side-nav-item menuitem-active">
                             <a data-bs-toggle="collapse" aria-expanded="true" aria-controls="sidebarStorageList" class="side-nav-link">
                                 <i class="uil-window"></i>
-                                <span> Sales </span>
+                                <span> Продажи </span>
                             </a>
                             <div class="collapse show" id="sidebarStorageList">
                                 <ul class="side-nav-second-level">
@@ -185,26 +185,26 @@
                         <li class="side-nav-item">
                             <a th:href="@{'/' + ${orgId} + '/warehouse/storage'}" class="side-nav-link">
                                 <i class="uil-folder-plus"></i>
-                                <span> Storage </span>
+                                <span> Склады </span>
                             </a>
                         </li>
 
-                        <li class="side-nav-title">Management</li>
+                        <li class="side-nav-title">Менеджмент</li>
 
                         <li class="side-nav-item">
                             <a th:href="@{'/' + ${orgId} + '/item'}" class="side-nav-link">
                                 <i class="uil-folder-plus"></i>
-                                <span> Products </span>
+                                <span> Товары </span>
                             </a>
                         </li>
 
                         <!--- Administer2-->
-                        <li class="side-nav-title">Administer</li>
+                        <li class="side-nav-title">Администрирование</li>
 
                         <li class="side-nav-item">
                             <a th:href="@{'/' + ${orgId} + '/organization'}" class="side-nav-link">
                                 <i class="ri-team-line"></i>
-                                <span> Organization </span>
+                                <span> Организация </span>
                             </a>
                         </li>
                         <!--- End Administer2-->
@@ -229,12 +229,12 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h4 class="modal-title" id="edit-sale-label">Add supply</h4>
+                                        <h4 class="modal-title" id="edit-sale-label">Добавить продажу</h4>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                                     </div>
                                     <div class="modal-body">
                                         <div th:if="${itemQuantity != null}" class="mb-3">
-                                            <label for="itemName" class="form-label">Product</label>
+                                            <label for="itemName" class="form-label">Товар</label>
                                             <select class="form-select"  id="itemName" data-placeholder="Product" onchange="findItemQuantity()">
                                                 <option></option>
                                                 <option th:each="item : ${itemQuantity.entrySet()}" th:text="${item.getKey().getItemName()}">
@@ -242,13 +242,13 @@
                                         </div>
                                         <label id="itemQuantity" class="form-label"></label>
                                         <div class="mb-3">
-                                            <label for="quantity" class="form-label">Quantity</label>
-                                            <input type="number" min="0" max="9" id="quantity" name="example-input-normal" class="form-control" placeholder="Quantity:">
+                                            <label for="quantity" class="form-label">Количество</label>
+                                            <input type="number" min="0" max="9" id="quantity" name="example-input-normal" class="form-control" placeholder="Кол-во:">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addSalesToWarehouse()">Add Sale</button>
+                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Закрыть</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addSalesToWarehouse()">Добавить продажу</button>
                                     </div>
                                 </div><!-- /.modal-content -->
                             </div><!-- /.modal-dialog -->
@@ -261,8 +261,8 @@
                                     <div class="modal-body p-4">
                                         <div class="text-center">
                                             <i class="ri-check-line h1"></i>
-                                            <h4 class="mt-2">Well Done!</h4>
-                                            <p class="mt-3">Sale was successfully edited</p>
+                                            <h4 class="mt-2">Готово!</h4>
+                                            <p class="mt-3">Продажа успешно добавлена!</p>
                                             <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal" onclick="location.reload()">OK</button>
                                         </div>
                                     </div>
@@ -276,8 +276,8 @@
                                     <div class="modal-body p-4">
                                         <div class="text-center">
                                             <i class="ri-alert-line h1 text-warning"></i>
-                                            <h4 class="mt-2">The sale could not be edited</h4>
-                                            <p class="mt-3">Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+                                            <h4 class="mt-2">Возникла ошибка</h4>
+                                            <p class="mt-3">При добавлении продажи возникла непредвиденная ошибка.</p>
                                             <button type="button" class="btn btn-warning my-2" data-bs-dismiss="modal">OK</button>
                                         </div>
                                     </div>
@@ -293,14 +293,13 @@
                                     <div class="page-title-right">
                                         <nav aria-label="breadcrumb">
                                             <ol class="breadcrumb bg-light-lighten p-2 mb-0">
-                                                <li class="breadcrumb-item"><a href="#"><i class="uil-home-alt"></i> Hyper</a></li>
-                                                <li class="breadcrumb-item"><a href="#">Storage</a></li>
+                                                <li class="breadcrumb-item"><a th:href="@{'/' + ${orgId} + '/warehouse/storage'}">Продажи</a></li>
                                                 <li class="breadcrumb-item active" aria-current="page" th:text="${warehouseName}"/>
                                                 <div class="something" th:text="${warehouseId}" hidden/>
                                             </ol>
                                         </nav>
                                     </div>
-                                    <h4 class="page-title">Storage</h4>
+                                    <h4 class="page-title">Продажи</h4>
                                 </div>
                             </div>
                         </div>
@@ -314,16 +313,16 @@
                                         <div th:if="${itemSales != null}" class="table-responsive">
                                             <div class="d-flex flex-wrap gap-2">
                                                 <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#edit-sale">
-                                                    <i class="mdi mdi-plus-circle me-2"></i>Add Sale
+                                                    <i class="mdi mdi-plus-circle me-2"></i>Добавить продажу
                                                 </button>
                                             </div>
                                             <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                                                 <thead>
                                                     <tr>
-                                                        <th>Product</th>
-                                                        <th>Category</th>
-                                                        <th>Last sale date</th>
-                                                        <th>Quantity of sale per day</th>
+                                                        <th>Товар</th>
+                                                        <th>Категория</th>
+                                                        <th>Дата продажи</th>
+                                                        <th>Кол-во</th>
                                                         <th style="width: 65px;">Action</th>
                                                     </tr>
                                                 </thead>
@@ -343,7 +342,7 @@
                                             </table>
                                         </div>
                                         <div th:unless="${itemSales != null}">
-                                            Choose storage for listing sales
+                                            Выбирете склад для просмотра продаж
                                         </div>
                                     </div>
                                 </div>
@@ -359,7 +358,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-6">
-                                <script>document.write(new Date().getFullYear())</script> © SMART&Co
+                                <script>document.write(new Date().getFullYear())</script> © SMART&Co.
                             </div>
                             <div class="col-md-6">
                                 <div class="text-md-end footer-links d-none d-md-block">

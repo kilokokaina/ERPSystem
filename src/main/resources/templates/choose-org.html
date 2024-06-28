@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Register | Hyper - Responsive Bootstrap 5 Admin Dashboard</title>
+        <title>ERPSystem - Выбор организации</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
@@ -38,8 +38,8 @@
                             <div class="card-body p-4">
                                 
                                 <div class="text-center w-75 m-auto">
-                                    <h4 class="text-dark-50 text-center mt-0 fw-bold">Choose an organization</h4>
-                                    <p class="text-muted mb-4">You should choose an organization where you will continue to work.</p>
+                                    <h4 class="text-dark-50 text-center mt-0 fw-bold">Выбирете организацию</h4>
+                                    <p class="text-muted mb-4">Для продолжения работы выберете организацию</p>
                                 </div>
 
                                 <form action="#">
@@ -48,10 +48,10 @@
                                         <a th:each="org : ${orgList}" th:href="@{'/' + ${org.getOrgId()}}" class="list-group-item list-group-item-action">
                                             <div class="d-flex w-100 justify-content-between">
                                                 <h5 class="mb-1" th:text="${org.getOrgName()}"/>
-                                                <small>3 days ago</small>
+                                                <small>3 дня назад</small>
                                             </div>
-                                            <p class="mb-1" th:text="'Address: ' + ${org.getOrgAddress()}"/>
-                                            <small>Contact: Contact person</small>
+                                            <p class="mb-1" th:text="'Адрес: ' + ${org.getOrgAddress()}"/>
+                                            <small>Контакты: Contact person</small>
                                         </a>
                                     </div>
                                     
@@ -62,7 +62,7 @@
 
                         <div class="row mt-3">
                             <div class="col-12 text-center">
-                                <p class="text-muted">Do you want to add a new organization? <a th:href="@{/login}" class="ri ri-add-line text-muted ms-1"><b>Add it </b></a></p>
+                                <p class="text-muted">Хотите добавить новую организацию? <a th:href="@{/create_org}" class="ri ri-add-line text-muted ms-1"><b>Вперёд </b></a></p>
                             </div> <!-- end col-->
                         </div>
                         <!-- end row -->
@@ -76,7 +76,7 @@
         <!-- end page -->
 
         <footer class="footer footer-alt">
-            2018 - <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
+            2018 - <script>document.write(new Date().getFullYear())</script> © SMART&Co.
         </footer>
 
         <!-- Vendor js -->

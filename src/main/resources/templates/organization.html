@@ -6,7 +6,7 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>ERPSystem</title>
+        <title th:href="'ERPSystem - ' + ${organization.getOrgName()}"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
@@ -97,18 +97,18 @@
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item">
                                     <i class="mdi mdi-account-edit me-1"></i>
-                                    <span>Settings</span>
+                                    <span>Настройик</span>
                                 </a>
 
                                 <a th:href="@{/choose_org}" class="dropdown-item">
                                     <i class="mdi mdi-account-convert me-1"></i>
-                                    <span>Change org</span>
+                                    <span>Сменить организацию</span>
                                 </a>
 
                                 <!-- item-->
                                 <a th:href="@{/logout}" class="dropdown-item">
                                     <i class="mdi mdi-logout me-1"></i>
-                                    <span>Logout</span>
+                                    <span>Выйти</span>
                                 </a>
                             </div>
                         </li>
@@ -154,48 +154,48 @@
                 <div class="h-100" id="leftside-menu-container" data-simplebar>
                     <!--- Sidemenu -->
                     <ul class="side-nav">
-                        <li class="side-nav-title">Summary</li>
+                        <li class="side-nav-title">Основное</li>
 
                         <li class="side-nav-item">
                             <a th:href="@{'/' + ${orgId}}" class="side-nav-link">
                                 <i class="uil-home-alt"></i>
                                 <span class="badge bg-success float-end">5</span>
-                                <span> Statistics </span>
+                                <span> Главная </span>
                             </a>
                         </li>
 
-                        <li class="side-nav-title">Navigation</li>
+                        <li class="side-nav-title">Навигация</li>
 
                         <li class="side-nav-item">
                             <a th:href="@{'/' + ${orgId} + '/warehouse/sales'}" class="side-nav-link">
                                 <i class="uil-copy-alt"></i>
-                                <span> Sales </span>
+                                <span> Продажи </span>
                             </a>
                         </li>
 
                         <li class="side-nav-item">
                             <a th:href="@{'/' + ${orgId} + '/warehouse/storage'}" class="side-nav-link">
                                 <i class="uil-window"></i>
-                                <span> Storage </span>
+                                <span> Скалды </span>
                             </a>
                         </li>
 
-                        <li class="side-nav-title">Management</li>
+                        <li class="side-nav-title">Менеджмент</li>
 
                         <li class="side-nav-item">
                             <a th:href="@{'/' + ${orgId} + '/item'}" class="side-nav-link">
                                 <i class="uil-folder-plus"></i>
-                                <span> Products </span>
+                                <span> Товары </span>
                             </a>
                         </li>
 
                         <!--- Administer2-->
-                        <li class="side-nav-title">Administer</li>
+                        <li class="side-nav-title">Администрирование</li>
 
                         <li class="side-nav-item menuitem-active">
                             <a href="javascript:void(0)" class="side-nav-link">
                                 <i class="ri-team-line"></i>
-                                <span> Organization </span>
+                                <span> Организация </span>
                             </a>
                         </li>
                         <!--- End Administer2-->
@@ -214,7 +214,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title" id="add-employeeLabel">Modal Heading</h4>
+                            <h4 class="modal-title" id="add-employeeLabel">Добавить сторудника</h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                         </div>
                         <div class="modal-body">
@@ -227,34 +227,34 @@
                             </div>
                             <div class="row g-2">
                                 <div class="mb-3 col-md-6">
-                                    <label for="first-name" class="form-label">First name</label>
-                                    <input type="text" class="form-control" id="first-name" placeholder="First name:">
+                                    <label for="first-name" class="form-label">Имя</label>
+                                    <input type="text" class="form-control" id="first-name" placeholder="Иван">
                                 </div>
                                 <div class="mb-3 col-md-6">
-                                    <label for="second-name" class="form-label">Second name</label>
-                                    <input type="text" class="form-control" id="second-name" placeholder="Second name:">
+                                    <label for="second-name" class="form-label">Фамилия</label>
+                                    <input type="text" class="form-control" id="second-name" placeholder="Иванов">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="mb-3 col">
-                                    <label for="post" class="form-label">Post</label>
-                                    <input type="text" class="form-control" id="post" placeholder="Post:">
+                                    <label for="post" class="form-label">Должность</label>
+                                    <input type="text" class="form-control" id="post" placeholder="Должность:">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="mb-3 col">
-                                    <label for="user-authority" class="form-label">Authority</label>
+                                    <label for="user-authority" class="form-label">Полномочия</label>
                                     <select id="user-authority" class="form-select">
-                                        <option>Choose</option>
-                                        <option value="USER">User</option>
-                                        <option value="ADMIN">Admin</option>
+                                        <option>Выбрать</option>
+                                        <option value="USER">Пользователь</option>
+                                        <option value="ADMIN">Администратор</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addUser()">Save</button>
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Закрыть</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addUser()">Добавить</button>
                         </div>
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
@@ -264,22 +264,22 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title" id="add-warehouseLabel">Modal Heading</h4>
+                            <h4 class="modal-title" id="add-warehouseLabel">Добавить склад</h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="warehouse-name" class="form-label">Warehouse name</label>
-                                <input type="text" id="warehouse-name" name="example-input-normal" class="form-control" placeholder="Name:">
+                                <label for="warehouse-name" class="form-label">Название</label>
+                                <input type="text" id="warehouse-name" name="example-input-normal" class="form-control" placeholder="Склад №1">
                             </div>
                             <div class="mb-3">
-                                <label for="warehouse-address" class="form-label">Warehouse address</label>
-                                <input type="text" id="warehouse-address" name="example-input-normal" class="form-control" placeholder="Address:">
+                                <label for="warehouse-address" class="form-label">Адрес</label>
+                                <input type="text" id="warehouse-address" name="example-input-normal" class="form-control" placeholder="г. Иавново, ул.Лермонтова, д.1">
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addWarehouse()">Save</button>
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Закрыть</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addWarehouse()">Добавить</button>
                         </div>
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
@@ -289,20 +289,20 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title" id="add-categoryLabel">Modal Heading</h4>
+                            <h4 class="modal-title" id="add-categoryLabel">Добавить категорию</h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                         </div>
                         <div class="modal-body">
                             <div class="row">
                                 <div class="mb-3">
-                                    <label for="categoryName" class="form-label">Category name</label>
-                                    <input type="text" id="categoryName" name="example-input-normal" class="form-control" placeholder="Name:">
+                                    <label for="categoryName" class="form-label">Название</label>
+                                    <input type="text" id="categoryName" name="example-input-normal" class="form-control" placeholder="Категория №1">
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addCategory()">Save</button>
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Закрыть</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addCategory()">Добавить</button>
                         </div>
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
@@ -315,8 +315,8 @@
                         <div class="modal-body p-4">
                             <div class="text-center">
                                 <i class="ri-check-line h1"></i>
-                                <h4 class="mt-2">Well Done!</h4>
-                                <p class="mt-3">Warehouse was successfully added</p>
+                                <h4 class="mt-2">Готово!</h4>
+                                <p class="mt-3" id="success-text">Успешно добавлено</p>
                                 <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal" onclick="location.reload()">OK</button>
                             </div>
                         </div>
@@ -330,8 +330,8 @@
                         <div class="modal-body p-4">
                             <div class="text-center">
                                 <i class="ri-alert-line h1 text-warning"></i>
-                                <h4 class="mt-2">The supply could not be created</h4>
-                                <p class="mt-3">Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+                                <h4 class="mt-2">Возникла ошибка</h4>
+                                <p class="mt-3">В ходе добавления произошла непредвиденная ошибка.</p>
                                 <button type="button" class="btn btn-warning my-2" data-bs-dismiss="modal">OK</button>
                             </div>
                         </div>
@@ -343,15 +343,15 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header bg-warning">
-                            <h4 class="modal-title" id="delete-modal-modalLabel">Delete Item</h4>
+                            <h4 class="modal-title" id="delete-modal-modalLabel">Удалить</h4>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
                         </div>
                         <div class="modal-body" id="dm-text">
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-warning" id="delete-button" data-bs-dismiss="modal">Delete</button>
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Закрыть</button>
+                            <button type="button" class="btn btn-warning" id="delete-button" data-bs-dismiss="modal">Удалить</button>
                         </div>
                     </div>
                 </div>
@@ -369,12 +369,10 @@
                                 <div class="page-title-box">
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
-                                            <li class="breadcrumb-item active">Organization card</li>
+                                            <li class="breadcrumb-item active">Организация</li>
                                         </ol>
                                     </div>
-                                    <h4 class="page-title">Organization card</h4>
+                                    <h4 class="page-title">Страница организации</h4>
                                 </div>
                             </div>
                         </div>
@@ -393,29 +391,29 @@
                                         <div class="row">
                                             <div class="col-lg-4">
                                                 <div class="border p-3 mt-4 mt-lg-0 rounded">
-                                                    <h4 class="header-title mb-3">Order Summary</h4>
+                                                    <h4 class="header-title mb-3">Основная информация</h4>
 
                                                     <div class="table-responsive">
                                                         <table class="table mb-0">
                                                             <tbody>
                                                             <tr>
-                                                                <td>Address :</td>
+                                                                <td>Адрес :</td>
                                                                 <td th:text="${organization.getOrgAddress()}"/>
                                                             </tr>
                                                             <tr>
-                                                                <td>Added date :</td>
+                                                                <td>Дата добавления: </td>
                                                                 <td th:text="${organization.getCreationDate()}"/>
                                                             </tr>
                                                             <tr>
-                                                                <td>Employees amount: </td>
+                                                                <td>Количество сотрудников: </td>
                                                                 <td th:text="${employees.size()}"/>
                                                             </tr>
                                                             <tr>
-                                                                <td>Payment methods: </td>
+                                                                <td>Способ оплаты: </td>
                                                                 <td>Cash, Money transfer</td>
                                                             </tr>
                                                             <tr>
-                                                                <th>Cost of all goods  :</th>
+                                                                <th>Суммарная выручка: </th>
                                                                 <th>$1458.3</th>
                                                             </tr>
                                                             </tbody>
@@ -424,9 +422,9 @@
                                                     <div class="border p-0 mt-4 mt-lg-1 rounded">
                                                         <div class="card">
                                                             <div class="card-body">
-                                                                <h4 class="header-title mb-3">Information about HQ</h4>
+                                                                <h4 class="header-title mb-3">Контактное лицо</h4>
 
-                                                                <h5>Contact: Aleksandr Lezin</h5>
+                                                                <h5>Имя: Aleksandr Lezin</h5>
 
                                                                 <address class="mb-0 font-14 address-lg">
                                                                     Irkutsk, Barrikad<br>
@@ -445,41 +443,41 @@
                                                         <li class="nav-item">
                                                             <a href="#storages" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0 active">
                                                                 <i class="ri-home-7-fill font-18"></i>
-                                                                <span class="d-none d-lg-block">Storages</span>
+                                                                <span class="d-none d-lg-block">Склады</span>
                                                             </a>
                                                         </li>
                                                         <li class="nav-item">
                                                             <a href="#categories" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
                                                                 <i class="uil-layers-alt font-19"></i>
-                                                                <span class="d-none d-lg-block">Categories</span>
+                                                                <span class="d-none d-lg-block">Категории</span>
                                                             </a>
                                                         </li>
                                                         <li class="nav-item">
                                                             <a href="#employees" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
                                                                 <i class="mdi mdi-account-circle font-18"></i>
-                                                                <span class="d-none d-lg-block">Employees</span>
+                                                                <span class="d-none d-lg-block">Сотрудники</span>
                                                             </a>
                                                         </li>
                                                     </ul>
                                                     <div class="tab-content">
                                                         <div class="tab-pane show active" id="storages">
                                                             <div class="row">
-                                                                <h4 class="mt-2">Storages</h4>
+                                                                <h4 class="mt-2">Склады</h4>
 
-                                                                <p class="text-muted mb-4">This section describes the division of the organization by storage</p>
+                                                                <p class="text-muted mb-4">Список имеющихся складов для данной организации</p>
 
                                                                 <div class="d-flex flex-wrap gap-2 mb-3">
-                                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-warehouse"><i class="mdi mdi-plus-circle me-2"></i>Add Storage</button>
+                                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-warehouse"><i class="mdi mdi-plus-circle me-2"></i>Добавить склад</button>
                                                                 </div>
 
                                                                 <div class="table-responsive">
                                                                     <table id="storage" class="table table-striped dt-responsive nowrap w-100">
                                                                         <thead>
                                                                         <tr>
-                                                                            <th>Name</th>
-                                                                            <th>Address</th>
-                                                                            <th>Amount of products</th>
-                                                                            <th>Action</th>
+                                                                            <th>Название</th>
+                                                                            <th>Адрес</th>
+                                                                            <th>Количество товаров</th>
+                                                                            <th>Действие</th>
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -504,12 +502,12 @@
                                                         <div class="tab-pane" id="employees">
                                                             <div class="row">
 
-                                                                <h4 class="mt-2">Employees</h4>
+                                                                <h4 class="mt-2">Сотрудники</h4>
 
-                                                                <p class="text-muted mb-4">There are lots of important information about employees</p>
+                                                                <p class="text-muted mb-4">Список работающих сотрудников в данной организации</p>
 
                                                                 <div class="d-flex flex-wrap gap-2 mb-3">
-                                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-employee"><i class="mdi mdi-plus-circle me-2"></i>Add Employee</button>
+                                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-employee"><i class="mdi mdi-plus-circle me-2"></i>Добавить сотрудника</button>
                                                                 </div>
 
                                                                 <div class="table-responsive">
@@ -517,11 +515,11 @@
                                                                         <thead>
                                                                             <tr>
                                                                                 <th></th>
-                                                                                <th>Name</th>
+                                                                                <th>Имя</th>
                                                                                 <th>Email</th>
-                                                                                <th>Post</th>
-                                                                                <th>Phone number</th>
-                                                                                <th>Action</th>
+                                                                                <th>Должность</th>
+                                                                                <th>Телефон</th>
+                                                                                <th>Действия</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -546,9 +544,9 @@
                                                         <div class="tab-pane" id="categories">
                                                             <div class="row">
 
-                                                                <h4 class="mt-2">Categories</h4>
+                                                                <h4 class="mt-2">Категории</h4>
 
-                                                                <p class="text-muted mb-4">This section describes the division of the products by category</p>
+                                                                <p class="text-muted mb-4">Список имеющихся категорий товарных позиций для данной организации</p>
 
                                                                 <div class="d-flex flex-wrap gap-2 mb-3">
                                                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-category"><i class="mdi mdi-plus-circle me-2"></i>Add Category</button>
@@ -558,9 +556,9 @@
                                                                     <table id="category" class="table table-striped nowrap w-100">
                                                                         <thead>
                                                                             <tr>
-                                                                                <th>Name</th>
-                                                                                <th>Amount</th>
-                                                                                <th>Action</th>
+                                                                                <th>Название</th>
+                                                                                <th>Количество</th>
+                                                                                <th>Действия</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -604,7 +602,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-6">
-                                <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
+                                <script>document.write(new Date().getFullYear())</script> © SMART&Co.
                             </div>
                             <div class="col-md-6">
                                 <div class="text-md-end footer-links d-none d-md-block">

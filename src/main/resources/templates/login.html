@@ -5,7 +5,7 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Log In</title>
+        <title>ERPSystem - Log In</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
@@ -42,13 +42,13 @@
                                     <li class="nav-item">
                                         <a href="#home-b2" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
                                             <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                                            <span class="d-none d-md-block">Sign In</span>
+                                            <span class="d-none d-md-block">Вход</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="#profile-b2" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
                                             <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                                            <span class="d-none d-md-block">Sign up</span>
+                                            <span class="d-none d-md-block">Регистрация</span>
                                         </a>
                                     </li>                                    
                                 </ul>
@@ -58,20 +58,20 @@
 
                                         <div class="text-center w-75 m-auto">
                                             <h4 class="text-dark-50 text-center pb-0 fw-bold">Sign In</h4>
-                                            <p class="text-muted mb-4">Enter your email address and password to access admin panel.</p>
+                                            <p class="text-muted mb-4">Введите ваш email и пароль</p>
                                         </div>
 
                                         <form th:action="@{/api/auth/login}" method="post">
                                             <div class="mb-3">
-                                                <label for="singin-emailaddress" class="form-label">Email address</label>
-                                                <input class="form-control" type="email" id="singin-emailaddress" name="username" required="" placeholder="Enter your email">
+                                                <label for="singin-emailaddress" class="form-label">Email</label>
+                                                <input class="form-control" type="email" id="singin-emailaddress" name="username" required="" placeholder="example@inbox.ru">
                                             </div>
 
                                             <div class="mb-3">
-                                                <a href="pages-recoverpw.html" class="text-muted float-end"><small>Forgot your password?</small></a>
-                                                <label for="singin-password" class="form-label">Password</label>
+                                                <a href="pages-recoverpw.html" class="text-muted float-end"><small>Забыли пароль?</small></a>
+                                                <label for="singin-password" class="form-label">Пароль</label>
                                                 <div class="input-group input-group-merge">
-                                                    <input type="password" id="singin-password" class="form-control" name="password" placeholder="Enter your password">
+                                                    <input type="password" id="singin-password" class="form-control" name="password" placeholder="*********">
                                                     <div class="input-group-text" data-password="false">
                                                         <span class="password-eye"></span>
                                                     </div>
@@ -81,12 +81,12 @@
                                             <div class="mb-3 mb-3">
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input" id="checkbox-signin" checked>
-                                                    <label class="form-check-label" for="checkbox-signin">Remember me</label>
+                                                    <label class="form-check-label" for="checkbox-signin">Запомнить меня</label>
                                                 </div>
                                             </div>
 
                                             <div class="mb-3 mb-0 text-center">
-                                                <button class="btn btn-primary" type="submit"> Log In </button>
+                                                <button class="btn btn-primary" type="submit"> Войти </button>
                                             </div>
                                         </form>
                                     </div>
@@ -94,31 +94,31 @@
                                     <div class="tab-pane" id="profile-b2">
                                                                        
                                         <div class="text-center w-75 m-auto">
-                                            <h4 class="text-dark-50 text-center mt-0 fw-bold">Free Sign Up</h4>
-                                            <p class="text-muted mb-4">Don't have an account? Create your account, it takes less than a minute </p>
+                                            <h4 class="text-dark-50 text-center mt-0 fw-bold">Регистрация</h4>
+                                            <p class="text-muted mb-4">Уже имеет аккаунт? Создайте первую организацию - этой займет меньше минуты  </p>
                                         </div>
         
                                         <form th:action="@{/api/auth/register}" method="post">
                                             <div class="mb-3">
-                                                <label for="emailaddress" class="form-label">Email address</label>
-                                                <input class="form-control" type="email" id="emailaddress" name="username" required placeholder="Enter your email">
+                                                <label for="emailaddress" class="form-label">Email</label>
+                                                <input class="form-control" type="email" id="emailaddress" name="username" required placeholder="example@inbox.ru">
                                             </div>
 
                                             <div class="row g-2">
                                                 <div class="mb-3 col-md-6">
-                                                    <label for="first-name" class="form-label">First name</label>
-                                                    <input type="text" class="form-control" name="firstname" id="first-name" placeholder="First name:">
+                                                    <label for="first-name" class="form-label">Имя</label>
+                                                    <input type="text" class="form-control" name="firstname" id="first-name" placeholder="Иван">
                                                 </div>
                                                 <div class="mb-3 col-md-6">
-                                                    <label for="second-name" class="form-label">Second name</label>
-                                                    <input type="text" class="form-control" name="secondname" id="second-name" placeholder="Second name:">
+                                                    <label for="second-name" class="form-label">Фамилия</label>
+                                                    <input type="text" class="form-control" name="secondname" id="second-name" placeholder="Иванов">
                                                 </div>
                                             </div>
         
                                             <div class="mb-3">
-                                                <label for="password" class="form-label">Password</label>
+                                                <label for="password" class="form-label">Пароль</label>
                                                 <div class="input-group input-group-merge">
-                                                    <input type="password" id="password" class="form-control" name="password" placeholder="Enter your password">
+                                                    <input type="password" id="password" class="form-control" name="password" placeholder="********">
                                                     <div class="input-group-text" data-password="false">
                                                         <span class="password-eye"></span>
                                                     </div>
@@ -128,12 +128,12 @@
                                             <div class="mb-3">
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input" id="checkbox-signup">
-                                                    <label class="form-check-label" for="checkbox-signup">I accept <a href="#" class="text-muted">Terms and Conditions</a></label>
+                                                    <label class="form-check-label" for="checkbox-signup">I accept <a href="#" class="text-muted">Условия использования</a></label>
                                                 </div>
                                             </div>
         
                                             <div class="mb-3 text-center">
-                                                <button class="btn btn-primary" type="submit"> Sign Up </button>
+                                                <button class="btn btn-primary" type="submit"> Зарегистрироваться </button>
                                             </div>
                                         </form>
                                     </div>
@@ -150,7 +150,7 @@
         <!-- end page -->
 
         <footer class="footer footer-alt">
-            2018 - <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
+            2018 - <script>document.write(new Date().getFullYear())</script> © SMART&Co.
         </footer>
 
         <!-- Vendor js -->

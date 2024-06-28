@@ -6,7 +6,7 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Log In | Hyper - Responsive Bootstrap 5 Admin Dashboard</title>
+        <title>ERPSystem - Создание организации</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
@@ -34,8 +34,8 @@
                             <div class="modal-body p-4">
                                 <div class="text-center">
                                     <i class="ri-check-line h1"></i>
-                                    <h4 class="mt-2">Well Done!</h4>
-                                    <p class="mt-3">User was successfully added</p>
+                                    <h4 class="mt-2">Готово!</h4>
+                                    <p class="mt-3">Пользователь успешно добавлен!</p>
                                     <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">OK</button>
                                 </div>
                             </div>
@@ -49,8 +49,8 @@
                             <div class="modal-body p-4">
                                 <div class="text-center">
                                     <i class="ri-alert-line h1 text-warning"></i>
-                                    <h4 class="mt-2">The user could not be created</h4>
-                                    <p class="mt-3">Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+                                    <h4 class="mt-2">Ошибка создания пользователя!</h4>
+                                    <p class="mt-3">Во время создания пользователя произошла ошибка.</p>
                                     <button type="button" class="btn btn-warning my-2" data-bs-dismiss="modal">OK</button>
                                 </div>
                             </div>
@@ -72,8 +72,8 @@
                             <div class="card-body p-4">
                                 
                                 <div class="text-center w-75 m-auto">
-                                    <h4 class="text-dark-50 text-center pb-0 fw-bold">Create your organization</h4>
-                                    <p class="text-muted mb-4">Enter main info about your organization</p>
+                                    <h4 class="text-dark-50 text-center pb-0 fw-bold">Создайте свою организацию</h4>
+                                    <p class="text-muted mb-4">Введите основную информацию о вашей организации</p>
                                 </div>                                
                                 <form>
                                     <div id="progressbarwizard">
@@ -82,19 +82,19 @@
                                             <li class="nav-item">
                                                 <a href="#account-2" data-bs-toggle="tab" id="main-tab" data-toggle="tab" class="nav-link rounded-0 py-2" aria-selected="true" role="tab">
                                                     <i class="mdi mdi-home-city-outline font-18 align-middle me-1"></i>
-                                                    <span class="d-none d-sm-inline">Main info</span>
+                                                    <span class="d-none d-sm-inline">Основная информация</span>
                                                 </a>
                                             </li>            
                                             <li class="nav-item">
                                                 <a href="#profile-tab-2" data-bs-toggle="tab" id="employee-tab" data-toggle="tab" class="nav-link rounded-0 py-2">
                                                     <i class="mdi mdi-human-queue font-18 align-middle me-1"></i>
-                                                    <span class="d-none d-sm-inline">Structure</span>
+                                                    <span class="d-none d-sm-inline">Сотрудники</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
                                                 <a href="#finish-2" data-bs-toggle="tab" id="finish-tab" data-toggle="tab" class="nav-link rounded-0 py-2">
                                                     <i class="mdi mdi-checkbox-marked-circle-outline font-18 align-middle me-1"></i>
-                                                    <span class="d-none d-sm-inline">Finish</span>
+                                                    <span class="d-none d-sm-inline">Подтверждение</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -109,15 +109,15 @@
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <div class="row mb-3">
-                                                            <label class="col-md-3 col-form-label" for="org-name">Organization Name</label>
+                                                            <label class="col-md-3 col-form-label" for="org-name">Нзавание</label>
                                                             <div class="col-md-9">
-                                                                <input type="text" class="form-control" id="org-name" placeholder="Org name">
+                                                                <input type="text" class="form-control" id="org-name" placeholder="ООО 'Рога и копыта'">
                                                             </div>
                                                         </div>
                                                         <div class="row mb-3">
-                                                            <label class="col-md-3 col-form-label" for="address">Address</label>
+                                                            <label class="col-md-3 col-form-label" for="address">Адрес</label>
                                                             <div class="col-md-9">
-                                                                <input type="text" class="form-control" id="address" placeholder="Address">
+                                                                <input type="text" class="form-control" id="address" placeholder="г. Иваново, ул. Пушкина, д.1">
                                                             </div>
                                                         </div>
                                                     </div> <!-- end col -->
@@ -125,7 +125,7 @@
 
                                                 <ul class="list-inline wizard mb-0">
                                                     <li class="next list-inline-item float-end">
-                                                        <a href="javascript:void(0);" class="btn btn-info" onclick="createOrganization()">Add More Info <i class="mdi mdi-arrow-right ms-1"></i></a>
+                                                        <a href="javascript:void(0);" class="btn btn-info" onclick="createOrganization()">Перейти к сотрудникам <i class="mdi mdi-arrow-right ms-1"></i></a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -141,38 +141,38 @@
                                                         </div>
                                                         <div class="row g-2">
                                                             <div class="mb-3 col-md-6">
-                                                                <input type="text" class="form-control" id="first-name" placeholder="First name:">
+                                                                <input type="text" class="form-control" id="first-name" placeholder="Имя:">
                                                             </div>
                                                             <div class="mb-3 col-md-6">
-                                                                <input type="text" class="form-control" id="second-name" placeholder="Second name:">
+                                                                <input type="text" class="form-control" id="second-name" placeholder="Фамилия:">
                                                             </div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="mb-3 col">
-                                                                <input type="text" class="form-control" id="post" placeholder="Post:">
+                                                                <input type="text" class="form-control" id="post" placeholder="Должность:">
                                                             </div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="mb-3 col">
                                                                 <select id="user-authority" class="form-select">
-                                                                    <option>Authority</option>
-                                                                    <option value="USER">User</option>
-                                                                    <option value="ADMIN">Admin</option>
+                                                                    <option>Полномочия</option>
+                                                                    <option value="USER">Пользователь</option>
+                                                                    <option value="ADMIN">Администратор</option>
                                                                 </select>
                                                             </div>
                                                         </div>
                                                     </div> <!-- end col -->
                                                 </div> <!-- end row -->
                                                 <div class="mb-3 mb-0 text-center">
-                                                    <button type="button" class="btn btn-success" onclick="addUser()">Add Employee</button>
+                                                    <button type="button" class="btn btn-success" onclick="addUser()">Добавить сторудника</button>
                                                 </div>
 
                                                 <ul class="pager wizard mb-1 list-inline">
                                                     <li class="previous list-inline-item">
-                                                        <button type="button" class="btn btn-light"><i class="mdi mdi-arrow-left me-1"></i> Back to Main Info</button>
+                                                        <button type="button" class="btn btn-light"><i class="mdi mdi-arrow-left me-1"></i> Назад</button>
                                                     </li>
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="button" class="btn btn-info">Finish <i class="mdi mdi-arrow-right ms-1"></i></button>
+                                                        <button type="button" class="btn btn-info">Готово <i class="mdi mdi-arrow-right ms-1"></i></button>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -182,15 +182,14 @@
                                                     <div class="col-12">
                                                         <div class="text-center">
                                                             <h2 class="mt-0"><i class="mdi mdi-check-all"></i></h2>
-                                                            <h3 class="mt-0">Thank you !</h3>
+                                                            <h3 class="mt-0">Спасибо!</h3>
 
-                                                            <p class="w-75 mb-2 mx-auto">Quisque nec turpis at urna dictum luctus. Suspendisse convallis dignissim eros at volutpat. In egestas mattis dui. Aliquam
-                                                                mattis dictum aliquet.</p>
+                                                            <p class="w-75 mb-2 mx-auto">Ваша организация была упешно создана, и Вы можете приступить к работе!</p>
 
                                                             <div class="mb-3">
                                                                 <div class="form-check d-inline-block">
                                                                     <input type="checkbox" class="form-check-input" id="customCheck3">
-                                                                    <label class="form-check-label" for="customCheck3">I agree with the Terms and Conditions</label>
+                                                                    <label class="form-check-label" for="customCheck3">Я согласен с условиями использования нашего сервиса</label>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -198,10 +197,10 @@
                                                 </div> <!-- end row -->
                                                 <ul class="pager wizard mb-0 list-inline mt-1">
                                                     <li class="previous list-inline-item">
-                                                        <button type="button" class="btn btn-light"><i class="mdi mdi-arrow-left me-1"></i> Back to Structure</button>
+                                                        <button type="button" class="btn btn-light"><i class="mdi mdi-arrow-left me-1"></i> Назад</button>
                                                     </li>
                                                     <li class="next list-inline-item float-end">
-                                                        <a type="button" th:href="@{/choose_org}" class="btn btn-info">Submit</a>
+                                                        <a type="button" th:href="@{/choose_org}" class="btn btn-info">Готово</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -215,7 +214,7 @@
 
                         <div class="row mt-3">
                             <div class="col-12 text-center">
-                                <p class="text-muted">Don't have an organization? <a href="pages-register.html" class=" mdi mdi-human-male-board-poll text-muted ms-1 "><b> Get out of here </b></a></p>
+                                <p class="text-muted">Уже работаете с нашим сервисом? <a th:href="@{/}" class=" mdi mdi-human-male-board-poll text-muted ms-1 "><b> Вход </b></a></p>
                             </div> <!-- end col -->
                         </div>
                         <!-- end row -->
@@ -249,7 +248,7 @@
 
 
         <footer class="footer footer-alt">
-            2018 - <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
+            2018 - <script>document.write(new Date().getFullYear())</script> © SMART&Co.
         </footer>        
     </body>
 </html>
