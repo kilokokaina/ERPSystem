@@ -74,3 +74,46 @@ function inviteUser(userId) {
         }
     });
 }
+
+function uploadImage(userId) {
+    const files = document.querySelector('#papers-list').files;
+    const formData = new FormData();
+
+    console.log(files);
+    console.log(files.length);
+    for (let i = 0; i < files.length; i++) {
+        formData.append('image', files[i]);
+    }
+
+    fetch(`/api/file/user/${userId}`, {
+        method: 'POST',
+        body: formData
+    });
+}
+
+function updateUser() {
+    let userId = document.querySelector('#user-id').innerHTML;
+    let email = document.querySelector('#email').value;
+    let firstName = document.querySelector('#first-name').value;
+    let secondName = document.querySelector('#second-name').value;
+
+    let userData = {
+        email: email,
+        firstName: firstName,
+        secondName: secondName,
+    };
+
+    fetch(`/api/user/update/${userId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+    }).then(async response => {
+        let payload = response.text();
+
+        if (response.ok) {
+            uploadImage(userId);
+            location.reload();
+        }
+    })
+
+}

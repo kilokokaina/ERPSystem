@@ -24,10 +24,10 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public WarehouseModel save(WarehouseModel warehouseModel) throws DuplicateDBRecord {
-        if (warehouseRepository.findByWarehouseName(warehouseModel.getWarehouseName()) != null) {
-            String exceptionMessage = "Record with name [%s] already exists in DB";
-            throw new DuplicateDBRecord(exceptionMessage);
-        }
+//        if (warehouseRepository.findByWarehouseName(warehouseModel.getWarehouseName()) != null) {
+//            String exceptionMessage = "Record with name [%s] already exists in DB";
+//            throw new DuplicateDBRecord(exceptionMessage);
+//        }
 
         return warehouseRepository.save(warehouseModel);
     }

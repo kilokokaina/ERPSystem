@@ -2,8 +2,10 @@ package com.work.erpsystem.controller;
 
 import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.OrganizationModel;
+import com.work.erpsystem.model.TransitModel;
 import com.work.erpsystem.model.WarehouseModel;
 import com.work.erpsystem.repository.SaleRepository;
+import com.work.erpsystem.repository.TransitRepository;
 import com.work.erpsystem.service.impl.CategoryServiceImpl;
 import com.work.erpsystem.service.impl.OrgServiceImpl;
 import com.work.erpsystem.service.impl.WarehouseServiceImpl;
@@ -26,14 +28,18 @@ import java.util.Objects;
 public class StorageController {
 
     private final WarehouseServiceImpl warehouseService;
+    private final TransitRepository transitRepository;
     private final CategoryServiceImpl categoryService;
     private final SaleRepository saleRepository;
     private final OrgServiceImpl orgService;
+    private StorageController storageController;
 
     @Autowired
-    public StorageController(WarehouseServiceImpl warehouseService, CategoryServiceImpl categoryService,
-                             SaleRepository saleRepository, OrgServiceImpl orgService) {
+    public StorageController(WarehouseServiceImpl warehouseService, TransitRepository transitRepository,
+                             CategoryServiceImpl categoryService, SaleRepository saleRepository,
+                             OrgServiceImpl orgService) {
         this.warehouseService = warehouseService;
+        this.transitRepository = transitRepository;
         this.categoryService = categoryService;
         this.saleRepository = saleRepository;
         this.orgService = orgService;
@@ -84,6 +90,33 @@ public class StorageController {
         } catch (NoDBRecord exception) {
             return "redirect:/error";
         }
+    }
+
+    @GetMapping("transit")
+    public String transit(@RequestParam(value = "id", required = false) WarehouseModel warehouseModel,
+                          Authentication authentication, Model model, @PathVariable(value = "org_uuid") Long orgId) {
+        try {
+            OrganizationModel organizationModel = orgService.findById(orgId);
+
+            if (Objects.nonNull(warehouseModel)) {
+                model.addAttribute("itemQuantity", warehouseModel.getItemQuantity());
+                model.addAttribute("itemPrice", warehouseModel.getItemPrice());
+                model.addAttribute("warehouseName", warehouseModel.getWarehouseName());
+                model.addAttribute("warehouseId", warehouseModel.getWarehouseId());
+            }
+
+            List<WarehouseModel> warehouseList = warehouseService.findByOrganization(organizationModel);
+            List<TransitModel> transitList = transitRepository.findByOrganization(organizationModel);
+
+            model.addAttribute("warehouses", warehouseList);
+            model.addAttribute("transits", transitList);
+            model.addAttribute("orgId", orgId);
+
+            return "delivery-2";
+        } catch (NoDBRecord exception) {
+            return "redirect:/error";
+        }
+
     }
 
 }

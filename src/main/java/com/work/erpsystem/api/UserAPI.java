@@ -10,6 +10,7 @@ import com.work.erpsystem.service.impl.OrgServiceImpl;
 import com.work.erpsystem.service.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -30,6 +31,10 @@ public class UserAPI {
     private final OrgServiceImpl orgService;
     private final JavaMailSender mailSender;
 
+    private @Value("${mail.message.invite}") String inviteMessage;
+    private @Value("${mail.message.change}") String changeMessage;
+
+
     @Autowired
     public UserAPI(UserServiceImpl userService, JavaMailSender mailSender, OrgServiceImpl orgService) {
         this.userService = userService;
@@ -37,12 +42,9 @@ public class UserAPI {
         this.mailSender = mailSender;
     }
 
-    private static SimpleMailMessage sendMessageToNewUser(UserModel newUser) {
+    private static SimpleMailMessage sendMessageToUser(UserModel newUser, String messageTemplate) {
         SimpleMailMessage message = new SimpleMailMessage();
-        String messageText = String.format("""
-            К вашей почте был привязан аккаунт в ERPSystem. Перейдите по ссылке для того, чтобы задать пароль
-            %s
-        """, newUser.getUserUUID());
+        String messageText = String.format(messageTemplate, newUser.getUserUUID());
 
         message.setFrom("nikolaushki@yandex.ru");
         message.setSubject("Вас пригласили в организацию - ERPSystem");
@@ -57,6 +59,16 @@ public class UserAPI {
         try {
             return ResponseEntity.ok(userService.findByUsername(email));
         } catch (UsernameNotFoundException exception) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @PostMapping("/api/user/is_password-correct/{id}")
+    public @ResponseBody ResponseEntity<Boolean> isPasswordCorrect(@PathVariable(value = "id") Long userId,
+                                                                   @RequestBody String password) {
+        try {
+            return ResponseEntity.ok(password.equals(userService.findById(userId).getPassword()));
+        } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
@@ -79,7 +91,7 @@ public class UserAPI {
             newUser.setRoleSet(Set.of(Role.USER));
 
             userService.save(newUser);
-            SimpleMailMessage message = sendMessageToNewUser(newUser);
+            SimpleMailMessage message = sendMessageToUser(newUser, inviteMessage);
             mailSender.send(message);
 
             return ResponseEntity.ok(newUser);
@@ -88,11 +100,30 @@ public class UserAPI {
         }
     }
 
+    @PutMapping("api/user/update/{id}")
+    public @ResponseBody ResponseEntity<HttpStatus> updateUser(@PathVariable(value = "id") Long userId, Authentication authentication,
+                                                               @RequestBody UserDTO userDTO) {
+        try {
+            UserModel userModel = userService.findById(userId);
+
+            userModel.setFirstName(userDTO.getFirstName());
+            userModel.setSecondName(userDTO.getSecondName());
+
+            if (!userModel.getUsername().equals(userDTO.getEmail())) {
+                sendMessageToUser(userModel, changeMessage);
+            }
+
+            userService.update(userModel);
+
+            return ResponseEntity.ok(HttpStatus.OK);
+        } catch (NoDBRecord exception) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
     @GetMapping("{org_uuid}/api/user/invite")
-    public @ResponseBody ResponseEntity<HttpStatus> inviteUser(@PathVariable(value = "org_uuid") Long orgId,
-                                                               @RequestParam(name = "user_id") Long userId,
-                                                               @RequestParam(name = "role") String role,
-                                                               Authentication authentication) {
+    public @ResponseBody ResponseEntity<HttpStatus> inviteUser(@PathVariable(value = "org_uuid") Long orgId, @RequestParam(name = "user_id") Long userId,
+                                                               @RequestParam(name = "role") String role, Authentication authentication) {
         try {
             UserModel user = userService.findById(userId);
             Map<OrganizationModel, String> orgRole = user.getOrgRole();

@@ -37,6 +37,13 @@ public class UserModel implements UserDetails {
     @MapKeyJoinColumn(name = "org")
     private Map<OrganizationModel, String> orgRole;
 
+    @OneToOne
+    @JoinTable(
+            name = "user_avatar", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "file_id")
+    )
+    private FileModel userAvatar;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoleSet();

@@ -95,9 +95,9 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
                                 <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item">
+                                <a th:href="@{'/' + ${orgId} + '/settings'}" class="dropdown-item">
                                     <i class="mdi mdi-account-edit me-1"></i>
-                                    <span>Настройик</span>
+                                    <span>Настройки</span>
                                 </a>
 
                                 <a th:href="@{/choose_org}" class="dropdown-item">
@@ -177,6 +177,13 @@
                             <a th:href="@{'/' + ${orgId} + '/warehouse/storage'}" class="side-nav-link">
                                 <i class="uil-window"></i>
                                 <span> Скалды </span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a th:href="@{'/' + ${orgId} +'/warehouse/transit'}" class="side-nav-link">
+                                <i class="ri-truck-line"></i>
+                                <span> Перемещение </span>
                             </a>
                         </li>
 
@@ -643,12 +650,21 @@
         <script th:inline="javascript" th:src="@{/v3/js/api/user-script.js}"></script>
         <script>
             new DataTable('#storage', {
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/ru.json'
+                },
                 responsive: true
             });
             new DataTable('#employee', {
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/ru.json'
+                },
                 responsive: true
             });
             new DataTable('#category', {
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/ru.json'
+                },
                 responsive: true
             });
         </script>

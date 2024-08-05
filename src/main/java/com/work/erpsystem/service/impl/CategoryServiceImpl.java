@@ -24,10 +24,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryModel save(CategoryModel categoryModel) throws DuplicateDBRecord {
-        if (categoryRepository.findByCategoryName(categoryModel.getCategoryName()) != null) {
-            String exceptionMessage = "Record with name [%s] already exists in DB";
-            throw new DuplicateDBRecord(exceptionMessage);
-        }
+//        if (categoryRepository.findByCategoryName(categoryModel.getCategoryName()) != null) {
+//            String exceptionMessage = "Record with name [%s] already exists in DB";
+//            throw new DuplicateDBRecord(exceptionMessage);
+//        }
 
         return categoryRepository.save(categoryModel);
     }

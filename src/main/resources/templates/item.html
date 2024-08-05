@@ -99,7 +99,7 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
                                 <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item">
+                                <a th:href="@{'/' + ${orgId} + '/settings'}" class="dropdown-item">
                                     <i class="mdi mdi-account-edit me-1"></i>
                                     <span>Настройки</span>
                                 </a>
@@ -181,6 +181,13 @@
                             <a th:href="@{'/' + ${orgId} + '/warehouse/storage'}" class="side-nav-link">
                                 <i class="uil-window"></i>
                                 <span> Склады </span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a th:href="@{'/' + ${orgId} +'/warehouse/transit'}" class="side-nav-link">
+                                <i class="ri-truck-line"></i>
+                                <span> Перемещение </span>
                             </a>
                         </li>
 
@@ -456,9 +463,6 @@
         <script th:src="@{/v3/vendor/datatables.net-responsive/js/dataTables.responsive.min.js}"></script>
         <script th:src="@{/v3/vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js}"></script>
 
-        <!-- Datatable Init js -->
-        <script th:src="@{/v3/js/pages/demo.datatable-init.js}"></script>
-
         <!-- Input Mask Plugin js -->
         <script th:src="@{/v3/vendor/jquery-mask-plugin/jquery.mask.min.js}"></script>
 
@@ -473,6 +477,15 @@
 
         <script th:src="@{/v3/js/api/item-script.js}"></script>
         <script th:src="@{/v3/js/api/category-script.js}"></script>
+
+        <script>
+            new DataTable('#basic-datatable', {
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/ru.json'
+                },
+                responsive: true
+            });
+        </script>
 
     </body>
 </html> 

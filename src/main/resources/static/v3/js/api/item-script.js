@@ -12,7 +12,7 @@ function uploadImage(itemId) {
         formData.append('images', files[i]);
     }
 
-    fetch(`/api/file/${itemId}`, {
+    fetch(`/api/file/item/${itemId}`, {
         method: 'POST',
         body: formData
     });

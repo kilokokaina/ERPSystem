@@ -1,13 +1,13 @@
 package com.work.erpsystem.api;
 
 import com.work.erpsystem.dto.ItemQuantityDTO;
+import com.work.erpsystem.dto.TransitDTO;
 import com.work.erpsystem.dto.WarehouseDTO;
 import com.work.erpsystem.exception.DBException;
 import com.work.erpsystem.exception.NoDBRecord;
-import com.work.erpsystem.model.ItemModel;
-import com.work.erpsystem.model.SaleModel;
-import com.work.erpsystem.model.WarehouseModel;
+import com.work.erpsystem.model.*;
 import com.work.erpsystem.repository.SaleRepository;
+import com.work.erpsystem.repository.TransitRepository;
 import com.work.erpsystem.service.impl.ItemServiceImpl;
 import com.work.erpsystem.service.impl.OrgServiceImpl;
 import com.work.erpsystem.service.impl.WarehouseServiceImpl;
@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,14 +29,17 @@ import java.util.Map;
 public class WarehouseAPI {
 
     private final WarehouseServiceImpl warehouseService;
+    private final TransitRepository transitRepository;
     private final SaleRepository saleRepository;
     private final ItemServiceImpl itemService;
     private final OrgServiceImpl orgService;
 
     @Autowired
-    public WarehouseAPI(WarehouseServiceImpl warehouseService, ItemServiceImpl itemService,
-                        OrgServiceImpl orgService, SaleRepository saleRepository) {
+    public WarehouseAPI(WarehouseServiceImpl warehouseService, TransitRepository transitRepository,
+                        ItemServiceImpl itemService, OrgServiceImpl orgService,
+                        SaleRepository saleRepository) {
         this.warehouseService = warehouseService;
+        this.transitRepository = transitRepository;
         this.saleRepository = saleRepository;
         this.itemService = itemService;
         this.orgService = orgService;
@@ -56,7 +61,6 @@ public class WarehouseAPI {
                                                                  Authentication authentication) {
         try {
             WarehouseModel warehouse = warehouseService.findById(warehouseId);
-
             return ResponseEntity.ok(warehouse);
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -160,6 +164,97 @@ public class WarehouseAPI {
         }
 
         return null;
+    }
+
+    @GetMapping("get_transit")
+    public @ResponseBody ResponseEntity<TransitModel> getTransit(@PathVariable(value = "org_uuid") Long orgId,
+                                                                 @RequestParam(value = "transitId") Long transitId,
+                                                                 Authentication authentication) {
+        return ResponseEntity.ok(transitRepository.findById(transitId).orElse(null));
+    }
+
+    @PostMapping("add_transit")
+    public @ResponseBody ResponseEntity<TransitModel> addNewTransit(@PathVariable(value = "org_uuid") Long orgId,
+                                                              @RequestBody TransitDTO transitDto,
+                                                              Authentication authentication) {
+        TransitModel transit = new TransitModel();
+        transit.setTransitStatus(String.valueOf(TransitStatus.valueOf(transitDto.getStatus())));
+
+        try {
+            WarehouseModel departWarehouse = warehouseService.findById(transitDto.getDepartPoint());
+            WarehouseModel arriveWarehouse = warehouseService.findById(transitDto.getArrivePoint());
+
+            Map<ItemModel, Integer> transitItemQuantity = new HashMap<>();
+            for (ItemQuantityDTO itemDto : transitDto.getItems()) {
+                ItemModel transitItem = itemService.findById(itemDto.getItemId());
+
+                if (departWarehouse.getItemQuantity().get(transitItem) < itemDto.getQuantity()) {
+                    log.error("Items quantity conflict: requested quantity is more than WH got");
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+
+                transitItemQuantity.put(transitItem, itemDto.getQuantity());
+            }
+            transit.setItemQuantity(transitItemQuantity);
+
+            transit.setDepartPoint(departWarehouse);
+            transit.setArrivePoint(arriveWarehouse);
+            transit.setOrganization(orgService.findById(transitDto.getOrgId()));
+
+        } catch (NoDBRecord e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        transitRepository.save(transit);
+
+        return ResponseEntity.ok(transit);
+    }
+
+    @PutMapping("change_transit_status")
+    public @ResponseBody ResponseEntity<TransitModel> changeTransitStatus(@PathVariable(value = "org_uuid") Long orgId,
+                                                                          @RequestParam Long transitId, @RequestParam String transitStatus,
+                                                                          Authentication authentication) throws NoDBRecord {
+        TransitModel transit = transitRepository.findById(transitId).orElse(null);
+
+        if (transit == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        transit.setTransitStatus(String.valueOf(TransitStatus.valueOf(transitStatus)));
+        Map<ItemModel, Integer> transitItems = transit.getItemQuantity();
+
+        try {
+            switch (transitStatus) {
+                case "IN_TRANSIT" -> {
+                    WarehouseModel warehouseModel = transit.getDepartPoint();
+                    Map<ItemModel, Integer> warehouseItems = warehouseModel.getItemQuantity();
+
+                    for (Map.Entry<ItemModel, Integer> entry : transitItems.entrySet()) {
+                        int currentQuantity = warehouseItems.get(entry.getKey());
+                        warehouseItems.replace(entry.getKey(), currentQuantity - entry.getValue());
+                    }
+
+                    warehouseService.update(warehouseModel);
+                }
+                case "DELIVERED" -> {
+                    WarehouseModel warehouseModel = transit.getArrivePoint();
+                    Map<ItemModel, Integer> warehouseItems = warehouseModel.getItemQuantity();
+
+                    for (Map.Entry<ItemModel, Integer> entry : transitItems.entrySet()) {
+                        int currentQuantity = warehouseItems.get(entry.getKey());
+                        warehouseItems.replace(entry.getKey(), currentQuantity + entry.getValue());
+                    }
+
+                    warehouseService.update(warehouseModel);
+                }
+            }
+
+            transitRepository.save(transit);
+
+        } catch (NoDBRecord exception) {
+            log.error(exception.getMessage());
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return ResponseEntity.ok(transit);
     }
 
     @DeleteMapping("{id}")

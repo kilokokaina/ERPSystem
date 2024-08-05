@@ -19,7 +19,7 @@ public class DevController {
 
     @GetMapping("route")
     public String dev() {
-        return "add-item";
+        return "delivery-2";
     }
 
 }

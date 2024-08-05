@@ -25,10 +25,10 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemModel save(ItemModel itemModel) throws DuplicateDBRecord {
-        if (itemRepository.findByItemName(itemModel.getItemName()) != null) {
-            String exceptionMessage = "Record with name [%s] already exists in DB";
-            throw new DuplicateDBRecord(exceptionMessage);
-        }
+//        if (itemRepository.findByItemName(itemModel.getItemName()) != null) {
+//            String exceptionMessage = "Record with name [%s] already exists in DB";
+//            throw new DuplicateDBRecord(exceptionMessage);
+//        }
 
         return itemRepository.save(itemModel);
     }
