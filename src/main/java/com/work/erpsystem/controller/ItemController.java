@@ -79,6 +79,7 @@ public class ItemController {
 
             model.addAttribute("itemPrice", warehouseItemPrice);
             model.addAttribute("itemQuantity", itemQuantity);
+            model.addAttribute("barcode", itemModel.getBarcode());
             model.addAttribute("item", itemModel);
             model.addAttribute("orgId", orgId);
 

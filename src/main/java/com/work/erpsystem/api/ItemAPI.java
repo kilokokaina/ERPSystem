@@ -4,9 +4,11 @@ import com.work.erpsystem.dto.ItemDTO;
 import com.work.erpsystem.exception.DBException;
 import com.work.erpsystem.exception.DuplicateDBRecord;
 import com.work.erpsystem.exception.NoDBRecord;
+import com.work.erpsystem.model.BarcodeModel;
 import com.work.erpsystem.model.CategoryModel;
 import com.work.erpsystem.model.FileModel;
 import com.work.erpsystem.model.ItemModel;
+import com.work.erpsystem.repository.BarcodeRepository;
 import com.work.erpsystem.repository.FileRepository;
 import com.work.erpsystem.service.impl.CategoryServiceImpl;
 import com.work.erpsystem.service.impl.ItemServiceImpl;
@@ -31,13 +33,16 @@ import java.util.List;
 public class ItemAPI {
 
     private final ItemServiceImpl itemService;
+    private final BarcodeRepository barcodeRepository;
     private final CategoryServiceImpl categoryService;
     private final FileRepository fileRepository;
     private final OrgServiceImpl orgService;
 
     @Autowired
     public ItemAPI(ItemServiceImpl itemService, CategoryServiceImpl categoryService,
-                   OrgServiceImpl orgService, FileRepository fileRepository) {
+                   BarcodeRepository barcodeRepository, OrgServiceImpl orgService,
+                   FileRepository fileRepository) {
+        this.barcodeRepository = barcodeRepository;
         this.categoryService = categoryService;
         this.fileRepository = fileRepository;
         this.itemService = itemService;
@@ -141,6 +146,23 @@ public class ItemAPI {
             return ResponseEntity.ok(HttpStatus.NO_CONTENT);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("add_barcode/{id}")
+    public @ResponseBody ResponseEntity<BarcodeModel> addBarcode(@PathVariable(value = "org_uuid") Long orgId,
+                                                                 @PathVariable(value = "id") Long itemId,
+                                                                 @RequestBody BarcodeModel barcode) {
+        try {
+            ItemModel itemModel = itemService.findById(itemId);
+
+            barcodeRepository.save(barcode);
+            itemModel.setBarcode(barcode);
+            itemService.update(itemModel);
+
+            return ResponseEntity.ok(barcode);
+        } catch (NoDBRecord exception) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 

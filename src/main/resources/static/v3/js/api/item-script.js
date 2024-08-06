@@ -73,3 +73,44 @@ function confirmItemDelete(itemId) {
         if (result.ok) location.reload();
     });
 }
+
+function addBarcode() {
+    let itemId = document.querySelector('#item-id').innerText;
+    let barcode = document.querySelector('#item-barcode').value;
+
+    fetch(`/${orgId}/api/item/add_barcode/${itemId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({ codeValue: barcode })
+    }).then(async response => {
+        if (response.ok) location.reload();
+    });
+}
+
+function onScanSuccess(decodedText, decodedResult) {
+    let scanLabel = document.querySelector('#scan-info');
+    let itemId = document.querySelector('#item-id').innerText;
+
+    scanLabel.innerHTML = `
+        <div class="alert alert-success" role="alert">
+            <strong>Штрих-код - </strong> ${decodedText}
+        </div>
+    `;
+
+    fetch(`/${orgId}/api/item/add_barcode/${itemId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({ codeValue: decodedText })
+    }).then(async response => {
+        if (response.ok) location.reload();
+    });
+
+    console.log(`Code scanned = ${decodedText}`, decodedResult);
+}
+
+let html5QrcodeScanner = new Html5QrcodeScanner("my-qr-reader", { fps: 10, qrbox: 250 });
+html5QrcodeScanner.render(onScanSuccess);

@@ -243,19 +243,28 @@ public class WarehouseAPI {
                         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                     }
 
-                    WarehouseModel warehouseModel = transit.getArrivePoint();
-                    Map<ItemModel, Integer> warehouseItems = warehouseModel.getItemQuantity();
+                    WarehouseModel arriveWarehouse = transit.getArrivePoint();
+                    Map<ItemModel, Integer> warehouseItems = arriveWarehouse.getItemQuantity();
 
                     for (Map.Entry<ItemModel, Integer> entry : transitItems.entrySet()) {
                         if (warehouseItems.containsKey(entry.getKey())) {
                             int currentQuantity = warehouseItems.get(entry.getKey());
+
                             warehouseItems.replace(entry.getKey(), currentQuantity + entry.getValue());
+                            arriveWarehouse.setItemQuantity(warehouseItems);
                         } else {
+                            WarehouseModel departWarehouse = transit.getDepartPoint();
+                            Map<ItemModel, Double> itemPrice = arriveWarehouse.getItemPrice();
+
+                            itemPrice.put(entry.getKey(), departWarehouse.getItemPrice().get(entry.getKey()));
                             warehouseItems.put(entry.getKey(), entry.getValue());
+
+                            arriveWarehouse.setItemQuantity(warehouseItems);
+                            arriveWarehouse.setItemPrice(itemPrice);
                         }
                     }
 
-                    warehouseService.update(warehouseModel);
+                    warehouseService.update(arriveWarehouse);
                 }
 
                 default -> {

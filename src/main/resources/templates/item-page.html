@@ -26,11 +26,16 @@
         <!-- Datatables css -->
         <link th:href="@{/v3/vendor/datatables.net-bs5/css/dataTables.bootstrap5.min.css}" rel="stylesheet" type="text/css" />
         <link th:href="@{/v3/vendor/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css}" rel="stylesheet" type="text/css" />
+
+        <!-- QR-Code Scanner css -->
+        <link th:href="@{/v3/css/qr-css.css}" rel="stylesheet" type="text/css" />
     </head>
 
     <body>
         <!-- Begin page -->
         <div class="wrapper">
+            <p hidden="hidden" id="item-id" th:text="${item.getItemId()}"/>
+            <p hidden="hidden" id="org-id" th:text="${orgId}">
 
             <!-- ========== Topbar Start ========== -->
             <div class="navbar-custom">
@@ -223,7 +228,7 @@
                     <!-- Start Content-->
                     <div class="container-fluid">
 
-                        <!-- button for bardcode -->
+                        <!-- button for barcode -->
                         <div id="multiple-one" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="multiple-oneModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -247,18 +252,25 @@
                                         <div class="tab-content" >                                            
                                             <div class="tab-pane show active" id="home-b2" >
                                                 <label for="item-barcode" class="form-label">Штрих-код</label>
-                                                <input type="text" id="item-barcode" class="form-control" maxlength="13" data-toggle="maxlength">
+                                                <div class="input-group align-items-center">
+                                                    <input type="text" id="item-barcode" class="form-control" maxlength="13" data-toggle="maxlength">
+                                                    <button class="btn btn-primary" type="button" onclick="addBarcode()">Добавить</button>
+                                                </div>
                                             </div>                                          
                                             
                                             <div class="tab-pane " id="profile-b2" >
-
+                                                <div id="scan-info"></div>
+                                                <div id="my-qr-reader">
+                                                    hui
+                                                </div>
                                             </div>                                                                
                                         </div>
 
                                         <!--End Tabs -->  
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" data-bs-target="#multiple-two" data-bs-toggle="modal" data-bs-dismiss="modal">Далее</button>
+                                        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-dismiss="modal">Закрыть</button>
+<!--                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">Далее</button>-->
                                     </div>
                                 </div><!-- /.modal-content -->
                             </div><!-- /.modal-dialog -->
@@ -368,7 +380,7 @@
                                                             </div>  
                                                             <div class="col-md-8">
                                                                 <div class="d-flex">
-                                                                    <button type="button" class="btn btn-dark ms-2" data-bs-toggle="modal" data-bs-target="#multiple-one">Добавить штри-код</button>
+                                                                    <button type="button" class="btn btn-dark ms-2" data-bs-toggle="modal" data-bs-target="#multiple-one">Добавить штрих-код</button>
                                                                 </div>
                                                             </div>                                                         
                                                         </div>                                                    
@@ -411,10 +423,10 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
+                                                    <tr th:if="${barcode != null}">
                                                         <td><img th:src="@{/v3/images/barcode-1.png}" width="50" height="25"></td>
-                                                        <td>22020320404924</td>
-                                                        <td>27.04.2024</td>
+                                                        <td th:text="${barcode.getCodeValue()}"/>
+                                                        <td th:text="${barcode.getScanDate()}"/>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -504,6 +516,9 @@
         <!-- Input Max Length js -->
         <script th:src="@{/v3/vendor/bootstrap-maxlength/bootstrap-maxlength.min.js}"></script>
 
+        <!-- QR-Code Scanner -->
+        <script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
 
+        <script th:src="@{/v3/js/api/item-script.js}"></script>
     </body>
 </html>

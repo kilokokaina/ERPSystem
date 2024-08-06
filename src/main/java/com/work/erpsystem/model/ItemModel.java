@@ -35,6 +35,9 @@ public class ItemModel {
     @JoinColumn(name = "org_id")
     private OrganizationModel organizationModel;
 
+    @OneToOne
+    private BarcodeModel barcode;
+
     private Double itemPurchasePrice;
 
 }
