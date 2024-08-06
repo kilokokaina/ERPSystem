@@ -32,7 +32,6 @@ public class StorageController {
     private final CategoryServiceImpl categoryService;
     private final SaleRepository saleRepository;
     private final OrgServiceImpl orgService;
-    private StorageController storageController;
 
     @Autowired
     public StorageController(WarehouseServiceImpl warehouseService, TransitRepository transitRepository,
@@ -100,9 +99,9 @@ public class StorageController {
 
             if (Objects.nonNull(warehouseModel)) {
                 model.addAttribute("itemQuantity", warehouseModel.getItemQuantity());
-                model.addAttribute("itemPrice", warehouseModel.getItemPrice());
                 model.addAttribute("warehouseName", warehouseModel.getWarehouseName());
                 model.addAttribute("warehouseId", warehouseModel.getWarehouseId());
+                model.addAttribute("itemPrice", warehouseModel.getItemPrice());
             }
 
             List<WarehouseModel> warehouseList = warehouseService.findByOrganization(organizationModel);
@@ -112,7 +111,7 @@ public class StorageController {
             model.addAttribute("transits", transitList);
             model.addAttribute("orgId", orgId);
 
-            return "delivery-2";
+            return "delivery";
         } catch (NoDBRecord exception) {
             return "redirect:/error";
         }

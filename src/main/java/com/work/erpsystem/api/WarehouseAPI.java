@@ -213,17 +213,21 @@ public class WarehouseAPI {
     @PutMapping("change_transit_status")
     public @ResponseBody ResponseEntity<TransitModel> changeTransitStatus(@PathVariable(value = "org_uuid") Long orgId,
                                                                           @RequestParam Long transitId, @RequestParam String transitStatus,
-                                                                          Authentication authentication) throws NoDBRecord {
+                                                                          Authentication authentication) {
         TransitModel transit = transitRepository.findById(transitId).orElse(null);
 
         if (transit == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (transit.getTransitStatus().equals(transitStatus)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        transit.setTransitStatus(String.valueOf(TransitStatus.valueOf(transitStatus)));
         Map<ItemModel, Integer> transitItems = transit.getItemQuantity();
 
         try {
             switch (transitStatus) {
                 case "IN_TRANSIT" -> {
+                    if (!transit.getTransitStatus().equals("CREATED")) {
+                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                    }
+
                     WarehouseModel warehouseModel = transit.getDepartPoint();
                     Map<ItemModel, Integer> warehouseItems = warehouseModel.getItemQuantity();
 
@@ -235,17 +239,31 @@ public class WarehouseAPI {
                     warehouseService.update(warehouseModel);
                 }
                 case "DELIVERED" -> {
+                    if (!transit.getTransitStatus().equals("IN_TRANSIT")) {
+                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                    }
+
                     WarehouseModel warehouseModel = transit.getArrivePoint();
                     Map<ItemModel, Integer> warehouseItems = warehouseModel.getItemQuantity();
 
                     for (Map.Entry<ItemModel, Integer> entry : transitItems.entrySet()) {
-                        int currentQuantity = warehouseItems.get(entry.getKey());
-                        warehouseItems.replace(entry.getKey(), currentQuantity + entry.getValue());
+                        if (warehouseItems.containsKey(entry.getKey())) {
+                            int currentQuantity = warehouseItems.get(entry.getKey());
+                            warehouseItems.replace(entry.getKey(), currentQuantity + entry.getValue());
+                        } else {
+                            warehouseItems.put(entry.getKey(), entry.getValue());
+                        }
                     }
 
                     warehouseService.update(warehouseModel);
                 }
+
+                default -> {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
             }
+
+            transit.setTransitStatus(String.valueOf(TransitStatus.valueOf(transitStatus)));
 
             transitRepository.save(transit);
 
@@ -255,6 +273,13 @@ public class WarehouseAPI {
         }
 
         return ResponseEntity.ok(transit);
+    }
+
+    @DeleteMapping("delete_transit/{id}")
+    public @ResponseBody ResponseEntity<HttpStatus> deleteTransit(@PathVariable(value = "org_uuid") Long orgId,
+                                                                  @PathVariable(value = "id") Long warehouseId) {
+        transitRepository.deleteById(warehouseId);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
