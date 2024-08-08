@@ -26,6 +26,9 @@
         <!-- Datatables css -->
         <link th:href="@{/v3/vendor/datatables.net-bs5/css/dataTables.bootstrap5.min.css}" rel="stylesheet" type="text/css" />
         <link th:href="@{/v3/vendor/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css}" rel="stylesheet" type="text/css" />
+
+        <!-- QR-Code Scanner css -->
+        <link th:href="@{/v3/css/qr-css.css}" rel="stylesheet" type="text/css" />
     </head>
 
     <body>
@@ -235,18 +238,20 @@
 
                         <!-- Modal for add supply -->
                         <div id="add-supply" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-supply-label" aria-hidden="true">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog modal-dialog-scrollable" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h4 class="modal-title" id="add-supply-label">Добавить товар на склад</h4>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                                     </div>
-                                    <div class="modal-body">
-                                        <div class="mb-3">
+                                    <div class="modal-body" id="add-body">
+                                        <div id="my-qr-reader">
+                                        </div>
+                                        <div class="mt-3 mb-3">
                                             <label for="itemCategory" class="form-label">Категория</label>
-                                            <select class="form-select" id="itemCategory" data-placeholder="Category" onchange="findItemsByCategory()">
+                                            <select class="form-select" id="itemCategory" data-placeholder="Category" onchange="findItemsByCategory(() => {}, 0)">
                                                 <option></option>
-                                                <option th:each="category : ${categories}" th:text="${category.getCategoryName()}">
+                                                <option th:each="category : ${categories}" th:text="${category.getCategoryName()}"/>
                                             </select>
                                         </div>
                                         <div class="mb-3">
@@ -434,6 +439,9 @@
 
         <!-- Input Mask Plugin js -->
         <script th:src="@{/v3/vendor/jquery-mask-plugin/jquery.mask.min.js}"></script>
+
+        <!-- QR-Code Scanner -->
+        <script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
 
         <script th:src="@{/v3/js/api/warehouse-script.js}"></script>
 

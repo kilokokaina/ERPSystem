@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.UnaryOperator;
 
 @Slf4j
 @RestController
@@ -62,6 +63,23 @@ public class WarehouseAPI {
         try {
             WarehouseModel warehouse = warehouseService.findById(warehouseId);
             return ResponseEntity.ok(warehouse);
+        } catch (NoDBRecord exception) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @GetMapping("get_item_price/{id}")
+    public @ResponseBody ResponseEntity<Double> getItemPrice(@PathVariable(value = "org_uuid") Long orgId,
+                                                              @PathVariable(value = "id") Long warehouseId,
+                                                              @RequestParam(value = "item_id") Long itemId,
+                                                              Authentication authentication) {
+        try {
+            WarehouseModel warehouse = warehouseService.findById(warehouseId);
+            ItemModel itemModel = itemService.findById(itemId);
+
+            Map<ItemModel, Double> itemPrice = warehouse.getItemPrice();
+
+            return ResponseEntity.ok(itemPrice.get(itemModel));
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

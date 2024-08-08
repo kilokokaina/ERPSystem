@@ -8,14 +8,13 @@ import com.work.erpsystem.model.BarcodeModel;
 import com.work.erpsystem.model.CategoryModel;
 import com.work.erpsystem.model.FileModel;
 import com.work.erpsystem.model.ItemModel;
-import com.work.erpsystem.repository.BarcodeRepository;
 import com.work.erpsystem.repository.FileRepository;
+import com.work.erpsystem.service.impl.BarcodeServiceImpl;
 import com.work.erpsystem.service.impl.CategoryServiceImpl;
 import com.work.erpsystem.service.impl.ItemServiceImpl;
 import com.work.erpsystem.service.impl.OrgServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +25,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
 
 @Slf4j
 @RestController
@@ -33,16 +34,16 @@ import java.util.List;
 public class ItemAPI {
 
     private final ItemServiceImpl itemService;
-    private final BarcodeRepository barcodeRepository;
+    private final BarcodeServiceImpl barcodeService;
     private final CategoryServiceImpl categoryService;
     private final FileRepository fileRepository;
     private final OrgServiceImpl orgService;
 
     @Autowired
     public ItemAPI(ItemServiceImpl itemService, CategoryServiceImpl categoryService,
-                   BarcodeRepository barcodeRepository, OrgServiceImpl orgService,
+                   BarcodeServiceImpl barcodeService, OrgServiceImpl orgService,
                    FileRepository fileRepository) {
-        this.barcodeRepository = barcodeRepository;
+        this.barcodeService = barcodeService;
         this.categoryService = categoryService;
         this.fileRepository = fileRepository;
         this.itemService = itemService;
@@ -54,7 +55,6 @@ public class ItemAPI {
         return ResponseEntity.ok(itemService.findAll());
     }
 
-    //HttpStatus - 200 (OK), 204 (No record in DB)
     @GetMapping("{id}")
     public @ResponseBody ResponseEntity<ItemModel> findById(@PathVariable(value = "org_uuid") Long orgId,
                                                             @PathVariable(value = "id") Long itemModelId) {
@@ -67,7 +67,6 @@ public class ItemAPI {
 
     }
 
-    //HttpStatus - 200 (OK), 204 (No record in DB)
     @GetMapping("find_by_name")
     public @ResponseBody ResponseEntity<ItemModel> findByName(@PathVariable(value = "org_uuid") Long orgId,
                                                               @RequestParam(name = "item_name") String itemName) {
@@ -79,7 +78,6 @@ public class ItemAPI {
         }
     }
 
-    //HttpStatus - 200 (OK), 204 (No record in DB)
     @GetMapping("find_by_category")
     public @ResponseBody ResponseEntity<List<ItemModel>> findByCategory(@PathVariable(value = "org_uuid") Long orgId,
                                                                         @RequestParam(name = "category_name") String categoryName) {
@@ -91,7 +89,17 @@ public class ItemAPI {
         }
     }
 
-    //HttpStatus - 200 (OK), 409 (Duplicate record in DB)
+    @GetMapping("find_by_barcode")
+    public @ResponseBody ResponseEntity<ItemModel> findByBarcode(@PathVariable(value = "org_uuid") Long orgId,
+                                                                 @RequestParam(name = "barcode") String barcode) {
+        try {
+            BarcodeModel barcodeModel = barcodeService.findByCode(barcode);
+            return ResponseEntity.ok(itemService.findByBarcode(barcodeModel));
+        } catch (NoDBRecord exception) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
     @PostMapping
     public @ResponseBody ResponseEntity<ItemModel> addItem(@RequestBody ItemDTO itemDto,
                                                            @PathVariable(value = "org_uuid") Long orgId) {
@@ -142,10 +150,9 @@ public class ItemAPI {
             itemService.deleteById(itemId);
 
             return ResponseEntity.ok(HttpStatus.OK);
-        } catch (NoDBRecord exception) {
+        } catch (NoDBRecord | IOException exception) {
+            log.error(exception.getMessage());
             return ResponseEntity.ok(HttpStatus.NO_CONTENT);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -156,12 +163,13 @@ public class ItemAPI {
         try {
             ItemModel itemModel = itemService.findById(itemId);
 
-            barcodeRepository.save(barcode);
+            barcodeService.save(barcode);
             itemModel.setBarcode(barcode);
             itemService.update(itemModel);
 
             return ResponseEntity.ok(barcode);
-        } catch (NoDBRecord exception) {
+        } catch (NoDBRecord | DuplicateDBRecord exception) {
+            log.error(exception.getMessage());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }

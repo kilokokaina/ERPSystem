@@ -25,7 +25,7 @@ function addWarehouse() {
     });
 }
 
-function findItemsByCategory() {
+function findItemsByCategory(param, value) {
     let itemCategory = document.querySelector('#itemCategory').value;
     let itemList = document.querySelector('#itemName');
 
@@ -39,6 +39,8 @@ function findItemsByCategory() {
                 itemList.innerHTML += `<option>${result[i].itemName}</option>`
             }
         }
+
+        param(itemList, value);
     });
 }
 
@@ -124,3 +126,31 @@ function confirmDelete() {
         if (result.ok) location.reload();
     });
 }
+
+function onScanSuccess(decodedText, decodedResult) {
+    let itemPrice = document.querySelector('#itemPrice');
+    let itemCategory = document.querySelector('#itemCategory');
+    let warehouseId = document.querySelector('.something').innerHTML;
+    let modalBody = document.querySelector('#add-body');
+
+    fetch(`/${orgId}/api/item/find_by_barcode?barcode=${decodedText}`, {
+        method: 'GET'
+    }).then(async result => {
+        let item = await result.json();
+
+        itemCategory.value = item.categoryModel.categoryName;
+        findItemsByCategory((element, value) => {
+            element.value = value;
+        }, item.itemName);
+
+        fetch(`/${orgId}/api/warehouse/get_item_price/${warehouseId}?item_id=${item.itemId}`, {
+            method: 'GET'
+        }).then(async result => {
+            itemPrice.value = await result.text();
+            modalBody.scrollTop = modalBody.scrollHeight;
+        });
+    });
+}
+
+let html5QrcodeScanner = new Html5QrcodeScanner("my-qr-reader", { fps: 10, qrbox: 250 });
+html5QrcodeScanner.render(onScanSuccess);

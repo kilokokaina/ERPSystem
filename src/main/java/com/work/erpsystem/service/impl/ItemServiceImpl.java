@@ -2,6 +2,7 @@ package com.work.erpsystem.service.impl;
 
 import com.work.erpsystem.exception.DuplicateDBRecord;
 import com.work.erpsystem.exception.NoDBRecord;
+import com.work.erpsystem.model.BarcodeModel;
 import com.work.erpsystem.model.ItemModel;
 import com.work.erpsystem.repository.ItemRepository;
 import com.work.erpsystem.service.ItemService;
@@ -63,7 +64,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemModel findByName(String itemName) throws NoDBRecord {
         ItemModel itemModel = itemRepository.findByItemName(itemName);
 
-        if (Objects.isNull(itemRepository.findByItemName(itemName))) {
+        if (Objects.isNull(itemModel)) {
             String exceptionMessage = "No such record in data base with name: %s";
             throw new NoDBRecord(String.format(exceptionMessage, itemName));
         }
@@ -76,6 +77,17 @@ public class ItemServiceImpl implements ItemService {
         return itemRepository.findByCategoryId(categoryId);
     }
 
+    public ItemModel findByBarcode(BarcodeModel barcode) throws NoDBRecord {
+        ItemModel itemModel = itemRepository.findByBarcode(barcode);
+
+        if (Objects.isNull(itemModel)) {
+            String exceptionMessage = "No such record in data base with barcode: %s";
+            throw new NoDBRecord(String.format(exceptionMessage, barcode.getCodeValue()));
+        }
+
+        return itemModel;
+    }
+
     @Override
     public void deleteById(Long itemId) throws NoDBRecord {
         if (Objects.isNull(itemRepository.findById(itemId).orElse(null))) {
@@ -84,7 +96,6 @@ public class ItemServiceImpl implements ItemService {
         }
 
         itemRepository.deleteById(itemId);
-
     }
 
     @Override
