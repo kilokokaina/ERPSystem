@@ -32,10 +32,11 @@ function addItem() {
     let itemData = {
         'itemName': document.getElementById('item-name').value,
         'categoryName': document.getElementById('item-category').value,
+        'itemDescribe': document.getElementsByClassName('ql-editor')[0].innerHTML,
         'itemPurchasePrice': Number.parseFloat(document.getElementById('item-coast').value),
     };
 
-    console.log(document.querySelector('#snow-editor').innerHTML);
+    console.log(document.getElementsByClassName('ql-editor')[0].innerHTML);
 
     fetch(`/${orgId}/api/item`, {
         method: 'POST',

@@ -7,6 +7,7 @@ public class ItemDTO {
 
     private String itemName;
     private String categoryName;
+    private String itemDescribe;
     private Double itemPurchasePrice;
 
 }

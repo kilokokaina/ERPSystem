@@ -110,6 +110,7 @@ public class ItemAPI {
 
             itemModel.setItemName(itemDto.getItemName());
             itemModel.setCategoryModel(categoryModel);
+            itemModel.setItemDescribe(itemDto.getItemDescribe());
             itemModel.setItemPurchasePrice(itemDto.getItemPurchasePrice());
             itemModel.setOrganizationModel(orgService.findById(orgId));
 

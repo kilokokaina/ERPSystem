@@ -354,7 +354,7 @@
                                                                                 </div> <!-- end col -->
                                                                                 <div class="col-lg-7">
                                                                                     <!-- Product information -->
-                                                                                    <div id="snow-editor" style="height: 300px;">
+                                                                                    <div id="item-describe" style="height: 300px;">
                                                                                         <h3><span class="ql-size-large">Описание товарной позиции</span></h3>
                                                                                         <p><br></p>
                                                                                         <h3>Здесь вы можете добавить текстовое описание для вашего товара</h3>
@@ -473,7 +473,7 @@
         <!-- quill js -->
         <script th:src="@{/v3/vendor/quill/quill.min.js}"></script>
         <!-- quill Init js-->
-        <script th:src="@{/v3/js/pages/demo.quilljs.js}"></script>
+<!--        <script th:src="@{/v3/js/pages/demo.quilljs.js}"></script>-->
 
         <script th:src="@{/v3/js/api/item-script.js}"></script>
         <script th:src="@{/v3/js/api/category-script.js}"></script>
@@ -484,6 +484,10 @@
                     url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/ru.json'
                 },
                 responsive: true
+            });
+
+            const quill = new Quill('#item-describe', {
+                theme: 'snow'
             });
         </script>
 

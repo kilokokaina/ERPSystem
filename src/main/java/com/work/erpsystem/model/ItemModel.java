@@ -16,6 +16,8 @@ public class ItemModel {
     private Long itemId;
 
     private String itemName;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String itemDescribe;
 
     private Date itemCreationDate = new Date();
