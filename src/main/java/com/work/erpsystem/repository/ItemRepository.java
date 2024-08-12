@@ -12,6 +12,7 @@ public interface ItemRepository extends JpaRepository<ItemModel, Long> {
 
     ItemModel findByItemName(String itemModelName);
     ItemModel findByBarcode(BarcodeModel barcode);
+    List<ItemModel> findByOrganizationModel(OrganizationModel org);
     @Query(nativeQuery = true, value = "SELECT * FROM item_model WHERE category_id = %:categoryId%")
     List<ItemModel> findByCategoryId(Long categoryId);
 

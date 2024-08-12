@@ -4,6 +4,7 @@ import com.work.erpsystem.exception.DuplicateDBRecord;
 import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.BarcodeModel;
 import com.work.erpsystem.model.ItemModel;
+import com.work.erpsystem.model.OrganizationModel;
 import com.work.erpsystem.repository.ItemRepository;
 import com.work.erpsystem.service.ItemService;
 import lombok.extern.slf4j.Slf4j;
@@ -77,6 +78,12 @@ public class ItemServiceImpl implements ItemService {
         return itemRepository.findByCategoryId(categoryId);
     }
 
+    @Override
+    public List<ItemModel> findByOrganizationModel(OrganizationModel org) {
+        return itemRepository.findByOrganizationModel(org);
+    }
+
+    @Override
     public ItemModel findByBarcode(BarcodeModel barcode) throws NoDBRecord {
         ItemModel itemModel = itemRepository.findByBarcode(barcode);
 

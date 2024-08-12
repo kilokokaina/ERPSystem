@@ -50,7 +50,7 @@ public class ItemController {
             if (Objects.nonNull(category)) {
                 model.addAttribute("categoryName", category.getCategoryName());
                 model.addAttribute("items", itemService.findByCategoryId(category.getCategoryId()));
-            } else model.addAttribute("items", null);
+            } else model.addAttribute("items", itemService.findByOrganizationModel(orgService.findById(orgId)));
 
             model.addAttribute("orgId", orgId);
 
