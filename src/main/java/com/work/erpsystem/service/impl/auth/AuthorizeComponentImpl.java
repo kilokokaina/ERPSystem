@@ -1,9 +1,11 @@
-package com.work.erpsystem.service.impl;
+package com.work.erpsystem.service.impl.auth;
 
 import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.OrganizationModel;
 import com.work.erpsystem.model.UserModel;
 import com.work.erpsystem.service.AuthorizeComponent;
+import com.work.erpsystem.service.impl.OrgServiceImpl;
+import com.work.erpsystem.service.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;

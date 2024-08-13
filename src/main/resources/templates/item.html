@@ -410,7 +410,6 @@
                                                         <td th:text="${item.getItemPurchasePrice()}"/>
                                                         <td class="table-action">
                                                             <a th:href="'/' + ${orgId} + '/item/' + ${item.getItemId()}" class="action-icon"> <i class="mdi mdi-eye"></i></a>
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
                                                             <a href="javascript:void(0);" class="action-icon" th:id="${item.getItemId()}" onclick="deleteItem(this)"> <i class="mdi mdi-delete"></i></a>
                                                         </td>
                                                     </tr>

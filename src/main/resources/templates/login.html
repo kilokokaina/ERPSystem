@@ -61,7 +61,7 @@
                                             <p class="text-muted mb-4">Введите ваш email и пароль</p>
                                         </div>
 
-                                        <form th:action="@{/api/auth/login}" method="post">
+                                        <form th:action="@{/login}" method="post">
                                             <div class="mb-3">
                                                 <label for="singin-emailaddress" class="form-label">Email</label>
                                                 <input class="form-control" type="email" id="singin-emailaddress" name="username" required="" placeholder="example@inbox.ru">
@@ -80,10 +80,12 @@
 
                                             <div class="mb-3 mb-3">
                                                 <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" id="checkbox-signin" checked>
+                                                    <input type="checkbox" class="form-check-input" id="checkbox-signin" name="remember-me">
                                                     <label class="form-check-label" for="checkbox-signin">Запомнить меня</label>
                                                 </div>
                                             </div>
+
+<!--                                            <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.getToken()}"/>-->
 
                                             <div class="mb-3 mb-0 text-center">
                                                 <button class="btn btn-primary" type="submit"> Войти </button>

@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 
 public interface UserAuthenticationService {
 
-    void startSession(String username, String password) throws BadCredentials;
     boolean register(String username, String password, String firstName, String secondName);
 
 }

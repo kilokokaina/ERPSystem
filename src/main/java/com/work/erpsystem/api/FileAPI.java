@@ -59,24 +59,26 @@ public class FileAPI {
     @PostMapping("item/{id}")
     public @ResponseBody ResponseEntity<HttpStatus> uploadImage(@PathVariable(value = "id") Long itemId,
                                                                 @RequestBody MultipartFile[] images) {
-        for (MultipartFile image : images) {
-            String fileType = Objects.requireNonNull(image.getContentType()).split("/")[0];
-            String fileName = UUID.randomUUID() + "." + image.getOriginalFilename();
+        if (Objects.nonNull(images)) {
+            for (MultipartFile image : images) {
+                String fileType = Objects.requireNonNull(image.getContentType()).split("/")[0];
+                String fileName = UUID.randomUUID() + "." + image.getOriginalFilename();
 
-            if (fileType.equals("image")) {
-                FileModel fileModel = saveFile(image, fileName);
+                if (fileType.equals("image")) {
+                    FileModel fileModel = saveFile(image, fileName);
 
-                try {
-                    ItemModel itemModel = itemService.findById(itemId);
+                    try {
+                        ItemModel itemModel = itemService.findById(itemId);
 
-                    List<FileModel> imageList = itemModel.getItemImages();
-                    imageList.add(fileModel);
-                    itemModel.setItemImages(imageList);
+                        List<FileModel> imageList = itemModel.getItemImages();
+                        imageList.add(fileModel);
+                        itemModel.setItemImages(imageList);
 
-                    itemService.update(itemModel);
+                        itemService.update(itemModel);
 
-                } catch (NoDBRecord exception) {
-                    return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+                    } catch (NoDBRecord exception) {
+                        return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+                    }
                 }
             }
         }

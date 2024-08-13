@@ -9,6 +9,8 @@ import com.work.erpsystem.service.impl.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +45,9 @@ public class OrgController {
     public String chooseOrg(Model model, Authentication authentication) {
         UserModel userModel = userService.findByUsername(authentication.getName());
         model.addAttribute("orgList", userModel.getOrgRole().keySet());
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        log.info(context.getAuthentication().toString());
 
         return "choose-org";
     }
