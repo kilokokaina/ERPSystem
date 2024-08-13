@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
-    private @Value("${upload.path}") String uploadPath;
+    private @Value("${resource.location}") String location;
     private final UserServiceImpl userService;
 
     @Autowired
@@ -23,7 +23,7 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/img/**")
-                .addResourceLocations("file:///Users/nikol/Desktop/ERPImages/");
+                .addResourceLocations(location);
     }
 
     @Override
