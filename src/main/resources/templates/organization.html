@@ -449,18 +449,21 @@
                                                     <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
                                                         <li class="nav-item">
                                                             <a href="#storages" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0 active">
+<!--                                                               th:class="${activeTab.equals('storage')} ? 'nav-link rounded-0 active' : 'nav-link rounded-0'">-->
                                                                 <i class="ri-home-7-fill font-18"></i>
                                                                 <span class="d-none d-lg-block">Склады</span>
                                                             </a>
                                                         </li>
                                                         <li class="nav-item">
                                                             <a href="#categories" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
+<!--                                                               th:class="${activeTab.equals('category')} ? 'nav-link rounded-0 active' : 'nav-link rounded-0'">-->
                                                                 <i class="uil-layers-alt font-19"></i>
                                                                 <span class="d-none d-lg-block">Категории</span>
                                                             </a>
                                                         </li>
                                                         <li class="nav-item">
                                                             <a href="#employees" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
+<!--                                                               th:class="${activeTab.equals('employee')} ? 'nav-link rounded-0 active' : 'nav-link rounded-0'">-->
                                                                 <i class="mdi mdi-account-circle font-18"></i>
                                                                 <span class="d-none d-lg-block">Сотрудники</span>
                                                             </a>
@@ -556,7 +559,7 @@
                                                                 <p class="text-muted mb-4">Список имеющихся категорий товарных позиций для данной организации</p>
 
                                                                 <div class="d-flex flex-wrap gap-2 mb-3">
-                                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-category"><i class="mdi mdi-plus-circle me-2"></i>Add Category</button>
+                                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-category"><i class="mdi mdi-plus-circle me-2"></i>Добавить категорию</button>
                                                                 </div>
 
                                                                 <div class="table-responsive">
@@ -667,6 +670,8 @@
                 },
                 responsive: true
             });
+
+            location.hash='#employees';
         </script>
     </body>
 </html>

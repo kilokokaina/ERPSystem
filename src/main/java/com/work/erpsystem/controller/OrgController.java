@@ -9,13 +9,11 @@ import com.work.erpsystem.service.impl.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,9 +44,6 @@ public class OrgController {
         UserModel userModel = userService.findByUsername(authentication.getName());
         model.addAttribute("orgList", userModel.getOrgRole().keySet());
 
-        SecurityContext context = SecurityContextHolder.getContext();
-        log.info(context.getAuthentication().toString());
-
         return "choose-org";
     }
 
@@ -59,7 +54,8 @@ public class OrgController {
 
 
     @GetMapping("{org_uuid}/organization")
-    public String orgHome(@PathVariable(value = "org_uuid") Long orgId, Model model, Authentication authentication) {
+    public String orgHome(@PathVariable(value = "org_uuid") Long orgId, Model model,
+                          @RequestParam(value = "tab", required = false) String tab, Authentication authentication) {
         try {
             OrganizationModel organizationModel = orgService.findById(orgId);
 
@@ -70,6 +66,11 @@ public class OrgController {
             categoryService.findByOrg(organizationModel).forEach(category ->
                     categories.put(category, itemService.findByCategoryId(category.getCategoryId()).size())
             );
+
+            if (tab != null) {
+                model.addAttribute("activeTab", tab);
+                log.info(tab);
+            }
 
             model.addAttribute("organization", organizationModel);
             model.addAttribute("employees", employees);

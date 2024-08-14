@@ -3,10 +3,7 @@ package com.work.erpsystem.controller;
 import com.work.erpsystem.exception.NoDBRecord;
 import com.work.erpsystem.model.UserModel;
 import com.work.erpsystem.service.impl.UserServiceImpl;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.UUID;
 
-@Slf4j
 @Controller
 public class LoginController {
 
@@ -29,9 +25,6 @@ public class LoginController {
 
     @GetMapping("login")
     public String login() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        log.info(context.getAuthentication().toString());
-
         return "login";
     }
 

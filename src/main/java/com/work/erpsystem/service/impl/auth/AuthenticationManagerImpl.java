@@ -8,12 +8,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
 public class AuthenticationManagerImpl implements AuthenticationManager {
 
     private final AuthenticationProviderImpl authenticationProvider;
 
-    @Autowired
     public AuthenticationManagerImpl(AuthenticationProviderImpl authenticationProvider) {
         this.authenticationProvider = authenticationProvider;
     }

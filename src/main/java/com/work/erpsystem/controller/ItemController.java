@@ -15,10 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -47,10 +44,18 @@ public class ItemController {
         try {
             model.addAttribute("categories", categoryService.findByOrg(orgService.findById(orgId)));
 
+            List<ItemModel> itemList;
             if (Objects.nonNull(category)) {
+                itemList = itemService.findByCategoryId(category.getCategoryId());
+                itemList.sort(Comparator.comparingLong(ItemModel::getItemId));
+
                 model.addAttribute("categoryName", category.getCategoryName());
-                model.addAttribute("items", itemService.findByCategoryId(category.getCategoryId()));
-            } else model.addAttribute("items", itemService.findByOrganizationModel(orgService.findById(orgId)));
+                model.addAttribute("items", itemList);
+            } else {
+                itemList = itemService.findByOrganizationModel(orgService.findById(orgId));
+                itemList.sort(Comparator.comparingLong(ItemModel::getItemId));
+                model.addAttribute("items", itemList);
+            }
 
             model.addAttribute("orgId", orgId);
 

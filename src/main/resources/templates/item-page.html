@@ -29,6 +29,10 @@
 
         <!-- QR-Code Scanner css -->
         <link th:href="@{/v3/css/qr-css.css}" rel="stylesheet" type="text/css" />
+
+        <!-- Quill css -->
+        <link th:href="@{/v3/vendor/quill/quill.core.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/v3/vendor/quill/quill.snow.css}" rel="stylesheet" type="text/css" />
     </head>
 
     <body>
@@ -228,6 +232,58 @@
                     <!-- Start Content-->
                     <div class="container-fluid">
 
+                        <!-- Large modal -->
+                        <div class="modal fade" id="bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="myLargeModalLabel" th:text="'Изменить товар: ' + ${item.getItemName()}"/>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-lg-5">
+                                                                <!-- Product title -->
+                                                                <div class="mb-3">
+                                                                    <label for="item-name" class="form-label">Название</label>
+                                                                    <input type="text" id="item-name" class="form-control" th:value="${item.getItemName()}">
+                                                                </div>
+
+                                                                <!-- Product description -->
+                                                                <div class="mb-3">
+                                                                    <label for="item-coast" class="form-label">Закупочная стоимость</label>
+                                                                    <input class="form-control" id="item-coast" type="number" name="number" th:value="${item.getItemPurchasePrice()}">
+                                                                </div>
+
+                                                                <!-- File Upload -->
+                                                                <label for="papers-list" class="form-label">Выбирете файлы</label>
+                                                                <input class="form-control" type="file" accept="image/*" id="papers-list" oninput="updateList()" multiple>
+                                                                <div class="mb-3" id="files-list">
+
+                                                                </div>
+                                                            </div> <!-- end col -->
+                                                            <div class="col-lg-7">
+                                                                <!-- Product information -->
+                                                                <div id="item-describe" style="height: 300px;" th:utext="${item.getItemDescribe()}">
+                                                                </div>
+                                                            </div> <!-- end col -->
+                                                        </div> <!-- end row-->
+                                                    </div> <!-- end card-body-->
+                                                </div> <!-- end card-->
+                                            </div> <!-- end col-->
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="updateItem()">Добавить</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+
                         <!-- button for barcode -->
                         <div id="multiple-one" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="multiple-oneModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -364,7 +420,7 @@
                                                     <h3 class="mt-0">
                                                         <span th:text="${item.getItemName()}"/>
                                                         <a href="javascript: void(0);" class="text-muted">
-                                                            <i class="mdi mdi-square-edit-outline ms-2"></i>
+                                                            <i class="mdi mdi-square-edit-outline ms-2" data-bs-toggle="modal" data-bs-target="#bs-example-modal-lg"></i>
                                                         </a>
                                                         <a href="javascript: void(0);" class="text-muted">
                                                             <span class="badge badge-success-lighten ms-2">В наличии</span>
@@ -516,9 +572,18 @@
         <!-- Input Max Length js -->
         <script th:src="@{/v3/vendor/bootstrap-maxlength/bootstrap-maxlength.min.js}"></script>
 
+        <!-- quill js -->
+        <script th:src="@{/v3/vendor/quill/quill.min.js}"></script>
+
         <!-- QR-Code Scanner -->
         <script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
 
         <script th:src="@{/v3/js/api/item-script.js}"></script>
+
+        <script>
+            const quill = new Quill('#item-describe', {
+                theme: 'snow'
+            });
+        </script>
     </body>
 </html>

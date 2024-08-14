@@ -50,11 +50,45 @@ function addItem() {
         if (response.ok) {
             uploadImage(result.itemId);
 
+            table.row.add([
+                result.itemId,
+                result.itemName,
+                new Date(result.itemCreationDate).toLocaleDateString("ru-RU", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                }),
+                result.itemPurchasePrice,
+                `<td class="table-action">
+                    <a href="/${orgId}/item/${result.itemId}" class="action-icon"> <i class="mdi mdi-eye"></i></a>
+                    <a href="javascript:void(0);" class="action-icon" id="${result.itemId}" onClick="deleteItem(this)"> <i class="mdi mdi-delete"></i></a>
+                </td>`
+            ]).draw();
+
             addItemModalSuccess.show();
-            console.log(itemData);
         } else {
             addItemModalWarning.show();
         }
+    });
+}
+
+function updateItem() {
+    let itemId = document.querySelector('#item-id').innerText;
+
+    let itemData = {
+        'itemName': document.getElementById('item-name').value,
+        'itemDescribe': document.getElementsByClassName('ql-editor')[0].innerHTML,
+        'itemPurchasePrice': Number.parseFloat(document.getElementById('item-coast').value),
+    };
+
+    fetch(`/${orgId}/api/item/${itemId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(itemData)
+    }).then(async response => {
+        if (response.ok) location.reload();
     });
 }
 

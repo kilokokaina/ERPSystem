@@ -125,11 +125,8 @@ public class ItemAPI {
                                                               @PathVariable(value = "id") ItemModel itemModel,
                                                               @PathVariable(value = "org_uuid") Long orgId) {
         try {
-            CategoryModel categoryModel = categoryService.findByName(itemDto.getCategoryName());
-
             itemModel.setItemName(itemDto.getItemName());
-            itemModel.setCategoryModel(categoryModel);
-            itemModel.setItemCreationDate(new Date());
+            itemModel.setItemDescribe(itemDto.getItemDescribe());
             itemModel.setItemPurchasePrice(itemDto.getItemPurchasePrice());
 
             return ResponseEntity.ok(itemService.update(itemModel));
