@@ -32,7 +32,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
         UserDetails userDetails = userService.loadUserByUsername(username);
 
-        if (userDetails == null || !userDetails.getPassword().equals(password)) return null;
+        if (userDetails == null || !userDetails.isEnabled() || !userDetails.getPassword().equals(password)) return null;
 
         log.info(userDetails.getUsername());
         log.info(request.getRemoteAddr());

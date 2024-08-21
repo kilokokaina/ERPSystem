@@ -18,7 +18,7 @@ public class AuthAPI {
         this.userAuthentication = userAuthentication;
     }
 
-    @PostMapping("api/auth/register")
+    @PostMapping("register")
     public @ResponseBody ResponseEntity<HttpStatus> register(@RequestParam(value = "username") String username,
                                                              @RequestParam(value = "password") String password,
                                                              @RequestParam(value = "firstname") String firstName,

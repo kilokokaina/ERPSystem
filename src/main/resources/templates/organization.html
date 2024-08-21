@@ -324,7 +324,7 @@
                                 <i class="ri-check-line h1"></i>
                                 <h4 class="mt-2">Готово!</h4>
                                 <p class="mt-3" id="success-text">Успешно добавлено</p>
-                                <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal" onclick="location.reload()">OK</button>
+                                <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">OK</button>
                             </div>
                         </div>
                     </div><!-- /.modal-content -->
@@ -497,7 +497,7 @@
                                                                             <td th:text="${warehouse.getItemQuantity().size()}"/>
                                                                             <td class="table-action">
                                                                                 <a href="javascript: void(0);" class="action-icon"> <i class="mdi mdi-pencil"></i></a>
-                                                                                <a th:onclick="'showDeleteModal(\'warehouse\', ' + ${warehouse.getWarehouseId()} + ')'" class="action-icon">
+                                                                                <a onclick="deleteWarehouse(this)" class="action-icon" th:id="'warehouse-' + ${warehouse.getWarehouseId()}">
                                                                                     <i class="mdi mdi-delete"></i>
                                                                                 </a>
                                                                             </td>
@@ -579,7 +579,7 @@
                                                                                     <a href="javascript: void(0);" class="action-icon">
                                                                                         <i class="mdi mdi-pencil"></i>
                                                                                     </a>
-                                                                                    <a th:onclick="'showDeleteModal(\'category\', ' + ${category.getKey().getCategoryId()} + ')'" class="action-icon">
+                                                                                    <a onclick="deleteCategory(this)" class="action-icon" th:id="'category-' + ${category.getKey().getCategoryId()}">
                                                                                         <i class="mdi mdi-delete"></i>
                                                                                     </a>
                                                                                 </td>
@@ -652,19 +652,19 @@
         <script th:inline="javascript" th:src="@{/v3/js/api/category-script.js}"></script>
         <script th:inline="javascript" th:src="@{/v3/js/api/user-script.js}"></script>
         <script>
-            new DataTable('#storage', {
+            let storageTable = new DataTable('#storage', {
                 language: {
                     url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/ru.json'
                 },
                 responsive: true
             });
-            new DataTable('#employee', {
+            let employeeTable = new DataTable('#employee', {
                 language: {
                     url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/ru.json'
                 },
                 responsive: true
             });
-            new DataTable('#category', {
+            let categoryTable = new DataTable('#category', {
                 language: {
                     url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/ru.json'
                 },

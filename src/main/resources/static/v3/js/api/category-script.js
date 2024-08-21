@@ -1,4 +1,4 @@
-let deleteModal = new bootstrap.Modal('#delete-modal');
+let categoryForDeletion;
 
 function addCategory() {
     let categoryName = document.querySelector('#categoryName');
@@ -10,8 +10,22 @@ function addCategory() {
         },
         body: JSON.stringify(categoryData)
     }).then(async response => {
-        let result = await response;
-        if (result.ok) {
+        let result = await response.json();
+
+        console.log(result);
+
+        if (response.ok) {
+            categoryTable.row.add([
+                result.categoryName,
+                0,
+                `<td class="table-action">
+                    <a href="javascript: void(0);" class="action-icon"> <i class="mdi mdi-pencil"></i></a>
+                    <a onclick="deleteCategory(this)" class="action-icon" id="category-${result.categoryId}">
+                        <i class="mdi mdi-delete"></i>
+                    </a>
+                </td>`
+            ]).draw();
+
             addSuccess.show();
         } else {
             addWarning.show();
@@ -19,47 +33,33 @@ function addCategory() {
     });
 }
 
-function showDeleteModal(type, id) {
-    let deleteText = document.querySelector('#dm-text');
-    let deleteButton = document.querySelector('#delete-button');
+function deleteCategory(element) {
+    categoryForDeletion = element;
 
-    switch (type) {
-        case 'category':
-            deleteText.innerHTML = 'Вы уверены, что хотите удалить эту категория?';
-            deleteButton.setAttribute('onclick', `confirmDelete('${type}', ${id})`);
-            break;
-        case 'warehouse':
-            deleteText.innerHTML = 'Вы уверены, что хотите удалить этот склад?';
-            deleteButton.setAttribute('onclick', `confirmDelete('${type}', ${id})`);
-            break;
-        case 'employee':
-            deleteText.innerHTML = 'Вы уверены, что хотите удалить этого сотрудника?';
-            deleteButton.setAttribute('onclick', `confirmDelete('${type}', ${id})`);
-            break;
-        default:
-            addWarning.show();
-            break;
-    }
+    let deleteModal = new bootstrap.Modal('#delete-modal');
+    let deleteButton = document.querySelector('#delete-button');
+    let deleteText = document.querySelector('#dm-text');
+
+    deleteButton.setAttribute('onclick', `confirmCategoryDelete('${element.id}')`);
+    deleteText.innerHTML = 'Вы уверены, что хотите удалить эту категорию?';
 
     deleteModal.show();
 }
 
-async function confirmDelete(type, id) {
-    let response;
-    switch (type) {
-        case 'category':
-            response = await fetch(`/${orgId}/api/category/${id}`, { method: 'DELETE' });
-            break;
-        case 'warehouse':
-            response = await fetch(`/${orgId}/api/warehouse/${id}`, { method: 'DELETE' });
-            break;
-        case 'employee':
-            response = await fetch(`/${orgId}/api/user/${id}`, { method: 'DELETE' });
-            break;
-        default:
-            addWarning.show();
-            break;
-    }
+function confirmCategoryDelete(categoryId) {
+    fetch(
+        `/${orgId}/api/category/${categoryId.split('-')[1]}`, { method: 'DELETE' }
+    ).then(async response => {
+        let result = await response;
+        if (result.ok) {
+            categoryTable
+                .row(categoryForDeletion.parentNode.parentNode)
+                .remove()
+                .draw();
 
-    if (response.ok) location.reload();
+            addSuccess.show();
+        } else {
+            addWarning.show();
+        }
+    });
 }

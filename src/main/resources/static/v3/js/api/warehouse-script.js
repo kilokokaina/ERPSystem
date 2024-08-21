@@ -3,6 +3,8 @@ let addSuccess = new bootstrap.Modal('#add-success');
 let addWarning = new bootstrap.Modal('#add-warning');
 let itemId = 0;
 
+let warehouseForDeletion;
+
 function addWarehouse() {
     let warehouseData = {
         'warehouseName' : document.querySelector('#warehouse-name').value,
@@ -16,31 +18,27 @@ function addWarehouse() {
         },
         body: JSON.stringify(warehouseData)
     }).then(async response => {
-        let result = await response;
-        if (result.ok) {
+        let result = await response.json();
+
+        console.log(result);
+
+        if (response.ok) {
+            storageTable.row.add([
+                result.warehouseName,
+                result.warehouseAddress,
+                0,
+                `<td class="table-action">
+                    <a href="javascript: void(0);" class="action-icon"> <i class="mdi mdi-pencil"></i></a>
+                    <a onclick="deleteWarehouse(this)" class="action-icon" id="warehouse-${result.warehouseId}">
+                        <i class="mdi mdi-delete"></i>
+                    </a>
+                </td>`
+            ]).draw();
+
             addSuccess.show();
         } else {
             addWarning.show();
         }
-    });
-}
-
-function findItemsByCategory(param, value) {
-    let itemCategory = document.querySelector('#itemCategory').value;
-    let itemList = document.querySelector('#itemName');
-
-    fetch(`/${orgId}/api/item/find_by_category?category_name=${itemCategory}`,
-        { method: 'GET' }
-    ).then(async response => {
-        let result = await response.json();
-        if (response.ok) {
-            itemList.innerHTML = '';
-            for (let i = 0; i < result.length; i++) {
-                itemList.innerHTML += `<option>${result[i].itemName}</option>`
-            }
-        }
-
-        param(itemList, value);
     });
 }
 
@@ -124,6 +122,55 @@ function confirmDelete() {
     ).then(async response => {
         let result = await response;
         if (result.ok) location.reload();
+    });
+}
+
+function deleteWarehouse(element) {
+    warehouseForDeletion = element;
+
+    let deleteModal = new bootstrap.Modal('#delete-modal');
+    let deleteButton = document.querySelector('#delete-button');
+    let deleteText = document.querySelector('#dm-text');
+
+    deleteButton.setAttribute('onclick', `confirmWarehouseDelete('${element.id}')`);
+    deleteText.innerHTML = 'Вы уверены, что хотите удалить этот склад?';
+
+    deleteModal.show();
+}
+
+function confirmWarehouseDelete(warehouseId) {
+    fetch(
+        `/${orgId}/api/warehouse/${warehouseId.split('-')[1]}`, { method: 'DELETE' }
+    ).then(async response => {
+        let result = await response;
+        if (result.ok) {
+            storageTable
+                .row(warehouseForDeletion.parentNode.parentNode)
+                .remove()
+                .draw();
+            addSuccess.show();
+        } else {
+            addWarning.show();
+        }
+    });
+}
+
+function findItemsByCategory(param, value) {
+    let itemCategory = document.querySelector('#itemCategory').value;
+    let itemList = document.querySelector('#itemName');
+
+    fetch(`/${orgId}/api/item/find_by_category?category_name=${itemCategory}`,
+        { method: 'GET' }
+    ).then(async response => {
+        let result = await response.json();
+        if (response.ok) {
+            itemList.innerHTML = '';
+            for (let i = 0; i < result.length; i++) {
+                itemList.innerHTML += `<option>${result[i].itemName}</option>`
+            }
+        }
+
+        param(itemList, value);
     });
 }
 

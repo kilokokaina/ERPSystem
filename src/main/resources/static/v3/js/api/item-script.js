@@ -2,6 +2,8 @@ let addItemModalSuccess = new bootstrap.Modal('#multiple-two');
 let addItemModalWarning = new bootstrap.Modal('#warning-alert-modal');
 const orgId = document.querySelector('#org-id').innerHTML;
 
+let itemForDeletion;
+
 function uploadImage(itemId) {
     const files = document.querySelector('#papers-list').files;
     const formData = new FormData();
@@ -51,7 +53,6 @@ function addItem() {
             uploadImage(result.itemId);
 
             table.row.add([
-                result.itemId,
                 result.itemName,
                 new Date(result.itemCreationDate).toLocaleDateString("ru-RU", {
                     year: "numeric",
@@ -61,7 +62,7 @@ function addItem() {
                 result.itemPurchasePrice,
                 `<td class="table-action">
                     <a href="/${orgId}/item/${result.itemId}" class="action-icon"> <i class="mdi mdi-eye"></i></a>
-                    <a href="javascript:void(0);" class="action-icon" id="${result.itemId}" onClick="deleteItem(this)"> <i class="mdi mdi-delete"></i></a>
+                    <a href="javascript:void(0);" class="action-icon" id="${result.itemId}" onclick="deleteItem(this)"> <i class="mdi mdi-delete"></i></a>
                 </td>`
             ]).draw();
 
@@ -93,6 +94,8 @@ function updateItem() {
 }
 
 function deleteItem(element) {
+    itemForDeletion = element;
+
     let deleteModal = new bootstrap.Modal('#delete-modal');
     let deleteButton = document.querySelector('#delete-button');
     deleteButton.setAttribute('onclick', `confirmItemDelete(${element.id})`);
@@ -101,11 +104,22 @@ function deleteItem(element) {
 }
 
 function confirmItemDelete(itemId) {
+    console.log(itemForDeletion);
+    console.log(itemId);
+
     fetch(
         `/${orgId}/api/item/${itemId}`, { method: 'DELETE' }
     ).then(async response => {
         let result = await response;
-        if (result.ok) location.reload();
+        if (result.ok) {
+            table
+                .row(itemForDeletion.parentNode.parentNode)
+                .remove()
+                .draw();
+            addItemModalSuccess.show();
+        } else {
+            addItemModalWarning.show();
+        }
     });
 }
 

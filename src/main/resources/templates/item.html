@@ -274,7 +274,7 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Закрыть</button>
-                                                            <button type="button" id="delete-button" class="btn btn-warning">Удалить</button>
+                                                            <button type="button" id="delete-button" class="btn btn-warning" data-bs-dismiss="modal" onclick="confirmItemDelete()">Удалить</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -396,7 +396,6 @@
                                             <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                                                 <thead>
                                                     <tr>
-                                                        <th hidden="hidden"></th>
                                                         <th>Название</th>
                                                         <th>Дата добавления</th>
                                                         <th>Закупочная цена</th>
@@ -406,7 +405,6 @@
 
                                                 <tbody>
                                                     <tr th:each="item : ${items}">
-                                                        <td th:text="${item.getItemId()}" hidden="hidden"/>
                                                         <td th:text="${item.getItemName()}"/>
                                                         <td th:text="${item.getItemCreationDate().toLocaleString().split(',')[0]}"/>
                                                         <td th:text="${item.getItemPurchasePrice()}"/>
