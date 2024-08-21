@@ -20,7 +20,7 @@ function selectItem(element) {
         `<tr id="ti-${itemId}">
             <td id="tin-${itemId}">${itemName}</td>
             <td>
-                <input type="number" class="form-control" id="tin-${itemId}" value="${itemPrice}" min="0">
+                <input type="number" class="form-control" id="tip-${itemId}" value="${itemPrice}" min="0">
             </td>
             <td>
                 <input type="number" class="form-control" id="tiq-${itemId}" value="${itemQuantity}" max="${itemQuantity}" min="0">
@@ -57,7 +57,8 @@ function confirmTransit() {
         itemList.push({
             itemId: itemId,
             itemName: items.item(i).querySelector(`#tin-${itemId}`).value,
-            quantity: items.item(i).querySelector(`#tiq-${itemId}`).value
+            quantity: items.item(i).querySelector(`#tiq-${itemId}`).value,
+            itemPrice: items.item(i).querySelector(`#tip-${itemId}`).value
         });
     }
 

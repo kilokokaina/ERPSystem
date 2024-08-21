@@ -122,13 +122,30 @@ public class UserAPI {
     }
 
     @GetMapping("{org_uuid}/api/user/invite")
-    public @ResponseBody ResponseEntity<HttpStatus> inviteUser(@PathVariable(value = "org_uuid") Long orgId, @RequestParam(name = "user_id") Long userId,
+    public @ResponseBody ResponseEntity<UserModel> inviteUser(@PathVariable(value = "org_uuid") Long orgId, @RequestParam(name = "user_id") Long userId,
                                                                @RequestParam(name = "role") String role, Authentication authentication) {
         try {
             UserModel user = userService.findById(userId);
             Map<OrganizationModel, String> orgRole = user.getOrgRole();
 
             orgRole.put(orgService.findById(orgId), Role.valueOf(role).name());
+            user.setOrgRole(orgRole);
+            userService.update(user);
+
+            return ResponseEntity.ok(user);
+        } catch (NoDBRecord exception) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @DeleteMapping("{org_uuid}/api/user/fire/{id}")
+    public @ResponseBody ResponseEntity<HttpStatus> fireUser(@PathVariable(value = "org_uuid") Long orgId, @PathVariable(value = "id") Long userId,
+                                                             Authentication authentication) {
+        try {
+            UserModel user = userService.findById(userId);
+            Map<OrganizationModel, String> orgRole = user.getOrgRole();
+
+            orgRole.remove(orgService.findById(orgId));
             user.setOrgRole(orgRole);
             userService.update(user);
 

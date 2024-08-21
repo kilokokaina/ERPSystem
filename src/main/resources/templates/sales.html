@@ -242,7 +242,7 @@
                                     <div class="modal-body">
                                         <div th:if="${itemQuantity != null}" class="mb-3">
                                             <label for="itemName" class="form-label">Товар</label>
-                                            <select class="form-select"  id="itemName" data-placeholder="Product" onchange="findItemQuantity()">
+                                            <select class="form-select" id="itemName" data-placeholder="Product">
                                                 <option></option>
                                                 <option th:each="item : ${itemQuantity.entrySet()}" th:text="${item.getKey().getItemName()}">
                                             </select>
@@ -250,7 +250,7 @@
                                         <label id="itemQuantity" class="form-label"></label>
                                         <div class="mb-3">
                                             <label for="quantity" class="form-label">Количество</label>
-                                            <input type="number" min="0" max="9" id="quantity" name="example-input-normal" class="form-control" placeholder="Кол-во:">
+                                            <input type="number" min="0" id="quantity" name="example-input-normal" class="form-control" placeholder="Кол-во:">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -270,7 +270,7 @@
                                             <i class="ri-check-line h1"></i>
                                             <h4 class="mt-2">Готово!</h4>
                                             <p class="mt-3">Продажа успешно добавлена!</p>
-                                            <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal" onclick="location.reload()">OK</button>
+                                            <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">OK</button>
                                         </div>
                                     </div>
                                 </div><!-- /.modal-content -->
@@ -330,7 +330,6 @@
                                                         <th>Категория</th>
                                                         <th>Дата продажи</th>
                                                         <th>Кол-во</th>
-                                                        <th style="width: 65px;">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -339,11 +338,6 @@
                                                         <td th:text="${sale.getItem().getCategoryModel().getCategoryName()}"/>
                                                         <td th:text="${sale.getSaleDate().toLocaleString()}"/>
                                                         <td th:text="${sale.getItemSaleQuantity()}"/>
-                                                        <td class="table-action">
-                                                            <a  class="action-icon">
-                                                                <i class="ri-arrow-right-line"></i>
-                                                            </a>
-                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -403,7 +397,7 @@
         <script th:src="@{/v3/js/api/warehouse-script.js}"></script>
 
         <script>
-            new DataTable('#basic-datatable', {
+            let saleTable = new DataTable('#basic-datatable', {
                 language: {
                     url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/ru.json'
                 },

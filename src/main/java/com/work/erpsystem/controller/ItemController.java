@@ -79,6 +79,7 @@ public class ItemController {
                 if (warehouse.getItemPrice().containsKey(itemModel)) {
                     warehouseItemPrice.put(warehouse, warehouse.getItemPrice().get(itemModel));
                     log.info(warehouse.getWarehouseName() + ": " + warehouse.getItemQuantity().get(itemModel));
+
                     itemQuantity += warehouse.getItemQuantity().get(itemModel);
                 }
             }

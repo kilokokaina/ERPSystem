@@ -4,6 +4,7 @@ let addWarning = new bootstrap.Modal('#add-warning');
 let itemId = 0;
 
 let warehouseForDeletion;
+let itemForDeletion;
 
 function addWarehouse() {
     let warehouseData = {
@@ -66,8 +67,17 @@ function addSalesToWarehouse() {
         },
         body: JSON.stringify(requestData)
     }).then(async response => {
-        let result = await response;
-        if (result.ok) {
+        let result = await response.json();
+        console.log(result);
+
+        if (response.ok) {
+            saleTable.row.add([
+                result.item.itemName,
+                result.item.categoryModel.categoryName,
+                new Date(result.saleDate).toLocaleString("ru-RU"),
+                result.itemSaleQuantity,
+            ]).draw();
+
             addSuccess.show();
         } else {
             addWarning.show();
@@ -99,8 +109,28 @@ function addItemsToWarehouse() {
         },
         body: JSON.stringify(requestData)
     }).then(async response => {
-        let result = await response;
-        if (result.ok) {
+        let result = await response.json();
+
+        let itemQuantity = result.itemQuantity;
+        let itemPrice = result.itemPrice;
+
+        console.log(result);
+        let storage = itemParser(JSON.stringify(itemPrice), JSON.stringify(itemQuantity), requestData.itemName);
+
+        if (response.ok) {
+            storageTable.row.add([
+                storage.itemName,
+                storage.itemCategory,
+                storage.itemPurchasePrice,
+                storage.price,
+                storage.quantity,
+                `<td class="table-action">
+                    <a class="action-icon" id="${storage.itemId}" onclick="deleteItem(this)">
+                        <i class="ri-delete-bin-line"></i>
+                    </a>
+                </td>`
+            ]).draw();
+
             addSuccess.show();
         } else {
             addWarning.show();
@@ -108,20 +138,67 @@ function addItemsToWarehouse() {
     });
 }
 
+function itemParser(itemPrice, itemQuantity, searchName) {
+    let result;
+
+    itemPrice = itemPrice.replace(/[*+?^${}()"|[\]\\]/g, '');
+    itemQuantity = itemQuantity.replace(/[*+?^${}()"|[\]\\]/g, '');
+
+    itemPrice = itemPrice.split('ItemModel');
+    itemQuantity = itemQuantity.split('ItemModel');
+
+    for (let i = 1; i < itemPrice.length; i++) {
+        let itemName = itemPrice[i].split('itemName=')[1].split(',')[0];
+
+        if (itemName === searchName) {
+            let quantity = itemQuantity[i].split(':');
+            let price = itemPrice[i].split(':');
+
+            let itemId = itemQuantity[i].split('itemId=')[1].split(',')[0];
+            let itemCategory = itemQuantity[i].split('categoryName=')[1].split(',')[0];
+            let itemPurchasePrice = itemQuantity[i].split('itemPurchasePrice=')[1].split(':')[0];
+
+            quantity = quantity[quantity.length - 1].replace(',', '');
+            price = price[price.length - 1].replace(',', '');
+
+            result = {
+                itemId: itemId,
+                itemName: itemName,
+                itemCategory: itemCategory,
+                itemPurchasePrice: itemPurchasePrice,
+                quantity: quantity,
+                price: price
+            };
+        }
+    }
+
+    return result;
+}
+
 function deleteItem(element) {
+    itemForDeletion = element;
     let deleteModal = new bootstrap.Modal('#delete-modal');
-    itemId = element.id.split('-')[1];
+    let deleteButton = document.querySelector('#delete-button');
+    deleteButton.setAttribute('onclick', `confirmItemDelete('${element.id}')`);
 
     deleteModal.show();
 }
 
-function confirmDelete() {
+function confirmItemDelete(itemId) {
     let warehouseId = document.querySelector('.something').innerHTML;
 
     fetch(`/${orgId}/api/warehouse/delete_item/${warehouseId}?item_id=${itemId}`, { method: 'DELETE' }
     ).then(async response => {
         let result = await response;
-        if (result.ok) location.reload();
+        if (result.ok) {
+            storageTable
+                .row(itemForDeletion.parentNode.parentNode)
+                .remove()
+                .draw();
+            addSuccess.show();
+        } else {
+            addWarning.show();
+        }
     });
 }
 

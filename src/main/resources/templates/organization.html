@@ -261,7 +261,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Закрыть</button>
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addUser()">Добавить</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addUserFromOrgPage()">Добавить</button>
                         </div>
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
@@ -409,11 +409,11 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>Дата добавления: </td>
-                                                                <td th:text="${organization.getCreationDate()}"/>
+                                                                <td th:text="${organization.getCreationDate().toLocaleString()}"/>
                                                             </tr>
                                                             <tr>
                                                                 <td>Количество сотрудников: </td>
-                                                                <td th:text="${employees.size()}"/>
+                                                                <td id="employee-count" th:text="${employees.size()}"/>
                                                             </tr>
                                                             <tr>
                                                                 <td>Способ оплаты: </td>
@@ -449,21 +449,18 @@
                                                     <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
                                                         <li class="nav-item">
                                                             <a href="#storages" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0 active">
-<!--                                                               th:class="${activeTab.equals('storage')} ? 'nav-link rounded-0 active' : 'nav-link rounded-0'">-->
                                                                 <i class="ri-home-7-fill font-18"></i>
                                                                 <span class="d-none d-lg-block">Склады</span>
                                                             </a>
                                                         </li>
                                                         <li class="nav-item">
                                                             <a href="#categories" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
-<!--                                                               th:class="${activeTab.equals('category')} ? 'nav-link rounded-0 active' : 'nav-link rounded-0'">-->
                                                                 <i class="uil-layers-alt font-19"></i>
                                                                 <span class="d-none d-lg-block">Категории</span>
                                                             </a>
                                                         </li>
                                                         <li class="nav-item">
                                                             <a href="#employees" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
-<!--                                                               th:class="${activeTab.equals('employee')} ? 'nav-link rounded-0 active' : 'nav-link rounded-0'">-->
                                                                 <i class="mdi mdi-account-circle font-18"></i>
                                                                 <span class="d-none d-lg-block">Сотрудники</span>
                                                             </a>
@@ -542,8 +539,9 @@
                                                                                 <td th:text="${employee.getOrgRole().get(organization)}">
                                                                                 <td>1111</td>
                                                                                 <td class="table-action">
-                                                                                    <a href="javascript: void(0);" class="action-icon"> <i class="mdi mdi-pencil"></i></a>
-                                                                                    <a href="javascript: void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                                                                                    <a onclick="fireEmployee(this)" href="javascript: void(0);" class="action-icon" th:id="'user-' + ${employee.getUserId()}">
+                                                                                        <i class="mdi mdi-delete"></i>
+                                                                                    </a>
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>

@@ -302,7 +302,7 @@
                                             <i class="ri-check-line h1"></i>
                                             <h4 class="mt-2">Готово!</h4>
                                             <p class="mt-3">Товар был успешно добавлен на склад</p>
-                                            <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal" onclick="location.reload()">OK</button>
+                                            <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">OK</button>
                                         </div>
                                     </div>
                                 </div><!-- /.modal-content -->
@@ -313,7 +313,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header bg-warning">
-                                        <h4 class="modal-title" id="delete-modal-modalLabel">Delete Item</h4>
+                                        <h4 class="modal-title" id="delete-modal-modalLabel">Удалить товар</h4>
                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
                                     </div>
                                     <div class="modal-body">
@@ -321,7 +321,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Зкарыть</button>
-                                        <button type="button" class="btn btn-warning" onclick="confirmDelete()">Удалить</button>
+                                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="delete-button">Удалить</button>
                                     </div>
                                 </div>
                             </div>
@@ -363,7 +363,6 @@
                                                     <tr>
                                                         <th>Товар</th>
                                                         <th>Категория</th>
-                                                        <th>Дата добавления</th>
                                                         <th>Цена закупки</th>
                                                         <th>Цена продажи</th>
                                                         <th>Кол-во</th>
@@ -374,13 +373,12 @@
                                                     <tr th:each="item : ${itemQuantity.entrySet()}">
                                                         <td th:text="${item.getKey().getItemName()}"/>
                                                         <td th:text="${item.getKey().getCategoryModel().getCategoryName()}"/>
-                                                        <td th:text="${item.getKey().getItemCreationDate()}"/>
                                                         <td th:text="${item.getKey().getItemPurchasePrice()}"/>
                                                         <td th:if="${itemPrice != null }" th:text="${itemPrice.get(item.getKey())}"/>
                                                         <td th:unless="${itemPrice != null }">Цена не указана</td>
                                                         <td th:text="${item.getValue()}"/>
                                                         <td class="table-action">
-                                                            <a class="action-icon" data-bs-toggle="modal" data-bs-target="#delete-modal" th:id="'ondelete-' + ${item.getKey().getItemId()}" onclick="deleteItem(this)">
+                                                            <a class="action-icon" th:id="${item.getKey().getItemId()}" onclick="deleteItem(this)">
                                                                 <i class="ri-delete-bin-line"></i>
                                                             </a>
                                                         </td>
@@ -446,7 +444,7 @@
         <script th:src="@{/v3/js/api/warehouse-script.js}"></script>
 
         <script>
-            new DataTable('#basic-datatable', {
+            let storageTable = new DataTable('#basic-datatable', {
                 language: {
                     url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/ru.json'
                 },

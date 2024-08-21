@@ -20,6 +20,11 @@ public class TransitModel {
     @MapKeyJoinColumn(name = "item_id")
     private Map<ItemModel, Integer> itemQuantity;
 
+    @ElementCollection
+    @CollectionTable(name = "transit_item_price", joinColumns = @JoinColumn(name = "transit_id"))
+    @MapKeyJoinColumn(name = "item_id")
+    private Map<ItemModel, Double> itemPrice;
+
     @ManyToOne
     @JoinTable(
             name = "depart_point", joinColumns = @JoinColumn(name = "transit_id"),

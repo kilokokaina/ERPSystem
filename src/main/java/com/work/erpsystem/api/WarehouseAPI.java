@@ -150,7 +150,7 @@ public class WarehouseAPI {
     }
 
     @PostMapping("add_sales/{id}")
-    public @ResponseBody ResponseEntity<WarehouseModel> addSalesToWarehouse(@PathVariable(value = "org_uuid") Long orgId,
+    public @ResponseBody ResponseEntity<SaleModel> addSalesToWarehouse(@PathVariable(value = "org_uuid") Long orgId,
                                                                             @PathVariable(value = "id") WarehouseModel warehouseModel,
                                                                             @RequestBody ItemQuantityDTO itemQuantityDTO,
                                                                             Authentication authentication) {
@@ -175,13 +175,11 @@ public class WarehouseAPI {
                 warehouseService.update(warehouseModel);
             }
 
-            saleRepository.save(saleModel);
+            return ResponseEntity.ok(saleRepository.save(saleModel));
         } catch (NoDBRecord exception) {
             log.error(exception.getMessage());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
-        return null;
     }
 
     @GetMapping("get_transit")
@@ -203,6 +201,8 @@ public class WarehouseAPI {
             WarehouseModel arriveWarehouse = warehouseService.findById(transitDto.getArrivePoint());
 
             Map<ItemModel, Integer> transitItemQuantity = new HashMap<>();
+            Map<ItemModel, Double> transitItemPrice = new HashMap<>();
+
             for (ItemQuantityDTO itemDto : transitDto.getItems()) {
                 ItemModel transitItem = itemService.findById(itemDto.getItemId());
 
@@ -212,12 +212,14 @@ public class WarehouseAPI {
                 }
 
                 transitItemQuantity.put(transitItem, itemDto.getQuantity());
+                transitItemPrice.put(transitItem, itemDto.getItemPrice());
             }
-            transit.setItemQuantity(transitItemQuantity);
 
+            transit.setOrganization(orgService.findById(transitDto.getOrgId()));
+            transit.setItemQuantity(transitItemQuantity);
+            transit.setItemPrice(transitItemPrice);
             transit.setDepartPoint(departWarehouse);
             transit.setArrivePoint(arriveWarehouse);
-            transit.setOrganization(orgService.findById(transitDto.getOrgId()));
 
         } catch (NoDBRecord e) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -263,18 +265,21 @@ public class WarehouseAPI {
 
                     WarehouseModel arriveWarehouse = transit.getArrivePoint();
                     Map<ItemModel, Integer> warehouseItems = arriveWarehouse.getItemQuantity();
+                    Map<ItemModel, Double> warehousePrice = arriveWarehouse.getItemPrice();
 
                     for (Map.Entry<ItemModel, Integer> entry : transitItems.entrySet()) {
                         if (warehouseItems.containsKey(entry.getKey())) {
                             int currentQuantity = warehouseItems.get(entry.getKey());
 
                             warehouseItems.replace(entry.getKey(), currentQuantity + entry.getValue());
+                            warehousePrice.replace(entry.getKey(), transit.getItemPrice().get(entry.getKey()));
+
                             arriveWarehouse.setItemQuantity(warehouseItems);
+                            arriveWarehouse.setItemPrice(warehousePrice);
                         } else {
-                            WarehouseModel departWarehouse = transit.getDepartPoint();
                             Map<ItemModel, Double> itemPrice = arriveWarehouse.getItemPrice();
 
-                            itemPrice.put(entry.getKey(), departWarehouse.getItemPrice().get(entry.getKey()));
+                            itemPrice.put(entry.getKey(), transit.getItemPrice().get(entry.getKey()));
                             warehouseItems.put(entry.getKey(), entry.getValue());
 
                             arriveWarehouse.setItemQuantity(warehouseItems);
