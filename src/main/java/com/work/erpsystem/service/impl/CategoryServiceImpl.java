@@ -33,12 +33,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryModel update(CategoryModel categoryModel) throws NoDBRecord {
-        if (Objects.isNull(this.findById(categoryModel.getCategoryId()))) {
-            throw new NoDBRecord(String.format("No such record in data base with id: %d", categoryModel.getCategoryId()));
+    public CategoryModel update(CategoryModel category) throws NoDBRecord {
+        if (Objects.isNull(this.findById(category.getCategoryId()))) {
+            throw new NoDBRecord(String.format("No such record in data base with id: %d", category.getCategoryId()));
         }
 
-        return categoryRepository.save(categoryModel);
+        return categoryRepository.save(category);
     }
 
     @Override
@@ -48,38 +48,38 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryModel findById(Long categoryId) throws NoDBRecord {
-        CategoryModel categoryModel = categoryRepository.findById(categoryId).orElse(null);
+        CategoryModel category = categoryRepository.findById(categoryId).orElse(null);
 
-        if (Objects.isNull(categoryModel)) {
+        if (Objects.isNull(category)) {
             String exceptionMessage = "No such record in data base with id: %d";
             throw new NoDBRecord(String.format(exceptionMessage, categoryId));
         }
 
-        return categoryModel;
+        return category;
     }
 
     @Override
     public CategoryModel findByName(String categoryName) throws NoDBRecord {
-        CategoryModel categoryModel = categoryRepository.findByCategoryName(categoryName);
+        CategoryModel category = categoryRepository.findByCategoryName(categoryName);
 
-        if (Objects.isNull(categoryModel)) {
+        if (Objects.isNull(category)) {
             String exceptionMessage = "No such record in data base with name: %s";
             throw new NoDBRecord(String.format(exceptionMessage, categoryName));
         }
 
-        return categoryModel;
+        return category;
     }
 
     @Override
-    public List<CategoryModel> findByOrg(OrganizationModel organizationModel) {
-        return categoryRepository.findByOrganization(organizationModel);
+    public List<CategoryModel> findByOrg(OrganizationModel organization) {
+        return categoryRepository.findByOrganization(organization);
     }
 
     @Override
     public void deleteById(Long categoryId) throws NoDBRecord {
-        CategoryModel categoryModel = this.findById(categoryId);
+        CategoryModel category = this.findById(categoryId);
 
-        if (Objects.isNull(categoryModel)) {
+        if (Objects.isNull(category)) {
             String exceptionMessage = "No such record in data base with id: %d";
             throw new NoDBRecord(String.format(exceptionMessage, categoryId));
         }
@@ -89,7 +89,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void delete(CategoryModel categoryModel) {
-        categoryRepository.delete(categoryModel);
+    public void delete(CategoryModel category) {
+        categoryRepository.delete(category);
     }
 }

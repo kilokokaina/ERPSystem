@@ -431,14 +431,17 @@
                                                             <div class="card-body">
                                                                 <h4 class="header-title mb-3">Контактное лицо</h4>
 
-                                                                <h5>Имя: Aleksandr Lezin</h5>
-
-                                                                <address class="mb-0 font-14 address-lg">
-                                                                    Irkutsk, Barrikad<br>
-                                                                    12b/1, Pavilion №4 <br>
-                                                                    <abbr title="Mobile">P:</abbr> +7(999) 686-5606 <br/>
-                                                                </address>
-
+                                                                <div th:if="${contactPerson != null}" id="contact-person">
+                                                                    <h5 th:text="'Имя: ' + ${contactPerson.getFirstName()} + ' ' + ${contactPerson.getSecondName()}"/>
+                                                                    <address class="mb-0 font-14 address-lg">
+                                                                        Irkutsk, Barrikad<br>
+                                                                        12b/1, Pavilion №4 <br>
+                                                                        <abbr title="Mobile">P:</abbr> +7(999) 686-5606 <br/>
+                                                                    </address>
+                                                                </div>
+                                                                <div th:if="${contactPerson == null}" id="contact-person">
+                                                                    <h5 th:text="'Нет контактного лица'"/>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div> <!-- end col -->
@@ -525,6 +528,7 @@
                                                                                 <th>Имя</th>
                                                                                 <th>Email</th>
                                                                                 <th>Должность</th>
+                                                                                <th></th>
                                                                                 <th>Телефон</th>
                                                                                 <th>Действия</th>
                                                                             </tr>
@@ -537,6 +541,13 @@
                                                                                 <td th:text="${employee.getFirstName()} + ' ' + ${employee.getSecondName()}"/>
                                                                                 <td th:text="${employee.getUsername()}"/>
                                                                                 <td th:text="${employee.getOrgRole().get(organization)}">
+                                                                                <td>
+                                                                                    <div class="form-check form-switch">
+                                                                                        <input type="radio" th:value="${employee.getUserId()}" name="contact" th:checked="${employee.getUserId() == organization.getContactPerson()}"
+                                                                                               class="form-check-input" id="contactPerson" onclick="setContactPerson(this)">
+                                                                                        <label class="form-check-label" for="contactPerson">Контактное лицо</label>
+                                                                                    </div>
+                                                                                </td>
                                                                                 <td>1111</td>
                                                                                 <td class="table-action">
                                                                                     <a onclick="fireEmployee(this)" href="javascript: void(0);" class="action-icon" th:id="'user-' + ${employee.getUserId()}">
@@ -649,6 +660,7 @@
         <script th:inline="javascript" th:src="@{/v3/js/api/warehouse-script.js}"></script>
         <script th:inline="javascript" th:src="@{/v3/js/api/category-script.js}"></script>
         <script th:inline="javascript" th:src="@{/v3/js/api/user-script.js}"></script>
+
         <script>
             let storageTable = new DataTable('#storage', {
                 language: {

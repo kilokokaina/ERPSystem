@@ -49,11 +49,11 @@ public class FileAPI {
             return null;
         }
 
-        FileModel fileModel = new FileModel();
-        fileModel.setFilePath(String.format(uploadFilePath, fileName));
-        fileModel.setFileName(fileName);
+        FileModel file = new FileModel();
+        file.setFilePath(String.format(uploadFilePath, fileName));
+        file.setFileName(fileName);
 
-        return fileRepository.save(fileModel);
+        return fileRepository.save(file);
     }
 
     @PostMapping("item/{id}")
@@ -65,16 +65,16 @@ public class FileAPI {
                 String fileName = UUID.randomUUID() + "." + image.getOriginalFilename();
 
                 if (fileType.equals("image")) {
-                    FileModel fileModel = saveFile(image, fileName);
+                    FileModel file = saveFile(image, fileName);
 
                     try {
-                        ItemModel itemModel = itemService.findById(itemId);
+                        ItemModel item = itemService.findById(itemId);
 
-                        List<FileModel> imageList = itemModel.getItemImages();
-                        imageList.add(fileModel);
-                        itemModel.setItemImages(imageList);
+                        List<FileModel> imageList = item.getItemImages();
+                        imageList.add(file);
+                        item.setItemImages(imageList);
 
-                        itemService.update(itemModel);
+                        itemService.update(item);
 
                     } catch (NoDBRecord exception) {
                         return ResponseEntity.ok(HttpStatus.NO_CONTENT);
@@ -93,13 +93,13 @@ public class FileAPI {
         String fileName = UUID.randomUUID() + "." + image.getOriginalFilename();
 
         if (fileType.equals("image")) {
-            FileModel fileModel = saveFile(image, fileName);
+            FileModel file = saveFile(image, fileName);
 
             try {
-                UserModel userModel = userService.findById(userId);
-                userModel.setUserAvatar(fileModel);
+                UserModel user = userService.findById(userId);
+                user.setUserAvatar(file);
 
-                userService.update(userModel);
+                userService.update(user);
             } catch (NoDBRecord exception) {
                 return ResponseEntity.ok(HttpStatus.NO_CONTENT);
             }

@@ -41,8 +41,8 @@ public class OrgController {
 
     @GetMapping("choose_org")
     public String chooseOrg(Model model, Authentication authentication) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
-        model.addAttribute("orgList", userModel.getOrgRole().keySet());
+        UserModel user = userService.findByUsername(authentication.getName());
+        model.addAttribute("orgList", user.getOrgRole().keySet());
 
         return "choose-org";
     }
@@ -54,25 +54,23 @@ public class OrgController {
 
 
     @GetMapping("{org_uuid}/organization")
-    public String orgHome(@PathVariable(value = "org_uuid") Long orgId, Model model,
-                          @RequestParam(value = "tab", required = false) String tab, Authentication authentication) {
+    public String orgHome(@PathVariable(value = "org_uuid") Long orgId, Model model, Authentication authentication) {
         try {
-            OrganizationModel organizationModel = orgService.findById(orgId);
+            OrganizationModel organization = orgService.findById(orgId);
 
-            List<UserModel> employees = userService.findByEmployeeOrg(organizationModel);
-            List<WarehouseModel> warehouses = warehouseService.findByOrganization(organizationModel);
+            List<UserModel> employees = userService.findByEmployeeOrg(organization);
+            List<WarehouseModel> warehouses = warehouseService.findByOrganization(organization);
             Map<CategoryModel, Integer> categories = new HashMap<>();
 
-            categoryService.findByOrg(organizationModel).forEach(category ->
+            categoryService.findByOrg(organization).forEach(category ->
                     categories.put(category, itemService.findByCategoryId(category.getCategoryId()).size())
             );
 
-            if (tab != null) {
-                model.addAttribute("activeTab", tab);
-                log.info(tab);
-            }
+            if (organization.getContactPerson() != null) {
+                model.addAttribute("contactPerson", userService.findById(organization.getContactPerson()));
+            } else model.addAttribute("contactPerson", null);
 
-            model.addAttribute("organization", organizationModel);
+            model.addAttribute("organization", organization);
             model.addAttribute("employees", employees);
             model.addAttribute("warehouses", warehouses);
             model.addAttribute("categories", categories);

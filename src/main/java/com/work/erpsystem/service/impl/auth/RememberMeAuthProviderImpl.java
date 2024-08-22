@@ -30,9 +30,8 @@ public class RememberMeAuthProviderImpl implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        UserModel userModel = (UserModel) authentication.getPrincipal();
-
-        UserDetails userDetails = userService.loadUserByUsername(userModel.getUsername());
+        UserModel user = (UserModel) authentication.getPrincipal();
+        UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
 
         if (userDetails == null) return null;
 
@@ -40,7 +39,7 @@ public class RememberMeAuthProviderImpl implements AuthenticationProvider {
         log.info(request.getRemoteAddr());
 
         return new RememberMeAuthenticationToken(
-                secretKey, userModel, userDetails.getAuthorities()
+                secretKey, user, userDetails.getAuthorities()
         );
     }
 

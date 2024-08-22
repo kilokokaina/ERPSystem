@@ -26,22 +26,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserModel save(UserModel userModel) throws DuplicateDBRecord {
-        if (Objects.nonNull(userRepository.findByUsername(userModel.getUsername()))) {
+    public UserModel save(UserModel user) throws DuplicateDBRecord {
+        if (Objects.nonNull(userRepository.findByUsername(user.getUsername()))) {
             String exceptionMessage = "Username with name [%s] already exist in DB";
-            throw new DuplicateDBRecord(String.format(exceptionMessage, userModel.getUsername()));
+            throw new DuplicateDBRecord(String.format(exceptionMessage, user.getUsername()));
         }
 
-        return userRepository.save(userModel);
+        return userRepository.save(user);
     }
 
     @Override
-    public UserModel update(UserModel userModel) throws NoDBRecord {
-        if (Objects.isNull(this.findById(userModel.getUserId()))) {
-            throw new NoDBRecord(String.format("No user with name: %s", userModel.getUsername()));
+    public UserModel update(UserModel user) throws NoDBRecord {
+        if (Objects.isNull(this.findById(user.getUserId()))) {
+            throw new NoDBRecord(String.format("No user with name: %s", user.getUsername()));
         }
 
-        return userRepository.save(userModel);
+        return userRepository.save(user);
     }
 
     @Override
@@ -51,43 +51,43 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserModel findById(Long userId) throws NoDBRecord {
-        UserModel userModel = userRepository.findById(userId).orElse(null);
+        UserModel user = userRepository.findById(userId).orElse(null);
 
-        if (Objects.isNull(userModel)) {
+        if (Objects.isNull(user)) {
             String exceptionMessage = "No such record in data base with id: %d";
             throw new NoDBRecord(String.format(exceptionMessage, userId));
         }
 
-        return userModel;
+        return user;
     }
 
     @Override
     public UserModel findByUsername(String username) throws UsernameNotFoundException {
-        UserModel userModel = userRepository.findByUsername(username);
+        UserModel user = userRepository.findByUsername(username);
 
-        if (Objects.isNull(userModel)) {
+        if (Objects.isNull(user)) {
             String exceptionMessage = "No such user with name: %s";
             throw new UsernameNotFoundException(String.format(exceptionMessage, username));
         }
 
-        return userModel;
+        return user;
     }
 
     @Override
     public UserModel findByUUID(String UUID) throws NoDBRecord {
-        UserModel userModel = userRepository.findByUserUUID(UUID);
+        UserModel user = userRepository.findByUserUUID(UUID);
 
-        if (Objects.isNull(userModel)) {
+        if (Objects.isNull(user)) {
             String exceptionMessage = "No such record in data base with UUID: %s";
             throw new NoDBRecord(String.format(exceptionMessage, UUID));
         }
 
-        return userModel;
+        return user;
     }
 
     @Override
-    public List<UserModel> findByEmployeeOrg(OrganizationModel organizationModel) {
-        return userRepository.findAll().stream().filter(user -> user.getOrgRole().containsKey(organizationModel)).toList();
+    public List<UserModel> findByEmployeeOrg(OrganizationModel organization) {
+        return userRepository.findAll().stream().filter(user -> user.getOrgRole().containsKey(organization)).toList();
     }
 
     @Override
@@ -101,8 +101,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void delete(UserModel userModel) throws NoDBRecord {
-        userRepository.delete(userModel);
+    public void delete(UserModel user) throws NoDBRecord {
+        userRepository.delete(user);
     }
 
     @Override

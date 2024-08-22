@@ -77,9 +77,9 @@ public class UserAPI {
     public @ResponseBody ResponseEntity<UserModel> createUser(@PathVariable(value = "org_uuid") Long orgId,
                                                               @RequestBody UserDTO userDTO, Authentication authentication) {
         try {
-            OrganizationModel organizationModel = orgService.findById(orgId);
+            OrganizationModel organization = orgService.findById(orgId);
             Map<OrganizationModel, String> orgRole = new HashMap<>();
-            orgRole.put(organizationModel, Role.valueOf(userDTO.getUserAuthority()).name());
+            orgRole.put(organization, Role.valueOf(userDTO.getUserAuthority()).name());
 
             UserModel newUser = new UserModel();
 
@@ -104,16 +104,16 @@ public class UserAPI {
     public @ResponseBody ResponseEntity<HttpStatus> updateUser(@PathVariable(value = "id") Long userId, Authentication authentication,
                                                                @RequestBody UserDTO userDTO) {
         try {
-            UserModel userModel = userService.findById(userId);
+            UserModel user = userService.findById(userId);
 
-            userModel.setFirstName(userDTO.getFirstName());
-            userModel.setSecondName(userDTO.getSecondName());
+            user.setFirstName(userDTO.getFirstName());
+            user.setSecondName(userDTO.getSecondName());
 
-            if (!userModel.getUsername().equals(userDTO.getEmail())) {
-                sendMessageToUser(userModel, changeMessage);
+            if (!user.getUsername().equals(userDTO.getEmail())) {
+                sendMessageToUser(user, changeMessage);
             }
 
-            userService.update(userModel);
+            userService.update(user);
 
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (NoDBRecord exception) {

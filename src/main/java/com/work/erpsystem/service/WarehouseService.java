@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface WarehouseService {
 
-    WarehouseModel save(WarehouseModel warehouseModel) throws DuplicateDBRecord;
-    WarehouseModel update(WarehouseModel warehouseModel) throws NoDBRecord;
+    WarehouseModel save(WarehouseModel warehouse) throws DuplicateDBRecord;
+    WarehouseModel update(WarehouseModel warehouse) throws NoDBRecord;
     List<WarehouseModel> findAll();
     WarehouseModel findById(Long warehouseId) throws NoDBRecord;
     WarehouseModel findByName(String warehouseName) throws NoDBRecord;
-    List<WarehouseModel> findByOrganization(OrganizationModel organizationModel);
+    List<WarehouseModel> findByOrganization(OrganizationModel organization);
     void deleteById(Long warehouseId) throws NoDBRecord;
-    void delete(WarehouseModel warehouseModel) throws NoDBRecord;
+    void delete(WarehouseModel warehouse) throws NoDBRecord;
 
 }

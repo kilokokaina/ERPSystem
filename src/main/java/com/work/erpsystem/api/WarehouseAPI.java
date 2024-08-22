@@ -75,11 +75,11 @@ public class WarehouseAPI {
                                                               Authentication authentication) {
         try {
             WarehouseModel warehouse = warehouseService.findById(warehouseId);
-            ItemModel itemModel = itemService.findById(itemId);
+            ItemModel item = itemService.findById(itemId);
 
             Map<ItemModel, Double> itemPrice = warehouse.getItemPrice();
 
-            return ResponseEntity.ok(itemPrice.get(itemModel));
+            return ResponseEntity.ok(itemPrice.get(item));
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -88,14 +88,14 @@ public class WarehouseAPI {
     @PostMapping
     public @ResponseBody ResponseEntity<WarehouseModel> addWarehouse(@PathVariable(value = "org_uuid") Long orgId,
                                                                      @RequestBody WarehouseDTO warehouseDto) {
-        WarehouseModel warehouseModel = new WarehouseModel();
+        WarehouseModel warehouse = new WarehouseModel();
 
         try {
-            warehouseModel.setOrganization(orgService.findById(orgId));
-            warehouseModel.setWarehouseName(warehouseDto.getWarehouseName());
-            warehouseModel.setWarehouseAddress(warehouseDto.getWarehouseAddress());
+            warehouse.setOrganization(orgService.findById(orgId));
+            warehouse.setWarehouseName(warehouseDto.getWarehouseName());
+            warehouse.setWarehouseAddress(warehouseDto.getWarehouseAddress());
 
-            return ResponseEntity.ok(warehouseService.save(warehouseModel));
+            return ResponseEntity.ok(warehouseService.save(warehouse));
         } catch (DBException exception) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
@@ -104,15 +104,15 @@ public class WarehouseAPI {
     @PutMapping("{id}")
     public @ResponseBody ResponseEntity<WarehouseModel> updateWarehouse(@PathVariable(value = "org_uuid") Long orgId,
                                                                         @PathVariable(value = "id") Long warehouseId,
-                                                                        @RequestBody WarehouseModel warehouseNew,
+                                                                        @RequestBody WarehouseModel newWarehouse,
                                                                         Authentication authentication) {
         try {
-            WarehouseModel warehouseModel = warehouseService.findById(warehouseId);
+            WarehouseModel warehouse = warehouseService.findById(warehouseId);
 
-            warehouseModel.setWarehouseName(warehouseNew.getWarehouseName());
-            warehouseModel.setWarehouseAddress(warehouseNew.getWarehouseAddress());
+            warehouse.setWarehouseName(newWarehouse.getWarehouseName());
+            warehouse.setWarehouseAddress(newWarehouse.getWarehouseAddress());
 
-            return ResponseEntity.ok(warehouseService.update(warehouseModel));
+            return ResponseEntity.ok(warehouseService.update(warehouse));
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -120,29 +120,29 @@ public class WarehouseAPI {
 
     @PostMapping("add_items/{id}")
     public @ResponseBody ResponseEntity<WarehouseModel> addItemsToWarehouse(@PathVariable(value = "org_uuid") Long orgId,
-                                                                            @PathVariable(value = "id") WarehouseModel warehouseModel,
+                                                                            @PathVariable(value = "id") WarehouseModel warehouse,
                                                                             @RequestBody ItemQuantityDTO itemQuantityDTO,
                                                                             Authentication authentication) {
         try {
-            ItemModel itemModel = itemService.findByName(itemQuantityDTO.getItemName());
+            ItemModel item = itemService.findByName(itemQuantityDTO.getItemName());
 
-            Map<ItemModel, Integer> itemQuantity = warehouseModel.getItemQuantity();
-            Map<ItemModel, Double> itemPrice = warehouseModel.getItemPrice();
+            Map<ItemModel, Integer> itemQuantity = warehouse.getItemQuantity();
+            Map<ItemModel, Double> itemPrice = warehouse.getItemPrice();
 
             double itemPriceValue = itemQuantityDTO.getItemPrice();
-            itemPrice.put(itemModel, itemPriceValue);
+            itemPrice.put(item, itemPriceValue);
 
             try {
-                int currentItemQuantity = itemQuantity.get(itemModel);
-                itemQuantity.put(itemModel, itemQuantityDTO.getQuantity() + currentItemQuantity);
+                int currentItemQuantity = itemQuantity.get(item);
+                itemQuantity.put(item, itemQuantityDTO.getQuantity() + currentItemQuantity);
             } catch (NullPointerException exception) {
-                itemQuantity.put(itemModel, itemQuantityDTO.getQuantity());
+                itemQuantity.put(item, itemQuantityDTO.getQuantity());
             }
 
-            warehouseModel.setItemQuantity(itemQuantity);
-            warehouseModel.setItemPrice(itemPrice);
+            warehouse.setItemQuantity(itemQuantity);
+            warehouse.setItemPrice(itemPrice);
 
-            return ResponseEntity.ok(warehouseService.update(warehouseModel));
+            return ResponseEntity.ok(warehouseService.update(warehouse));
 
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -151,31 +151,31 @@ public class WarehouseAPI {
 
     @PostMapping("add_sales/{id}")
     public @ResponseBody ResponseEntity<SaleModel> addSalesToWarehouse(@PathVariable(value = "org_uuid") Long orgId,
-                                                                            @PathVariable(value = "id") WarehouseModel warehouseModel,
+                                                                            @PathVariable(value = "id") WarehouseModel warehouse,
                                                                             @RequestBody ItemQuantityDTO itemQuantityDTO,
                                                                             Authentication authentication) {
         try {
-            SaleModel saleModel = new SaleModel();
-            ItemModel itemModel = itemService.findByName(itemQuantityDTO.getItemName());
+            SaleModel sale = new SaleModel();
+            ItemModel item = itemService.findByName(itemQuantityDTO.getItemName());
 
-            saleModel.setWarehouse(warehouseModel);
-            saleModel.setItem(itemModel);
-            saleModel.setItemSalePrice(warehouseModel.getItemPrice().get(itemModel));
-            saleModel.setItemSaleQuantity(itemQuantityDTO.getQuantity());
+            sale.setWarehouse(warehouse);
+            sale.setItem(item);
+            sale.setItemSalePrice(warehouse.getItemPrice().get(item));
+            sale.setItemSaleQuantity(itemQuantityDTO.getQuantity());
 
-            if (itemQuantityDTO.getQuantity() > warehouseModel.getItemQuantity().get(itemModel)) {
+            if (itemQuantityDTO.getQuantity() > warehouse.getItemQuantity().get(item)) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             } else {
-                Map<ItemModel, Integer> itemQuantity = warehouseModel.getItemQuantity();
+                Map<ItemModel, Integer> itemQuantity = warehouse.getItemQuantity();
 
-                int currentQuantity = itemQuantity.get(itemModel);
-                itemQuantity.put(itemModel, currentQuantity - itemQuantityDTO.getQuantity());
-                warehouseModel.setItemQuantity(itemQuantity);
+                int currentQuantity = itemQuantity.get(item);
+                itemQuantity.put(item, currentQuantity - itemQuantityDTO.getQuantity());
+                warehouse.setItemQuantity(itemQuantity);
 
-                warehouseService.update(warehouseModel);
+                warehouseService.update(warehouse);
             }
 
-            return ResponseEntity.ok(saleRepository.save(saleModel));
+            return ResponseEntity.ok(saleRepository.save(sale));
         } catch (NoDBRecord exception) {
             log.error(exception.getMessage());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -248,15 +248,15 @@ public class WarehouseAPI {
                         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                     }
 
-                    WarehouseModel warehouseModel = transit.getDepartPoint();
-                    Map<ItemModel, Integer> warehouseItems = warehouseModel.getItemQuantity();
+                    WarehouseModel warehouse = transit.getDepartPoint();
+                    Map<ItemModel, Integer> warehouseItems = warehouse.getItemQuantity();
 
                     for (Map.Entry<ItemModel, Integer> entry : transitItems.entrySet()) {
                         int currentQuantity = warehouseItems.get(entry.getKey());
                         warehouseItems.replace(entry.getKey(), currentQuantity - entry.getValue());
                     }
 
-                    warehouseService.update(warehouseModel);
+                    warehouseService.update(warehouse);
                 }
                 case "DELIVERED" -> {
                     if (!transit.getTransitStatus().equals("IN_TRANSIT")) {
@@ -329,17 +329,17 @@ public class WarehouseAPI {
 
     @DeleteMapping("delete_item/{id}")
     public @ResponseBody ResponseEntity<HttpStatus> deleteItemFromWarehouse(@PathVariable(value = "org_uuid") Long orgId,
-                                                                            @PathVariable(value = "id") WarehouseModel warehouseModel,
+                                                                            @PathVariable(value = "id") WarehouseModel warehouse,
                                                                             @RequestParam(value = "item_id") Long itemId,
                                                                             Authentication authentication) {
         try {
-            ItemModel itemModel = itemService.findById(itemId);
+            ItemModel item = itemService.findById(itemId);
 
-            Map<ItemModel, Integer> itemQuantity = warehouseModel.getItemQuantity();
-            itemQuantity.remove(itemModel);
-            warehouseModel.setItemQuantity(itemQuantity);
+            Map<ItemModel, Integer> itemQuantity = warehouse.getItemQuantity();
+            itemQuantity.remove(item);
+            warehouse.setItemQuantity(itemQuantity);
 
-            warehouseService.update(warehouseModel);
+            warehouseService.update(warehouse);
 
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (NoDBRecord exception) {

@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -38,9 +39,9 @@ public class OrganizationAPI {
                                                                     @PathVariable(value = "id") Long organizationId,
                                                                     Authentication authentication) {
         try {
-            OrganizationModel organizationModel = orgService.findById(organizationId);
+            OrganizationModel organization = orgService.findById(organizationId);
 
-            return new ResponseEntity<>(organizationModel, HttpStatus.OK);
+            return new ResponseEntity<>(organization, HttpStatus.OK);
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -51,9 +52,26 @@ public class OrganizationAPI {
                                                                       @RequestParam(value = "orgName") String orgName,
                                                                       Authentication authentication) {
         try {
-            OrganizationModel organizationModel = orgService.findByName(orgName);
+            OrganizationModel organization = orgService.findByName(orgName);
 
-            return new ResponseEntity<>(organizationModel, HttpStatus.OK);
+            return new ResponseEntity<>(organization, HttpStatus.OK);
+        } catch (NoDBRecord exception) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @GetMapping("add_cp/{id}")
+    public @ResponseBody ResponseEntity<UserModel> addContactPerson(@PathVariable(value = "org_uuid") Long orgId,
+                                                                    @PathVariable(value = "id") Long userId,
+                                                                    Authentication authentication) {
+        try {
+            UserModel user = userService.findById(userId);
+            OrganizationModel organization = orgService.findById(orgId);
+
+            organization.setContactPerson(user.getUserId());
+            orgService.update(organization);
+
+            return ResponseEntity.ok(user);
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -62,21 +80,21 @@ public class OrganizationAPI {
     @PostMapping
     public @ResponseBody ResponseEntity<OrganizationModel> addOrg(@PathVariable(value = "org_uuid", required = false) Long orgId,
                                                                   @RequestBody OrgDTO orgDTO, Authentication authentication) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
-        OrganizationModel organizationModel = new OrganizationModel();
+        UserModel user = userService.findByUsername(authentication.getName());
+        OrganizationModel organization = new OrganizationModel();
         try {
-            organizationModel.setOrgName(orgDTO.getOrgName());
-            organizationModel.setOrgAddress(orgDTO.getOrgAddress());
+            organization.setOrgName(orgDTO.getOrgName());
+            organization.setOrgAddress(orgDTO.getOrgAddress());
 
-            orgService.save(organizationModel);
+            orgService.save(organization);
 
-            Map<OrganizationModel, String> orgRole = userModel.getOrgRole();
-            orgRole.put(organizationModel, Role.OWNER.name());
-            userModel.setOrgRole(orgRole);
+            Map<OrganizationModel, String> orgRole = user.getOrgRole();
+            orgRole.put(organization, Role.OWNER.name());
+            user.setOrgRole(orgRole);
 
-            userService.update(userModel);
+            userService.update(user);
 
-            return ResponseEntity.ok(organizationModel);
+            return ResponseEntity.ok(organization);
         } catch (DBException exception) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
@@ -84,15 +102,15 @@ public class OrganizationAPI {
 
     @PutMapping("{id}")
     public @ResponseBody ResponseEntity<OrganizationModel> updateOrg(@PathVariable(value = "org_uuid") Long orgId,
-                                                                     @PathVariable(value = "id") Long organizationId,
+                                                                     @PathVariable(value = "id") Long updateOrgId,
                                                                      @RequestBody OrgDTO orgDTO, Authentication authentication) {
         try {
-            OrganizationModel organizationModel = orgService.findById(organizationId);
+            OrganizationModel organization = orgService.findById(updateOrgId);
 
-            organizationModel.setOrgName(orgDTO.getOrgName());
-            organizationModel.setOrgAddress(orgDTO.getOrgAddress());
+            organization.setOrgName(orgDTO.getOrgName());
+            organization.setOrgAddress(orgDTO.getOrgAddress());
 
-            return ResponseEntity.ok(orgService.update(organizationModel));
+            return ResponseEntity.ok(orgService.update(organization));
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

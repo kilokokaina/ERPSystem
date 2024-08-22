@@ -23,4 +23,6 @@ public class OrganizationModel {
 
     private String orgUUID = UUID.randomUUID().toString();
 
+    private Long contactPerson;
+
 }

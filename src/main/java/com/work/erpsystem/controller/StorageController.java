@@ -45,20 +45,20 @@ public class StorageController {
     }
 
     @GetMapping("storage")
-    public String storageList(@RequestParam(value = "id", required = false) WarehouseModel warehouseModel,
+    public String storageList(@RequestParam(value = "id", required = false) WarehouseModel warehouse,
                               Authentication authentication, Model model, @PathVariable(value = "org_uuid") Long orgId) {
         try {
-            OrganizationModel organizationModel = orgService.findById(orgId);
-            model.addAttribute("categories", categoryService.findByOrg(organizationModel));
+            OrganizationModel organization = orgService.findById(orgId);
+            model.addAttribute("categories", categoryService.findByOrg(organization));
 
-            if (Objects.nonNull(warehouseModel)) {
-                model.addAttribute("itemQuantity", warehouseModel.getItemQuantity());
-                model.addAttribute("itemPrice", warehouseModel.getItemPrice());
-                model.addAttribute("warehouseName", warehouseModel.getWarehouseName());
-                model.addAttribute("warehouseId", warehouseModel.getWarehouseId());
+            if (Objects.nonNull(warehouse)) {
+                model.addAttribute("itemQuantity", warehouse.getItemQuantity());
+                model.addAttribute("itemPrice", warehouse.getItemPrice());
+                model.addAttribute("warehouseName", warehouse.getWarehouseName());
+                model.addAttribute("warehouseId", warehouse.getWarehouseId());
             }
 
-            List<WarehouseModel> warehouseList = warehouseService.findByOrganization(organizationModel);
+            List<WarehouseModel> warehouseList = warehouseService.findByOrganization(organization);
             model.addAttribute("warehouses", warehouseList);
             model.addAttribute("orgId", orgId);
 
@@ -69,19 +69,19 @@ public class StorageController {
     }
 
     @GetMapping("sales")
-    public String salesList(@RequestParam(value = "id", required = false) WarehouseModel warehouseModel,
+    public String salesList(@RequestParam(value = "id", required = false) WarehouseModel warehouse,
                             Authentication authentication, Model model, @PathVariable(value = "org_uuid") Long orgId) {
         try {
-            OrganizationModel organizationModel = orgService.findById(orgId);
+            OrganizationModel organization = orgService.findById(orgId);
 
-            if (Objects.nonNull(warehouseModel)) {
-                model.addAttribute("itemSales", saleRepository.findByWarehouse(warehouseModel));
-                model.addAttribute("itemQuantity", warehouseModel.getItemQuantity());
-                model.addAttribute("warehouseName", warehouseModel.getWarehouseName());
-                model.addAttribute("warehouseId", warehouseModel.getWarehouseId());
+            if (Objects.nonNull(warehouse)) {
+                model.addAttribute("itemSales", saleRepository.findByWarehouse(warehouse));
+                model.addAttribute("itemQuantity", warehouse.getItemQuantity());
+                model.addAttribute("warehouseName", warehouse.getWarehouseName());
+                model.addAttribute("warehouseId", warehouse.getWarehouseId());
             }
 
-            List<WarehouseModel> warehouseList = warehouseService.findByOrganization(organizationModel);
+            List<WarehouseModel> warehouseList = warehouseService.findByOrganization(organization);
             model.addAttribute("warehouses", warehouseList);
             model.addAttribute("orgId", orgId);
 
@@ -92,20 +92,20 @@ public class StorageController {
     }
 
     @GetMapping("transit")
-    public String transit(@RequestParam(value = "id", required = false) WarehouseModel warehouseModel,
+    public String transit(@RequestParam(value = "id", required = false) WarehouseModel warehouse,
                           Authentication authentication, Model model, @PathVariable(value = "org_uuid") Long orgId) {
         try {
-            OrganizationModel organizationModel = orgService.findById(orgId);
+            OrganizationModel organization = orgService.findById(orgId);
 
-            if (Objects.nonNull(warehouseModel)) {
-                model.addAttribute("itemQuantity", warehouseModel.getItemQuantity());
-                model.addAttribute("warehouseName", warehouseModel.getWarehouseName());
-                model.addAttribute("warehouseId", warehouseModel.getWarehouseId());
-                model.addAttribute("itemPrice", warehouseModel.getItemPrice());
+            if (Objects.nonNull(warehouse)) {
+                model.addAttribute("itemQuantity", warehouse.getItemQuantity());
+                model.addAttribute("warehouseName", warehouse.getWarehouseName());
+                model.addAttribute("warehouseId", warehouse.getWarehouseId());
+                model.addAttribute("itemPrice", warehouse.getItemPrice());
             }
 
-            List<WarehouseModel> warehouseList = warehouseService.findByOrganization(organizationModel);
-            List<TransitModel> transitList = transitRepository.findByOrganization(organizationModel);
+            List<WarehouseModel> warehouseList = warehouseService.findByOrganization(organization);
+            List<TransitModel> transitList = transitRepository.findByOrganization(organization);
 
             model.addAttribute("warehouses", warehouseList);
             model.addAttribute("transits", transitList);

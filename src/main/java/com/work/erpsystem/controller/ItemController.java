@@ -69,25 +69,25 @@ public class ItemController {
     public String itemPage(@PathVariable(value = "id") Long itemId, @P("auth") Authentication authentication,
                            @P("org") @PathVariable(value = "org_uuid") Long orgId, Model model) {
         try {
-            ItemModel itemModel = itemService.findById(itemId);
+            ItemModel item = itemService.findById(itemId);
 
             int itemQuantity = 0;
             Map<WarehouseModel, Double> warehouseItemPrice = new HashMap<>();
             List<WarehouseModel> warehouseList = warehouseService.findByOrganization(orgService.findById(orgId));
 
             for (WarehouseModel warehouse : warehouseList) {
-                if (warehouse.getItemPrice().containsKey(itemModel)) {
-                    warehouseItemPrice.put(warehouse, warehouse.getItemPrice().get(itemModel));
-                    log.info(warehouse.getWarehouseName() + ": " + warehouse.getItemQuantity().get(itemModel));
+                if (warehouse.getItemPrice().containsKey(item)) {
+                    warehouseItemPrice.put(warehouse, warehouse.getItemPrice().get(item));
+                    log.info(warehouse.getWarehouseName() + ": " + warehouse.getItemQuantity().get(item));
 
-                    itemQuantity += warehouse.getItemQuantity().get(itemModel);
+                    itemQuantity += warehouse.getItemQuantity().get(item);
                 }
             }
 
             model.addAttribute("itemPrice", warehouseItemPrice);
             model.addAttribute("itemQuantity", itemQuantity);
-            model.addAttribute("barcode", itemModel.getBarcode());
-            model.addAttribute("item", itemModel);
+            model.addAttribute("barcode", item.getBarcode());
+            model.addAttribute("item", item);
             model.addAttribute("orgId", orgId);
 
             return "item-page";

@@ -30,10 +30,10 @@ public class AuthorizeComponentImpl implements AuthorizeComponent {
     @Override
     public boolean getAuthorities(@NonNull Authentication authentication, @NonNull Long orgId, String role) {
         try {
-            UserModel userModel = userService.findByUsername(authentication.getName());
-            OrganizationModel organizationModel = orgService.findById(orgId);
+            UserModel user = userService.findByUsername(authentication.getName());
+            OrganizationModel organization = orgService.findById(orgId);
 
-            String orgRole = userModel.getOrgRole().get(organizationModel);
+            String orgRole = user.getOrgRole().get(organization);
 
             return role.contains(orgRole);
         } catch (NoDBRecord exception) {

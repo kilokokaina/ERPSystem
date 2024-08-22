@@ -25,15 +25,15 @@ public class UserAuthenticationImpl implements UserAuthenticationService {
     @Override
     public boolean register(String username, String password, String firstName, String secondName) {
         try {
-            UserModel userModel = new UserModel();
+            UserModel user = new UserModel();
 
-            userModel.setUsername(username);
-            userModel.setPassword(password);
-            userModel.setFirstName(firstName);
-            userModel.setSecondName(secondName);
-            userModel.setRoleSet(Set.of(Role.USER));
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setFirstName(firstName);
+            user.setSecondName(secondName);
+            user.setRoleSet(Set.of(Role.USER));
 
-            userService.save(userModel);
+            userService.save(user);
         } catch (DuplicateDBRecord exception) {
             return false;
         }

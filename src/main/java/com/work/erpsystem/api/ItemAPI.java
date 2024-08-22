@@ -57,10 +57,10 @@ public class ItemAPI {
 
     @GetMapping("{id}")
     public @ResponseBody ResponseEntity<ItemModel> findById(@PathVariable(value = "org_uuid") Long orgId,
-                                                            @PathVariable(value = "id") Long itemModelId) {
+                                                            @PathVariable(value = "id") Long itemId) {
         try {
-            ItemModel itemModel = itemService.findById(itemModelId);
-            return new ResponseEntity<>(itemModel, HttpStatus.OK);
+            ItemModel item = itemService.findById(itemId);
+            return new ResponseEntity<>(item, HttpStatus.OK);
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -71,8 +71,8 @@ public class ItemAPI {
     public @ResponseBody ResponseEntity<ItemModel> findByName(@PathVariable(value = "org_uuid") Long orgId,
                                                               @RequestParam(name = "item_name") String itemName) {
         try {
-            ItemModel itemModel = itemService.findByName(itemName);
-            return new ResponseEntity<>(itemModel, HttpStatus.OK);
+            ItemModel item = itemService.findByName(itemName);
+            return new ResponseEntity<>(item, HttpStatus.OK);
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -82,8 +82,8 @@ public class ItemAPI {
     public @ResponseBody ResponseEntity<List<ItemModel>> findByCategory(@PathVariable(value = "org_uuid") Long orgId,
                                                                         @RequestParam(name = "category_name") String categoryName) {
         try {
-            CategoryModel categoryModel = categoryService.findByName(categoryName);
-            return ResponseEntity.ok(itemService.findByCategoryId(categoryModel.getCategoryId()));
+            CategoryModel category = categoryService.findByName(categoryName);
+            return ResponseEntity.ok(itemService.findByCategoryId(category.getCategoryId()));
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -91,10 +91,10 @@ public class ItemAPI {
 
     @GetMapping("find_by_barcode")
     public @ResponseBody ResponseEntity<ItemModel> findByBarcode(@PathVariable(value = "org_uuid") Long orgId,
-                                                                 @RequestParam(name = "barcode") String barcode) {
+                                                                 @RequestParam(name = "barcode") String code) {
         try {
-            BarcodeModel barcodeModel = barcodeService.findByCode(barcode);
-            return ResponseEntity.ok(itemService.findByBarcode(barcodeModel));
+            BarcodeModel barcode = barcodeService.findByCode(code);
+            return ResponseEntity.ok(itemService.findByBarcode(barcode));
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -104,17 +104,17 @@ public class ItemAPI {
     public @ResponseBody ResponseEntity<ItemModel> addItem(@RequestBody ItemDTO itemDto,
                                                            @PathVariable(value = "org_uuid") Long orgId) {
         try {
-            ItemModel itemModel = new ItemModel();
+            ItemModel item = new ItemModel();
 
-            CategoryModel categoryModel = categoryService.findByName(itemDto.getCategoryName());
+            CategoryModel category = categoryService.findByName(itemDto.getCategoryName());
 
-            itemModel.setItemName(itemDto.getItemName());
-            itemModel.setCategoryModel(categoryModel);
-            itemModel.setItemDescribe(itemDto.getItemDescribe());
-            itemModel.setItemPurchasePrice(itemDto.getItemPurchasePrice());
-            itemModel.setOrganizationModel(orgService.findById(orgId));
+            item.setItemName(itemDto.getItemName());
+            item.setCategoryModel(category);
+            item.setItemDescribe(itemDto.getItemDescribe());
+            item.setItemPurchasePrice(itemDto.getItemPurchasePrice());
+            item.setOrganizationModel(orgService.findById(orgId));
 
-            return ResponseEntity.ok(itemService.save(itemModel));
+            return ResponseEntity.ok(itemService.save(item));
         } catch (DBException exception) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
@@ -122,14 +122,14 @@ public class ItemAPI {
 
     @PutMapping("{id}")
     public @ResponseBody ResponseEntity<ItemModel> updateItem(@RequestBody ItemDTO itemDto,
-                                                              @PathVariable(value = "id") ItemModel itemModel,
+                                                              @PathVariable(value = "id") ItemModel item,
                                                               @PathVariable(value = "org_uuid") Long orgId) {
         try {
-            itemModel.setItemName(itemDto.getItemName());
-            itemModel.setItemDescribe(itemDto.getItemDescribe());
-            itemModel.setItemPurchasePrice(itemDto.getItemPurchasePrice());
+            item.setItemName(itemDto.getItemName());
+            item.setItemDescribe(itemDto.getItemDescribe());
+            item.setItemPurchasePrice(itemDto.getItemPurchasePrice());
 
-            return ResponseEntity.ok(itemService.update(itemModel));
+            return ResponseEntity.ok(itemService.update(item));
         } catch (DBException exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -139,9 +139,9 @@ public class ItemAPI {
     public @ResponseBody ResponseEntity<HttpStatus> deleteItemById(@PathVariable(value = "org_uuid") Long orgId,
                                                                    @PathVariable(value = "id") Long itemId) {
         try {
-            ItemModel itemModel = itemService.findById(itemId);
-            List<FileModel> imageList = itemModel.getItemImages();
-            itemModel.setItemImages(new ArrayList<>());
+            ItemModel item = itemService.findById(itemId);
+            List<FileModel> imageList = item.getItemImages();
+            item.setItemImages(new ArrayList<>());
 
             fileRepository.deleteAll(imageList);
             for (FileModel image : imageList) Files.delete(Path.of(image.getFilePath()));
@@ -159,11 +159,11 @@ public class ItemAPI {
                                                                  @PathVariable(value = "id") Long itemId,
                                                                  @RequestBody BarcodeModel barcode) {
         try {
-            ItemModel itemModel = itemService.findById(itemId);
+            ItemModel item = itemService.findById(itemId);
 
             barcodeService.save(barcode);
-            itemModel.setBarcode(barcode);
-            itemService.update(itemModel);
+            item.setBarcode(barcode);
+            itemService.update(item);
 
             return ResponseEntity.ok(barcode);
         } catch (NoDBRecord | DuplicateDBRecord exception) {

@@ -27,9 +27,9 @@ public class MainController {
 
     @GetMapping("{org_uuid}/settings")
     public String settings(@PathVariable(value = "org_uuid") Long orgId, Authentication authentication, Model model) {
-        UserModel userModel = userService.findByUsername(authentication.getName());
+        UserModel user = userService.findByUsername(authentication.getName());
 
-        model.addAttribute("user", userModel);
+        model.addAttribute("user", user);
         model.addAttribute("orgId", orgId);
 
         return "settings";

@@ -183,6 +183,32 @@ function updateUserTable(result, userAuthority) {
     document.querySelector('#employee-count').innerText = ++employeeCount;
 }
 
+function setContactPerson(element) {
+    console.log(element.value);
+
+    fetch(
+        `/${orgId}/api/org/add_cp/${element.value}`, { method: 'GET' }
+    ).then(async response => {
+        let result = await response.json();
+
+        if (response.ok) {
+            let contactBlock = document.querySelector('#contact-person');
+            contactBlock.innerHTML = `
+                <h5>Имя: ${result.firstName} ${result.secondName}</h5>
+                <address class="mb-0 font-14 address-lg">
+                    Irkutsk, Barrikad<br>
+                    12b/1, Pavilion №4 <br>
+                    <abbr title="Mobile">P:</abbr> +7(999) 686-5606 <br/>
+                </address>
+            `;
+
+            addSuccess.show();
+        } else {
+            addWarning.show();
+        }
+    });
+}
+
 function prepareUserData() {
     let email = document.querySelector('#email').value;
     let firstName = document.querySelector('#first-name').value;

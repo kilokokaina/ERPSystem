@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface CategoryService {
 
-    CategoryModel save(CategoryModel categoryModel) throws DuplicateDBRecord;
-    CategoryModel update(CategoryModel categoryModel) throws NoDBRecord;
+    CategoryModel save(CategoryModel category) throws DuplicateDBRecord;
+    CategoryModel update(CategoryModel category) throws NoDBRecord;
     List<CategoryModel> findAll();
     CategoryModel findById(Long categoryId) throws NoDBRecord;
     CategoryModel findByName(String categoryName) throws NoDBRecord;
-    List<CategoryModel> findByOrg(OrganizationModel organizationModel);
+    List<CategoryModel> findByOrg(OrganizationModel organization);
     void deleteById(Long categoryId) throws NoDBRecord;
-    void delete(CategoryModel categoryModel) throws NoDBRecord;
+    void delete(CategoryModel category) throws NoDBRecord;
 
 }

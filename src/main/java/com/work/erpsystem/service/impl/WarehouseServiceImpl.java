@@ -23,22 +23,22 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public WarehouseModel save(WarehouseModel warehouseModel) throws DuplicateDBRecord {
+    public WarehouseModel save(WarehouseModel warehouse) throws DuplicateDBRecord {
 //        if (warehouseRepository.findByWarehouseName(warehouseModel.getWarehouseName()) != null) {
 //            String exceptionMessage = "Record with name [%s] already exists in DB";
 //            throw new DuplicateDBRecord(exceptionMessage);
 //        }
 
-        return warehouseRepository.save(warehouseModel);
+        return warehouseRepository.save(warehouse);
     }
 
     @Override
-    public WarehouseModel update(WarehouseModel warehouseModel) throws NoDBRecord {
-        if (Objects.isNull(warehouseRepository.findById(warehouseModel.getWarehouseId()).orElse(null))) {
-            throw new NoDBRecord(String.format("No such record in data base with id: %d", warehouseModel.getWarehouseId()));
+    public WarehouseModel update(WarehouseModel warehouse) throws NoDBRecord {
+        if (Objects.isNull(warehouseRepository.findById(warehouse.getWarehouseId()).orElse(null))) {
+            throw new NoDBRecord(String.format("No such record in data base with id: %d", warehouse.getWarehouseId()));
         }
 
-        return warehouseRepository.save(warehouseModel);
+        return warehouseRepository.save(warehouse);
     }
 
     @Override
@@ -48,31 +48,31 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public WarehouseModel findById(Long warehouseId) throws NoDBRecord {
-        WarehouseModel warehouseModel = warehouseRepository.findById(warehouseId).orElse(null);
+        WarehouseModel warehouse = warehouseRepository.findById(warehouseId).orElse(null);
 
-        if (Objects.isNull(warehouseModel)) {
+        if (Objects.isNull(warehouse)) {
             String exceptionMessage = "No such record in data base with id: %d";
             throw new NoDBRecord(String.format(exceptionMessage, warehouseId));
         }
 
-        return warehouseModel;
+        return warehouse;
     }
 
     @Override
     public WarehouseModel findByName(String warehouseName) throws NoDBRecord {
-        WarehouseModel warehouseModel = warehouseRepository.findByWarehouseName(warehouseName);
+        WarehouseModel warehouse = warehouseRepository.findByWarehouseName(warehouseName);
 
-        if (Objects.isNull(warehouseModel)) {
+        if (Objects.isNull(warehouse)) {
             String exceptionMessage = "No such record in data base with name: %s";
             throw new NoDBRecord(String.format(exceptionMessage, warehouseName));
         }
 
-        return warehouseModel;
+        return warehouse;
     }
 
     @Override
-    public List<WarehouseModel> findByOrganization(OrganizationModel organizationModel) {
-        return warehouseRepository.findByOrganization(organizationModel);
+    public List<WarehouseModel> findByOrganization(OrganizationModel organization) {
+        return warehouseRepository.findByOrganization(organization);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public void delete(WarehouseModel warehouseModel) throws NoDBRecord {
-        warehouseRepository.delete(warehouseModel);
+    public void delete(WarehouseModel warehouse) throws NoDBRecord {
+        warehouseRepository.delete(warehouse);
     }
 }

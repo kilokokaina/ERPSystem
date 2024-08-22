@@ -42,8 +42,8 @@ public class CategoryAPI {
                                                                 @PathVariable(value = "org_uuid") Long orgId,
                                                                 Authentication authentication) {
         try {
-            CategoryModel categoryModel = categoryService.findById(categoryId);
-            return ResponseEntity.ok(categoryModel);
+            CategoryModel category = categoryService.findById(categoryId);
+            return ResponseEntity.ok(category);
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -51,11 +51,11 @@ public class CategoryAPI {
 
     @PostMapping
     public @ResponseBody ResponseEntity<CategoryModel> addCategory(@PathVariable(value = "org_uuid") Long orgId,
-                                                                   @RequestBody CategoryModel categoryModel) {
+                                                                   @RequestBody CategoryModel category) {
         try {
-            categoryModel.setOrganization(orgService.findById(orgId));
+            category.setOrganization(orgService.findById(orgId));
 
-            return ResponseEntity.ok(categoryService.save(categoryModel));
+            return ResponseEntity.ok(categoryService.save(category));
         } catch (DuplicateDBRecord | NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
@@ -64,13 +64,13 @@ public class CategoryAPI {
     @PutMapping("{id}")
     public @ResponseBody ResponseEntity<CategoryModel> updateCategory(@PathVariable(value = "id") Long categoryId,
                                                                       @PathVariable(value = "org_uuid") Long orgId,
-                                                                      @RequestBody CategoryModel categoryNew,
+                                                                      @RequestBody CategoryModel newCategory,
                                                                       Authentication authentication) {
         try {
-            CategoryModel categoryModel = categoryService.findById(categoryId);
-            categoryModel.setCategoryName(categoryNew.getCategoryName());
+            CategoryModel category = categoryService.findById(categoryId);
+            category.setCategoryName(newCategory.getCategoryName());
 
-            return ResponseEntity.ok(categoryService.update(categoryModel));
+            return ResponseEntity.ok(categoryService.update(category));
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

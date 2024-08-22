@@ -9,14 +9,14 @@ import java.util.List;
 
 public interface UserService {
 
-    UserModel save(UserModel userModel) throws DuplicateDBRecord;
-    UserModel update(UserModel userModel) throws NoDBRecord;
+    UserModel save(UserModel user) throws DuplicateDBRecord;
+    UserModel update(UserModel user) throws NoDBRecord;
     List<UserModel> findAll();
     UserModel findById(Long userId) throws NoDBRecord;
     UserModel findByUsername(String username) throws NoDBRecord;
-    List<UserModel> findByEmployeeOrg(OrganizationModel organizationModel);
+    List<UserModel> findByEmployeeOrg(OrganizationModel organization);
     UserModel findByUUID(String username) throws NoDBRecord;
     void deleteById(Long userId) throws NoDBRecord;
-    void delete(UserModel userModel) throws NoDBRecord;
+    void delete(UserModel user) throws NoDBRecord;
 
 }

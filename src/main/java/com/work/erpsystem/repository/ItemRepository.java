@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface ItemRepository extends JpaRepository<ItemModel, Long> {
 
-    ItemModel findByItemName(String itemModelName);
+    ItemModel findByItemName(String itemName);
     ItemModel findByBarcode(BarcodeModel barcode);
-    List<ItemModel> findByOrganizationModel(OrganizationModel org);
+    List<ItemModel> findByOrganizationModel(OrganizationModel organization);
     @Query(nativeQuery = true, value = "SELECT * FROM item_model WHERE category_id = %:categoryId%")
     List<ItemModel> findByCategoryId(Long categoryId);
 

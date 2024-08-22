@@ -26,22 +26,22 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemModel save(ItemModel itemModel) throws DuplicateDBRecord {
+    public ItemModel save(ItemModel item) throws DuplicateDBRecord {
 //        if (itemRepository.findByItemName(itemModel.getItemName()) != null) {
 //            String exceptionMessage = "Record with name [%s] already exists in DB";
 //            throw new DuplicateDBRecord(exceptionMessage);
 //        }
 
-        return itemRepository.save(itemModel);
+        return itemRepository.save(item);
     }
 
     @Override
-    public ItemModel update(ItemModel itemModel) throws NoDBRecord {
-        if (Objects.isNull(itemRepository.findById(itemModel.getItemId()).orElse(null))) {
-            throw new NoDBRecord(String.format("No such record in data base with id: %d", itemModel.getItemId()));
+    public ItemModel update(ItemModel item) throws NoDBRecord {
+        if (Objects.isNull(itemRepository.findById(item.getItemId()).orElse(null))) {
+            throw new NoDBRecord(String.format("No such record in data base with id: %d", item.getItemId()));
         }
 
-        return itemRepository.save(itemModel);
+        return itemRepository.save(item);
     }
 
     @Override
@@ -51,26 +51,26 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemModel findById(Long itemId) throws NoDBRecord {
-        ItemModel itemModel = itemRepository.findById(itemId).orElse(null);
+        ItemModel item = itemRepository.findById(itemId).orElse(null);
 
-        if (Objects.isNull(itemModel)) {
+        if (Objects.isNull(item)) {
             String exceptionMessage = "No such record in data base with id: %d";
             throw new NoDBRecord(String.format(exceptionMessage, itemId));
         }
 
-        return itemModel;
+        return item;
     }
 
     @Override
     public ItemModel findByName(String itemName) throws NoDBRecord {
-        ItemModel itemModel = itemRepository.findByItemName(itemName);
+        ItemModel item = itemRepository.findByItemName(itemName);
 
-        if (Objects.isNull(itemModel)) {
+        if (Objects.isNull(item)) {
             String exceptionMessage = "No such record in data base with name: %s";
             throw new NoDBRecord(String.format(exceptionMessage, itemName));
         }
 
-        return itemModel;
+        return item;
     }
 
     @Override
@@ -79,20 +79,20 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemModel> findByOrganizationModel(OrganizationModel org) {
-        return itemRepository.findByOrganizationModel(org);
+    public List<ItemModel> findByOrganizationModel(OrganizationModel organization) {
+        return itemRepository.findByOrganizationModel(organization);
     }
 
     @Override
     public ItemModel findByBarcode(BarcodeModel barcode) throws NoDBRecord {
-        ItemModel itemModel = itemRepository.findByBarcode(barcode);
+        ItemModel item = itemRepository.findByBarcode(barcode);
 
-        if (Objects.isNull(itemModel)) {
+        if (Objects.isNull(item)) {
             String exceptionMessage = "No such record in data base with barcode: %s";
             throw new NoDBRecord(String.format(exceptionMessage, barcode.getCodeValue()));
         }
 
-        return itemModel;
+        return item;
     }
 
     @Override
@@ -106,7 +106,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void delete(ItemModel itemModel) {
-        itemRepository.delete(itemModel);
+    public void delete(ItemModel item) {
+        itemRepository.delete(item);
     }
 }

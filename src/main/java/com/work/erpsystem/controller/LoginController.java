@@ -38,10 +38,10 @@ public class LoginController {
     @PostMapping("set_new_password/{uuid}")
     public String saveNewPassword(@PathVariable(value = "uuid") String uuid,
                                   @RequestParam(value = "password") String newPassword) throws NoDBRecord {
-        UserModel userModel = userService.findByUUID(uuid);
-        userModel.setPassword(newPassword);
-        userModel.setUserUUID(UUID.randomUUID().toString());
-        userService.update(userModel);
+        UserModel user = userService.findByUUID(uuid);
+        user.setPassword(newPassword);
+        user.setUserUUID(UUID.randomUUID().toString());
+        userService.update(user);
 
         return "redirect:/login";
     }

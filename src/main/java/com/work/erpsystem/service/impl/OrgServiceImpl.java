@@ -23,22 +23,22 @@ public class OrgServiceImpl implements OrgService {
 
 
     @Override
-    public OrganizationModel save(OrganizationModel organizationModel) throws DuplicateDBRecord {
-        if (organizationRepository.findByOrgName(organizationModel.getOrgName()) != null) {
+    public OrganizationModel save(OrganizationModel organization) throws DuplicateDBRecord {
+        if (organizationRepository.findByOrgName(organization.getOrgName()) != null) {
             String exceptionMessage = "Record with name [%s] already exists in DB";
             throw new DuplicateDBRecord(exceptionMessage);
         }
 
-        return organizationRepository.save(organizationModel);
+        return organizationRepository.save(organization);
     }
 
     @Override
-    public OrganizationModel update(OrganizationModel organizationModel) throws NoDBRecord {
-        if (Objects.isNull(organizationRepository.findById(organizationModel.getOrgId()).orElse(null))) {
-            throw new NoDBRecord(String.format("No such record in data base with id: %d", organizationModel.getOrgId()));
+    public OrganizationModel update(OrganizationModel organization) throws NoDBRecord {
+        if (Objects.isNull(organizationRepository.findById(organization.getOrgId()).orElse(null))) {
+            throw new NoDBRecord(String.format("No such record in data base with id: %d", organization.getOrgId()));
         }
 
-        return organizationRepository.save(organizationModel);
+        return organizationRepository.save(organization);
     }
 
     @Override
@@ -48,38 +48,38 @@ public class OrgServiceImpl implements OrgService {
 
     @Override
     public OrganizationModel findById(Long organizationId) throws NoDBRecord {
-        OrganizationModel organizationModel = organizationRepository.findById(organizationId).orElse(null);
+        OrganizationModel organization = organizationRepository.findById(organizationId).orElse(null);
 
-        if (Objects.isNull(organizationModel)) {
+        if (Objects.isNull(organization)) {
             String exceptionMessage = "No such record in data base with id: %d";
             throw new NoDBRecord(String.format(exceptionMessage, organizationId));
         }
 
-        return organizationModel;
+        return organization;
     }
 
     @Override
     public OrganizationModel findByName(String organizationName) throws NoDBRecord {
-        OrganizationModel organizationModel = organizationRepository.findByOrgName(organizationName);
+        OrganizationModel organization = organizationRepository.findByOrgName(organizationName);
 
-        if (Objects.isNull(organizationModel)) {
+        if (Objects.isNull(organization)) {
             String exceptionMessage = "No such record in data base with name: %d";
             throw new NoDBRecord(String.format(exceptionMessage, organizationName));
         }
 
-        return organizationModel;
+        return organization;
     }
 
     @Override
     public OrganizationModel findByUUID(String organizationUUID) throws NoDBRecord {
-        OrganizationModel organizationModel = organizationRepository.findByOrgUUID(organizationUUID);
+        OrganizationModel organization = organizationRepository.findByOrgUUID(organizationUUID);
 
-        if (Objects.isNull(organizationModel)) {
+        if (Objects.isNull(organization)) {
             String exceptionMessage = "No such record in data base with name: %d";
             throw new NoDBRecord(String.format(exceptionMessage, organizationUUID));
         }
 
-        return organizationModel;
+        return organization;
     }
 
     @Override
@@ -93,7 +93,7 @@ public class OrgServiceImpl implements OrgService {
     }
 
     @Override
-    public void delete(OrganizationModel organizationModel) throws NoDBRecord {
-        organizationRepository.delete(organizationModel);
+    public void delete(OrganizationModel organization) throws NoDBRecord {
+        organizationRepository.delete(organization);
     }
 }
