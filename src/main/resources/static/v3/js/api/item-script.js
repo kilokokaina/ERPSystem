@@ -161,5 +161,43 @@ function onScanSuccess(decodedText, decodedResult) {
     console.log(`Code scanned = ${decodedText}`, decodedResult);
 }
 
-let html5QrcodeScanner = new Html5QrcodeScanner("my-qr-reader", { fps: 10, qrbox: 250 });
-html5QrcodeScanner.render(onScanSuccess);
+let constraints = {
+    audio: false, video: { facingMode: { exact: "environment" } }
+};
+
+
+let isOnline = false;
+let canvas = document.querySelector('canvas').getContext('2d');
+let video = document.querySelector("video");
+let intervalId;
+
+async function startScan() {
+    try {
+        video.srcObject = await navigator.mediaDevices.getUserMedia(constraints);
+
+        video.play();
+        isOnline = true;
+
+        intervalId = window.setInterval(() => {
+            console.log('Capturing...')
+            canvas.drawImage(video, 0, 0, 640, 480);
+        }, 100);
+    } catch(error) {
+        console.log(error);
+    }
+}
+
+function stopScan() {
+    video.srcObject.getVideoTracks().forEach(track => track.stop());
+
+    video.srcObject = null;
+    isOnline = false;
+
+    window.clearInterval(intervalId);
+}
+
+document.getElementById('camera').onclick = function() {
+    isOnline ? stopScan() : startScan();
+}
+// let html5QrcodeScanner = new Html5QrcodeScanner("my-qr-reader", { fps: 10, qrbox: 150 });
+// html5QrcodeScanner.render(onScanSuccess);

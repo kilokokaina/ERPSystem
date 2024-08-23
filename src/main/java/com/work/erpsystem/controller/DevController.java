@@ -10,7 +10,7 @@ public class DevController {
 
     @GetMapping("route")
     public String dev() {
-        return "delivery";
+        return "barcode-test";
     }
 
 }
