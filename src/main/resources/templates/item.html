@@ -391,6 +391,18 @@
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bs-example-modal-lg"><i class="mdi mdi-plus-circle me-2"></i>Добавить</button>
                                             </div>
 
+                                            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                                                <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                                                    <div class="toast-header">
+                                                        <strong class="me-auto">ERPSystem</strong>
+                                                        <small>Только что</small>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="toast-body">
+                                                        Hello, world! This is a toast message.
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>    
                                         <div class="table-responsive">
                                             <table id="basic-datatable" class="table dt-responsive nowrap w-100">
@@ -486,6 +498,9 @@
             const quill = new Quill('#item-describe', {
                 theme: 'snow'
             });
+
+            const toastLiveExample = document.getElementById('liveToast');
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
         </script>
 
     </body>

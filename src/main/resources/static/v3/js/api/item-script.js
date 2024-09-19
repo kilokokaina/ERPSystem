@@ -1,7 +1,4 @@
-let addItemModalSuccess = new bootstrap.Modal('#multiple-two');
-let addItemModalWarning = new bootstrap.Modal('#warning-alert-modal');
 const orgId = document.querySelector('#org-id').innerHTML;
-
 let itemForDeletion;
 
 function uploadImage(itemId) {
@@ -49,7 +46,7 @@ function addItem() {
     }).then(async response => {
         let result = await response.json();
 
-        if (response.ok) {
+        if (response.status === 200) {
             uploadImage(result.itemId);
 
             table.row.add([
@@ -66,9 +63,11 @@ function addItem() {
                 </td>`
             ]).draw();
 
-            addItemModalSuccess.show();
+            document.querySelector('.toast-body').innerHTML = `Товар "${document.getElementById('item-name').value}" успешно создан`;
+            toastBootstrap.show();
         } else {
-            addItemModalWarning.show();
+            document.querySelector('.toast-body').innerHTML = `Товар "${document.getElementById('item-name').value}" не был создан`;
+            toastBootstrap.show();
         }
     });
 }
@@ -110,15 +109,19 @@ function confirmItemDelete(itemId) {
     fetch(
         `/${orgId}/api/item/${itemId}`, { method: 'DELETE' }
     ).then(async response => {
-        let result = await response;
-        if (result.ok) {
+        let result = await response.json();
+
+        if (response.status === 200) {
             table
                 .row(itemForDeletion.parentNode.parentNode)
                 .remove()
                 .draw();
-            addItemModalSuccess.show();
+
+            document.querySelector('.toast-body').innerHTML = `Товар "${result.itemName}" успешно удален`;
+            toastBootstrap.show();
         } else {
-            addItemModalWarning.show();
+            document.querySelector('.toast-body').innerHTML = `Товар "${result.itemName}" не был удален`;
+            toastBootstrap.show();
         }
     });
 }
@@ -134,13 +137,15 @@ function addBarcode() {
         },
         body: JSON.stringify({ codeValue: barcode })
     }).then(async response => {
-        if (response.ok) location.reload();
+        if (response.status === 200) location.reload();
     });
 }
 
 function onScanSuccess(decodedText, decodedResult) {
     let scanLabel = document.querySelector('#scan-info');
     let itemId = document.querySelector('#item-id').innerText;
+
+    console.log(`Code scanned = ${decodedText}`, decodedResult);
 
     scanLabel.innerHTML = `
         <div class="alert alert-success" role="alert">
@@ -155,49 +160,9 @@ function onScanSuccess(decodedText, decodedResult) {
         },
         body: JSON.stringify({ codeValue: decodedText })
     }).then(async response => {
-        if (response.ok) location.reload();
+        if (response.status === 200) location.reload();
     });
-
-    console.log(`Code scanned = ${decodedText}`, decodedResult);
 }
 
-let constraints = {
-    audio: false, video: { facingMode: { exact: "environment" } }
-};
-
-
-let isOnline = false;
-let canvas = document.querySelector('canvas').getContext('2d');
-let video = document.querySelector("video");
-let intervalId;
-
-async function startScan() {
-    try {
-        video.srcObject = await navigator.mediaDevices.getUserMedia(constraints);
-
-        video.play();
-        isOnline = true;
-
-        intervalId = window.setInterval(() => {
-            console.log('Capturing...')
-            canvas.drawImage(video, 0, 0, 640, 480);
-        }, 100);
-    } catch(error) {
-        console.log(error);
-    }
-}
-
-function stopScan() {
-    video.srcObject.getVideoTracks().forEach(track => track.stop());
-
-    video.srcObject = null;
-    isOnline = false;
-
-    window.clearInterval(intervalId);
-}
-
-document.getElementById('camera').onclick = function() {
-    isOnline ? stopScan() : startScan();
-}
-// let html5QrcodeScanner = new Html5QrcodeScanner("my-qr-reader", { fps: 10, qrbox: 150 });
-// html5QrcodeScanner.render(onScanSuccess);
+let html5QrcodeScanner = new Html5QrcodeScanner("my-qr-reader", { fps: 10, qrbox: 250 });
+html5QrcodeScanner.render(onScanSuccess);

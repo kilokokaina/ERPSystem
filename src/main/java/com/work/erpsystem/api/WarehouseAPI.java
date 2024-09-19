@@ -315,35 +315,42 @@ public class WarehouseAPI {
     }
 
     @DeleteMapping("{id}")
-    public @ResponseBody ResponseEntity<HttpStatus> deleteWarehouse(@PathVariable(value = "org_uuid") Long orgId,
+    public @ResponseBody ResponseEntity<WarehouseModel> deleteWarehouse(@PathVariable(value = "org_uuid") Long orgId,
                                                                     @PathVariable(value = "id") Long warehouseId,
                                                                     Authentication authentication) {
         try {
-            warehouseService.deleteById(warehouseId);
+            WarehouseModel warehouse = warehouseService.findById(warehouseId);
+            warehouseService.deleteById(warehouse.getWarehouseId());
 
-            return ResponseEntity.ok(HttpStatus.OK);
+            return ResponseEntity.ok(warehouse);
         } catch (NoDBRecord exception) {
-            return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
     @DeleteMapping("delete_item/{id}")
-    public @ResponseBody ResponseEntity<HttpStatus> deleteItemFromWarehouse(@PathVariable(value = "org_uuid") Long orgId,
-                                                                            @PathVariable(value = "id") WarehouseModel warehouse,
+    public @ResponseBody ResponseEntity<ItemModel> deleteItemFromWarehouse(@PathVariable(value = "org_uuid") Long orgId,
+                                                                            @PathVariable(value = "id") Long warehouseId,
                                                                             @RequestParam(value = "item_id") Long itemId,
                                                                             Authentication authentication) {
         try {
             ItemModel item = itemService.findById(itemId);
+            WarehouseModel warehouse = warehouseService.findById(warehouseId);
 
             Map<ItemModel, Integer> itemQuantity = warehouse.getItemQuantity();
+            Map<ItemModel, Double> itemPrice = warehouse.getItemPrice();
+
             itemQuantity.remove(item);
+            itemPrice.remove(item);
+
             warehouse.setItemQuantity(itemQuantity);
+            warehouse.setItemPrice(itemPrice);
 
             warehouseService.update(warehouse);
 
-            return ResponseEntity.ok(HttpStatus.OK);
+            return ResponseEntity.ok(item);
         } catch (NoDBRecord exception) {
-            return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 

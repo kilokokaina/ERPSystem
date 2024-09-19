@@ -139,7 +139,7 @@ public class UserAPI {
     }
 
     @DeleteMapping("{org_uuid}/api/user/fire/{id}")
-    public @ResponseBody ResponseEntity<HttpStatus> fireUser(@PathVariable(value = "org_uuid") Long orgId, @PathVariable(value = "id") Long userId,
+    public @ResponseBody ResponseEntity<UserModel> fireUser(@PathVariable(value = "org_uuid") Long orgId, @PathVariable(value = "id") Long userId,
                                                              Authentication authentication) {
         try {
             UserModel user = userService.findById(userId);
@@ -149,7 +149,7 @@ public class UserAPI {
             user.setOrgRole(orgRole);
             userService.update(user);
 
-            return ResponseEntity.ok(HttpStatus.OK);
+            return ResponseEntity.ok(user);
         } catch (NoDBRecord exception) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

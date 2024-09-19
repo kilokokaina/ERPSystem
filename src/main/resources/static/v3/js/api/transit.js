@@ -77,7 +77,40 @@ function confirmTransit() {
         },
         body: JSON.stringify(transitData)
     }).then(async response => {
-        if (response.status === 200) location.reload();
+        let result = await response.json();
+        let statusColumn;
+
+        switch (result.transitStatus) {
+            case 'CREATED':
+                statusColumn = `<td><h4><span class="badge badge-secondary-lighten">СОЗДАН</span></h4></td>`;
+                break;
+            case 'IN_TRANSIT':
+                statusColumn = `<td><h4><span class="badge badge-primary-lighten">В ПУТИ</span></h4></td>`;
+                break;
+            case 'DELIVERED':
+                statusColumn = `<td"><h4><span class="badge badge-success-lighten">ДОСТАВЛЕН</span></h4></td>`;
+                break;
+        }
+
+        if (response.status === 200) {
+            console.log(result, statusColumn);
+            transitTable.row.add([
+                result.transitId,
+                result.creationDate,
+                statusColumn,
+                `<td>
+                    <a href="javascript:void(0);" class="action-icon" id="${result.transitId}" onclick="showTransit(this)">
+                        <i class="mdi mdi-eye"></i>
+                    </a>
+                </td>`
+            ]).draw();
+
+            document.querySelector('.toast-body').innerHTML = `Перемещение №${result.transitId} успешно создан`;
+            toastBootstrap.show();
+        } else {
+            document.querySelector('.toast-body').innerHTML = `Перемещение №${result.transitId} не был создан`;
+            toastBootstrap.show();
+        }
     });
 }
 
@@ -181,6 +214,6 @@ function changeTransitStatus(transitId) {
     fetch(`/${orgId}/api/warehouse/change_transit_status?transitId=${transitId}&transitStatus=${newStatus}`, {
         method: 'PUT'
     }).then(async response => {
-        if (response.ok) location.reload();
+        if (response.status === 200) location.reload();
     });
 }

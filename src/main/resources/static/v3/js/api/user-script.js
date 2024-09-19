@@ -12,9 +12,11 @@ function addUser() {
     }).then(async response => {
         let result = await response;
         if (result.ok) {
-            addSuccess.show();
+            document.querySelector('.toast-body').innerHTML = `Пользователь ${result.firstName} ${result.secondName} успешно добавлен`;
+            toastBootstrap.show();
         } else {
-            addWarning.show();
+            document.querySelector('.toast-body').innerHTML = `Пользователь ${result.firstName} ${result.secondName} не был добавлен`;
+            toastBootstrap.show();
         }
     });
 }
@@ -32,9 +34,12 @@ function addUserFromOrgPage() {
         let result = await response.json();
         if (response.ok) {
             updateUserTable(result, userData.userAuthority);
-            addSuccess.show();
+
+            document.querySelector('.toast-body').innerHTML = `Пользователь ${userData.firstName} ${userData.secondName} успешно добавлен`;
+            toastBootstrap.show();
         } else {
-            addWarning.show();
+            document.querySelector('.toast-body').innerHTML = `Пользователь ${userData.firstName} ${userData.secondName} не был добавлен`;
+            toastBootstrap.show();
         }
     });
 }
@@ -79,9 +84,12 @@ function inviteUser(userId) {
 
         if (response.ok) {
             updateUserTable(result, userAuthority);
-            addSuccess.show();
+
+            document.querySelector('.toast-body').innerHTML = `Пользователь ${userData.firstName} ${userData.secondName} успешно добавлен`;
+            toastBootstrap.show();
         } else {
-            addWarning.show();
+            document.querySelector('.toast-body').innerHTML = `Пользователь ${userData.firstName} ${userData.secondName} не был добавлен`;
+            toastBootstrap.show();
         }
     });
 }
@@ -146,8 +154,8 @@ function confirmFireEmployee(userId) {
     fetch(
         `/${orgId}/api/user/fire/${userId.split('-')[1]}`, { method: 'DELETE' }
     ).then(async response => {
-        let result = await response;
-        if (result.ok) {
+        let result = await response.json();
+        if (response.ok) {
             employeeTable
                 .row(employeeForDeletion.parentNode.parentNode)
                 .remove()
@@ -156,9 +164,11 @@ function confirmFireEmployee(userId) {
             let employeeCount = Number.parseInt(document.querySelector('#employee-count').innerText);
             document.querySelector('#employee-count').innerText = --employeeCount;
 
-            addSuccess.show();
+            document.querySelector('.toast-body').innerHTML = `Пользователь ${result.firstName} ${result.secondName} был удален из организации`;
+            toastBootstrap.show();
         } else {
-            addWarning.show();
+            document.querySelector('.toast-body').innerHTML = `Пользователь ${result.firstName} ${result.secondName} не был удален из организации`;
+            toastBootstrap.show();
         }
     });
 }
@@ -173,10 +183,10 @@ function updateUserTable(result, userAuthority) {
         userAuthority,
         '1111',
         `<td class="table-action">
-                    <a onclick="fireEmployee(this)" href="javascript: void(0);" class="action-icon" id="user-${result.userId}">
-                        <i class="mdi mdi-delete"></i>
-                    </a>
-                </td>`
+            <a onclick="fireEmployee(this)" href="javascript: void(0);" class="action-icon" id="user-${result.userId}">
+                <i class="mdi mdi-delete"></i>
+            </a>
+        </td>`
     ]).draw();
 
     let employeeCount = Number.parseInt(document.querySelector('#employee-count').innerText);
@@ -202,9 +212,11 @@ function setContactPerson(element) {
                 </address>
             `;
 
-            addSuccess.show();
+            document.querySelector('.toast-body').innerHTML = `Пользователь ${result.firstName} ${result.secondName} был назначен контактным лицом`;
+            toastBootstrap.show();
         } else {
-            addWarning.show();
+            document.querySelector('.toast-body').innerHTML = `Пользователь ${result.firstName} ${result.secondName} не был назначен контактным лицом`;
+            toastBootstrap.show();
         }
     });
 }

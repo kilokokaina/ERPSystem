@@ -12,9 +12,7 @@ function addCategory() {
     }).then(async response => {
         let result = await response.json();
 
-        console.log(result);
-
-        if (response.ok) {
+        if (response.status === 200) {
             categoryTable.row.add([
                 result.categoryName,
                 0,
@@ -26,9 +24,11 @@ function addCategory() {
                 </td>`
             ]).draw();
 
-            addSuccess.show();
+            document.querySelector('.toast-body').innerHTML = `Категория "${categoryName.value}" успешно добавлена`;
+            toastBootstrap.show();
         } else {
-            addWarning.show();
+            document.querySelector('.toast-body').innerHTML = `Товар "${categoryName.value}" не была добавлена`;
+            toastBootstrap.show();
         }
     });
 }
@@ -50,16 +50,19 @@ function confirmCategoryDelete(categoryId) {
     fetch(
         `/${orgId}/api/category/${categoryId.split('-')[1]}`, { method: 'DELETE' }
     ).then(async response => {
-        let result = await response;
-        if (result.ok) {
+        let result = await response.json();
+
+        if (response.status === 200) {
             categoryTable
                 .row(categoryForDeletion.parentNode.parentNode)
                 .remove()
                 .draw();
 
-            addSuccess.show();
+            document.querySelector('.toast-body').innerHTML = `Категория "${result.categoryName}" успешно добавлена`;
+            toastBootstrap.show();
         } else {
-            addWarning.show();
+            document.querySelector('.toast-body').innerHTML = `Товар "${result.categoryName}" не была добавлена`;
+            toastBootstrap.show();
         }
     });
 }

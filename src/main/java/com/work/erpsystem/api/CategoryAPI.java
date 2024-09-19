@@ -77,15 +77,16 @@ public class CategoryAPI {
     }
 
     @DeleteMapping("{id}")
-    public @ResponseBody ResponseEntity<HttpStatus> deleteCategory(@PathVariable(value = "id") Long categoryId,
+    public @ResponseBody ResponseEntity<CategoryModel> deleteCategory(@PathVariable(value = "id") Long categoryId,
                                                                    @PathVariable(value = "org_uuid") Long orgId,
                                                                    Authentication authentication) {
         try {
-            categoryService.deleteById(categoryId);
+            CategoryModel category = categoryService.findById(categoryId);
+            categoryService.deleteById(category.getCategoryId());
 
-            return ResponseEntity.ok(HttpStatus.OK);
+            return ResponseEntity.ok(category);
         } catch (NoDBRecord exception) {
-            return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 

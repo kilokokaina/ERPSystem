@@ -111,7 +111,7 @@ public class StorageController {
             model.addAttribute("transits", transitList);
             model.addAttribute("orgId", orgId);
 
-            return "delivery";
+            return "transit";
         } catch (NoDBRecord exception) {
             return "redirect:/error";
         }

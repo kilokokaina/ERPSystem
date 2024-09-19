@@ -1,6 +1,4 @@
 const orgId = document.querySelector('#org-id').innerHTML;
-let addSuccess = new bootstrap.Modal('#add-success');
-let addWarning = new bootstrap.Modal('#add-warning');
 let itemId = 0;
 
 let warehouseForDeletion;
@@ -21,9 +19,7 @@ function addWarehouse() {
     }).then(async response => {
         let result = await response.json();
 
-        console.log(result);
-
-        if (response.ok) {
+        if (response.status === 200) {
             storageTable.row.add([
                 result.warehouseName,
                 result.warehouseAddress,
@@ -36,9 +32,11 @@ function addWarehouse() {
                 </td>`
             ]).draw();
 
-            addSuccess.show();
+            document.querySelector('.toast-body').innerHTML = `Склад "${result.warehouseName}" успешно создан`;
+            toastBootstrap.show();
         } else {
-            addWarning.show();
+            document.querySelector('.toast-body').innerHTML = `Склад "${result.warehouseName}" не был создан`;
+            toastBootstrap.show();
         }
     });
 }
@@ -68,9 +66,8 @@ function addSalesToWarehouse() {
         body: JSON.stringify(requestData)
     }).then(async response => {
         let result = await response.json();
-        console.log(result);
 
-        if (response.ok) {
+        if (response.status === 200) {
             saleTable.row.add([
                 result.item.itemName,
                 result.item.categoryModel.categoryName,
@@ -78,9 +75,11 @@ function addSalesToWarehouse() {
                 result.itemSaleQuantity,
             ]).draw();
 
-            addSuccess.show();
+            document.querySelector('.toast-body').innerHTML = `Продажа товара "${result.item.itemName}" была зафиксирована`;
+            toastBootstrap.show();
         } else {
-            addWarning.show();
+            document.querySelector('.toast-body').innerHTML = `Продажа товара "${result.item.itemName}" не была зафиксирована`;
+            toastBootstrap.show();
         }
     });
 }
@@ -114,10 +113,9 @@ function addItemsToWarehouse() {
         let itemQuantity = result.itemQuantity;
         let itemPrice = result.itemPrice;
 
-        console.log(result);
         let storage = itemParser(JSON.stringify(itemPrice), JSON.stringify(itemQuantity), requestData.itemName);
 
-        if (response.ok) {
+        if (response.status === 200) {
             storageTable.row.add([
                 storage.itemName,
                 storage.itemCategory,
@@ -131,9 +129,11 @@ function addItemsToWarehouse() {
                 </td>`
             ]).draw();
 
-            addSuccess.show();
+            document.querySelector('.toast-body').innerHTML = `Товар "${storage.itemName}" был добавлен на склад`;
+            toastBootstrap.show();
         } else {
-            addWarning.show();
+            document.querySelector('.toast-body').innerHTML = `Товар "${storage.itemName}" не был добавлен на склад`;
+            toastBootstrap.show();
         }
     });
 }
@@ -189,15 +189,19 @@ function confirmItemDelete(itemId) {
 
     fetch(`/${orgId}/api/warehouse/delete_item/${warehouseId}?item_id=${itemId}`, { method: 'DELETE' }
     ).then(async response => {
-        let result = await response;
-        if (result.ok) {
+        let result = await response.json();
+
+        if (response.status === 200) {
             storageTable
                 .row(itemForDeletion.parentNode.parentNode)
                 .remove()
                 .draw();
-            addSuccess.show();
+
+            document.querySelector('.toast-body').innerHTML = `Товар "${result.itemName}" был удален со склада`;
+            toastBootstrap.show();
         } else {
-            addWarning.show();
+            document.querySelector('.toast-body').innerHTML = `Товар "${result.itemName}" не был удален со склада`;
+            toastBootstrap.show();
         }
     });
 }
@@ -219,15 +223,19 @@ function confirmWarehouseDelete(warehouseId) {
     fetch(
         `/${orgId}/api/warehouse/${warehouseId.split('-')[1]}`, { method: 'DELETE' }
     ).then(async response => {
-        let result = await response;
-        if (result.ok) {
+        let result = await response.json();
+
+        if (response.status === 200) {
             storageTable
                 .row(warehouseForDeletion.parentNode.parentNode)
                 .remove()
                 .draw();
-            addSuccess.show();
+
+            document.querySelector('.toast-body').innerHTML = `Склад "${result.warehouseName}" был удален`;
+            toastBootstrap.show();
         } else {
-            addWarning.show();
+            document.querySelector('.toast-body').innerHTML = `Склад "${result.warehouseName}" не был удален`;
+            toastBootstrap.show();
         }
     });
 }
@@ -240,7 +248,7 @@ function findItemsByCategory(param, value) {
         { method: 'GET' }
     ).then(async response => {
         let result = await response.json();
-        if (response.ok) {
+        if (response.status === 200) {
             itemList.innerHTML = '';
             for (let i = 0; i < result.length; i++) {
                 itemList.innerHTML += `<option>${result[i].itemName}</option>`

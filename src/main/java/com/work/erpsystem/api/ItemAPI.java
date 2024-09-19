@@ -136,7 +136,7 @@ public class ItemAPI {
     }
 
     @DeleteMapping("{id}")
-    public @ResponseBody ResponseEntity<HttpStatus> deleteItemById(@PathVariable(value = "org_uuid") Long orgId,
+    public @ResponseBody ResponseEntity<ItemModel> deleteItemById(@PathVariable(value = "org_uuid") Long orgId,
                                                                    @PathVariable(value = "id") Long itemId) {
         try {
             ItemModel item = itemService.findById(itemId);
@@ -147,10 +147,10 @@ public class ItemAPI {
             for (FileModel image : imageList) Files.delete(Path.of(image.getFilePath()));
             itemService.deleteById(itemId);
 
-            return ResponseEntity.ok(HttpStatus.OK);
+            return ResponseEntity.ok(item);
         } catch (NoDBRecord | IOException exception) {
             log.error(exception.getMessage());
-            return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
